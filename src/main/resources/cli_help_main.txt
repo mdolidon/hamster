@@ -1,0 +1,23 @@
+
+hamster lets you clone websites, online and offline.
+
+hamster init
+    Creates a job configuration file in the current folder.
+    It's a text file where you'll describe exactly what you want to do.
+    The sample file contains a cheat-sheet for the configuration language.
+    For more information about the possibilities, run :
+        hamster help configure
+
+hamster 
+    Starts the job. Each piece of content that's downloaded is immediately 
+    written to the disk, in the local folder, as per the configuration.
+    
+    Besides, every 15 seconds or so, a memento file is updated. 
+    The memento is the hamster's way of keeping track of what it knows so far. 
+    It allows to carry on a job after an interruption, without starting from
+    the front up.
+        
+hamster resume 
+    The hamster starts by reading the memento file, and carries on from there.
+    Take note that if you change the configuration file before resuming,
+    inconsistencies and broken links may appear in the offline site.

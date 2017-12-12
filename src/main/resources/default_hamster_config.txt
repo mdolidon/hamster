@@ -1,0 +1,53 @@
+start at "git-scm.com/book/en/v2"
+
+get subpaths
+get resources on domain
+
+
+
+############## Cheat-sheet ############## 
+# 
+# Download rules (first match applies, avoid if no match)
+# 
+#     get MATCHER
+#     avoid MATCHER
+# 
+# 
+# Storage rules (first match applies, save flat if no match)
+# 
+#     save [MATCHER] as tree [under "directory"]
+#     save [MATCHER] flat [under "directory"]
+#     save urls "regex with groups" as "directory/$1/$2.$3..."
+# 
+# 
+# Authentication rules (first match applies, anonymous if no match)
+# 
+#     user "name" password "1234" on MATCHER
+# 
+# 
+# Miscellaneous rules
+# 
+#     check in at "http://.../login.php" post "name"="me" "password"="5678"
+#     maximum N Kb each [from MATCHER]   # (Kb or Mb)
+#     N parallel downloads
+#
+# 
+# Matchers
+# 
+#     all
+#     css "selector"  # only allowed in get/avoid rules
+#     domain          # you can also use 'items on domain' if more appropriate
+#     images
+#     N jumps and more
+#     resources      # includes images
+#     subpaths
+#     up to N jumps
+#     urls "regex"
+# 
+# Combine matchers with 'unknown', 'on' and 'outside' :
+#     
+#     resources
+#     outside domain
+#     resources on domain
+#     resources outside domain
+#     unknown resources outside domain

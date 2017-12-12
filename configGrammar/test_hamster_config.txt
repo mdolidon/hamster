@@ -1,0 +1,11 @@
+start at "http://truc.com"
+
+get   unknown   items    on    domain
+save unknown up to 5 jumps flat
+
+# save urls ".*topic.([0-9]+)" as "topics/$1"
+
+# check in at "http://truc.com/ucp.php"
+#   post
+#      "user" = "moi"
+#      "password" = "1234"

@@ -1,0 +1,22 @@
+
+hamster resume 
+
+    Let the hamster continue a job that had been interrupted.
+    
+    Hamster is designed for very large jobs that may run hours on end.
+    If for whatever reason the hamster is interrupted (loss of power, loss
+    of network, accidental process killing...), you can take the job back
+    up where it was left. 
+
+    During any job, every 15 seconds or so, a memento file is updated. 
+    It contains the status of the exploration process, as well as all
+    the content that was fully downloaded but not yet written to the disk.
+    Content that was only partially downloaded at the time of the interruption
+    is not saved in the memento, and will be downloaded again upon resume.
+    
+    hamster resume uses the memento file to carry on.
+   
+    A job can be interrupted and resumed several times without causing
+    any data loss to the overall download job.
+    
+    hamster resume does not take any options.

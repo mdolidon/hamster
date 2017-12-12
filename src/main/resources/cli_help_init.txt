@@ -1,0 +1,11 @@
+
+hamster init
+    
+    Creates a job configuration file in the current folder.
+    It's a text file where you'll describe exactly what you want to do.
+    The sample file contains a cheat-sheet for the configuration language.
+    
+    For more information about the possibilities, run :
+        hamster help configure
+        
+    hamster init does not take any options.

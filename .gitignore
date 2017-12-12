@@ -1,0 +1,9 @@
+*.jar
+.classpath
+.gradle
+.interp
+.project
+.settings
+bin
+build
+playground
