@@ -1,4 +1,4 @@
-package org.mdolidon.hamster;
+package test.org.mdolidon.hamster.core;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

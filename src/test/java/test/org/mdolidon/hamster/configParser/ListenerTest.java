@@ -1,4 +1,4 @@
-package org.mdolidon.hamster.configParser;
+package test.org.mdolidon.hamster.configParser;
 
 import static org.junit.Assert.*;
 import org.junit.Test;

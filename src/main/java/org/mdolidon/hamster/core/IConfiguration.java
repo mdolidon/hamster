@@ -72,8 +72,9 @@ public interface IConfiguration {
 	public TargetProfile getTargetProfile(Link link);
 
 	/**
-	 * Associates an offline location to a link. In normal use, this is only meant
-	 * to be called by link objects.
+	 * Associates an offline location to a link. Two links with the same target URL
+	 * must always end up being stored in the same file. In normal use, this method is only
+	 * meant to be called by link objects.
 	 * 
 	 * @param link
 	 */
