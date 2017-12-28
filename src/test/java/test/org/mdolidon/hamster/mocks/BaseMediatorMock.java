@@ -1,6 +1,7 @@
 package test.org.mdolidon.hamster.mocks;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import org.apache.http.client.protocol.HttpClientContext;
 import org.mdolidon.hamster.core.Content;
@@ -115,6 +116,12 @@ public class BaseMediatorMock implements IMediator {
 	public void resetFromMemento(Serializable memento) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void acceptAllNewLinks(Collection<Link> incomingLinks) throws InterruptedException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

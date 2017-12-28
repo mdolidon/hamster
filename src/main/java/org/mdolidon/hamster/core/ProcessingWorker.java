@@ -7,6 +7,8 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -63,6 +65,7 @@ public class ProcessingWorker implements Runnable {
 	private boolean processCurrentContent(Content content, Link sourceLink, URL baseUrl) throws InterruptedException {
 		InputStream is = new ByteArrayInputStream(content.getBytes());
 		Document dom;
+		List<Link> linksToDownload = new ArrayList<>(20);
 		try {
 			dom = Jsoup.parse(is, null, content.getEffectiveLocation().toString());
 
@@ -80,8 +83,9 @@ public class ProcessingWorker implements Runnable {
 
 		Elements linkElements = selectLinkElements(dom);
 		for (Element el : linkElements) {
-			processLinkElement(el, sourceLink, baseUrl);
+			processLinkElement(el, sourceLink, baseUrl, linksToDownload);
 		}
+		mediator.acceptAllNewLinks(linksToDownload);
 
 		String processedHtml = dom.outerHtml();
 		content.setBytes(processedHtml.getBytes(dom.outputSettings().charset()));
@@ -92,16 +96,17 @@ public class ProcessingWorker implements Runnable {
 		return dom.select("[href],[src]");
 	}
 
-	private void processLinkElement(Element el, Link sourceLink, URL baseUrl) throws InterruptedException {
+	private void processLinkElement(Element el, Link sourceLink, URL baseUrl, List<Link> linksToDownload)
+			throws InterruptedException {
 		if (el.hasAttr("href")) {
-			processLinkElement(el, "href", sourceLink, baseUrl);
+			processLinkElement(el, "href", sourceLink, baseUrl, linksToDownload);
 		} else if (el.hasAttr("src")) {
-			processLinkElement(el, "src", sourceLink, baseUrl);
+			processLinkElement(el, "src", sourceLink, baseUrl, linksToDownload);
 		}
 	}
 
-	private void processLinkElement(Element el, String attributeKey, Link sourceLink, URL baseUrl)
-			throws InterruptedException {
+	private void processLinkElement(Element el, String attributeKey, Link sourceLink, URL baseUrl,
+			List<Link> linksToDownload) throws InterruptedException {
 
 		String refStr = el.attr(attributeKey);
 		try {
@@ -119,7 +124,7 @@ public class ProcessingWorker implements Runnable {
 			if (isPartOfTargetSet) {
 				storageHref = getRelativeHref(sourceLink.getStorageFile(), link.getStorageFile()) + link.getUrlHash();
 				if (needsDownload) {
-					mediator.acceptNewLink(link);
+					linksToDownload.add(link);
 				}
 			} else {
 				// if we won't download the target, make sure we leave an absolute href

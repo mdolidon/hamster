@@ -2,6 +2,7 @@ package org.mdolidon.hamster.core;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.List;
 import java.util.Set;
@@ -156,7 +157,7 @@ public class Mediator implements IMediator {
 			c.setConfiguration_afterDeserialization(configuration);
 		}
 	}
-	
+
 	public void resetFromMemento(Serializable input) throws InterruptedException {
 		if (getJobsLeftCount() > 0 || getNumberOfFilesSaved() > 0) {
 			throw new RuntimeException(
@@ -165,16 +166,16 @@ public class Mediator implements IMediator {
 		MediatorMemento memento = (MediatorMemento) input;
 
 		setAllConfigurationsOnContents(memento.contentToProcess);
-		contentsToBeProcessed.addAll(memento.contentToProcess);	
-		
+		contentsToBeProcessed.addAll(memento.contentToProcess);
+
 		setAllConfigurationsOnContents(memento.contentToStore);
 		contentsToBeStored.addAll(memento.contentToStore);
-		
+
 		setAllConfigurationsOnLinks(memento.linksToDownload);
 		linksToDownload.addAll(memento.linksToDownload);
-		
+
 		urlsAlreadySeen.addAll(memento.urlsAlreadySeen);
-		
+
 		filesSaved.set(memento.filesSaved);
 	}
 
@@ -251,18 +252,31 @@ public class Mediator implements IMediator {
 
 	@Override
 	public void acceptNewLink(Link link) throws InterruptedException {
-		link.unbindSourceElement(); // yes, be paranoid
-		synchronized (urlsAlreadySeen) {
-			String memoizableTarget = link.getTargetAsStringWithoutHash();
-			if (urlsAlreadySeen.contains(memoizableTarget)) {
-				logger.debug("Rejecting URL as already seen : {}", link.getTargetAsString());
-				return;
-			}
-			urlsAlreadySeen.add(memoizableTarget);
+		List<Link> oneLink = new ArrayList<>(1);
+		oneLink.add(link);
+		acceptAllNewLinks(oneLink);
+	}
+
+	@Override
+	public void acceptAllNewLinks(Collection<Link> incomingLinks) throws InterruptedException {
+		for (Link link : incomingLinks) {
+			link.unbindSourceElement();
 		}
-		logger.debug("Forwarding URL to downloads queue : {}", link);
-		linksToDownload.put(link); // If we get blocked here, it means we're utterly saturated !
-									// There's probably no clean way out.
+		List<Link> acceptableLinks = new ArrayList<>(incomingLinks.size());
+		synchronized (urlsAlreadySeen) {
+			for (Link link : incomingLinks) {
+				String memoizableTarget = link.getTargetAsStringWithoutHash();
+				if (urlsAlreadySeen.contains(memoizableTarget)) {
+					logger.debug("Rejecting URL as already seen : {}", link.getTargetAsString());
+				} else {
+					urlsAlreadySeen.add(memoizableTarget);
+					acceptableLinks.add(link);
+				}
+			}
+		}
+		logger.debug("Forwarding {} URLs to downloads queue", acceptableLinks.size());
+		linksToDownload.addAll(acceptableLinks); // If we get blocked here, it means we're utterly saturated !
+		// There's probably no clean way out.
 	}
 
 	//

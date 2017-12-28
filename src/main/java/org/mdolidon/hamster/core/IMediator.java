@@ -1,6 +1,7 @@
 package org.mdolidon.hamster.core;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import org.apache.http.client.protocol.HttpClientContext;
 
@@ -95,14 +96,25 @@ public interface IMediator {
 
 	/**
 	 * Notify the mediator about a new link that has been discovered and checked.
-	 * The mediator will queue this link for later download. It is the caller's
-	 * responsibility to check whether the configuration asks for this link to be
-	 * downloaded or not.
+	 * The mediator will queue this link for later download, provided it has never
+	 * been seen before. It is the caller's responsibility to check whether the
+	 * configuration asks for this link to be downloaded or not.
 	 * 
 	 * @param link
 	 * @throws InterruptedException
 	 */
 	public void acceptNewLink(Link link) throws InterruptedException;
+
+	/**
+	 * Notify the mediator about a collection of new links that have been discovered
+	 * and checked. The mediator will queue each of these links that have never been
+	 * seen before for later download. It is the caller's responsibility to check
+	 * whether the configuration asks for each link to be downloaded or not.
+	 * 
+	 * @param link
+	 * @throws InterruptedException
+	 */
+	public void acceptAllNewLinks(Collection<Link> incomingLinks) throws InterruptedException;
 
 	/**
 	 * Ask the mediator for a Content that needs to be stored. The content's source
