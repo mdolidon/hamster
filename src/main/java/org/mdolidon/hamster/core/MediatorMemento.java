@@ -11,6 +11,7 @@ public class MediatorMemento implements Serializable {
 	public List<Link> linksToDownload;
 	public List<Content> contentToProcess;
 	public List<Content> contentToStore;
+	public List<Link> retriableLinks;
 	public int filesSaved;
 	
 }

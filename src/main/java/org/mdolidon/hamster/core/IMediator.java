@@ -2,6 +2,7 @@ package org.mdolidon.hamster.core;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.http.client.protocol.HttpClientContext;
 
@@ -62,10 +63,11 @@ public interface IMediator {
 	 * link's target.
 	 * 
 	 * @param link
+	 * @param retriable
 	 * @param message
 	 * @throws InterruptedException
 	 */
-	public void acceptDownloadError(Link link, String message) throws InterruptedException;
+	public void acceptDownloadError(Link link, boolean retriable, String message) throws InterruptedException;
 
 	/**
 	 * Ask the mediator for a Content that needs to be rewritten for offline usage.
@@ -190,4 +192,19 @@ public interface IMediator {
 	 */
 	public void resetFromMemento(Serializable memento) throws InterruptedException;
 
+	/**
+	 * Queues the retriable links for a new download attempt. Retriable links are
+	 * links that could not be downloaded due to a failure that could be of
+	 * intermittent nature (loss of connectivity, server error...)
+	 *
+	 */
+	public void recycleRetriableLinks();
+
+	/**
+	 * List the links that were queued for retry. This is meant to provide
+	 * information to the end-user. Retriable links are links that could not be
+	 * downloaded due to a failure that could be of intermittent nature (loss of
+	 * connectivity, server error...)
+	 */
+	public List<Link> getRetriableLinks();
 }

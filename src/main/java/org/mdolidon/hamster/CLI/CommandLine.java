@@ -22,6 +22,15 @@ public class CommandLine {
 	@Parameter(names = { "resume", "--resume"}, description = "Restarts from the memento file")
 	private boolean resume;
 	
+	@Parameter(names= {"retry", "--retry"}, description = "Retry downloads that failed on the latest job")
+	private boolean retry;
+	
+	@Parameter(names= {"info","--info"}, description ="Information flag. Can be associated to other commands.")
+	private boolean info;
+	
+	@Parameter(names= {"dont"}, description="Dont flat. Can be associated to other commands.")
+	private boolean dont;
+	
 	@Parameter(names = { "configure"}, description = "Request the help topic about configuration")
 	private boolean configuration;
 	
@@ -50,6 +59,18 @@ public class CommandLine {
 	
 	public boolean isResume() {
 		return resume;
+	}
+	
+	public boolean isRetry() {
+		return retry;
+	}
+	
+	public boolean isInfoRequest() {
+		return info;
+	}
+	
+	public boolean isDontFlag() {
+		return dont;
 	}
 
 }

@@ -71,6 +71,7 @@ public class Mediator implements IMediator {
 	private Set<String> urlsAlreadySeen = ConcurrentHashMap.newKeySet(URLS_SEEN_INITIAL_CAP);
 	private List<Thread> workerThreads = new ArrayList<>(MAX_WORKERS);
 	private MatcherDrivenList<AuthContextHolder> authContextHolders = new MatcherDrivenList<>();
+	private List<Link> retriableLinks = new ArrayList<>();
 
 	private boolean terminatingFlag = false;
 
@@ -89,6 +90,10 @@ public class Mediator implements IMediator {
 		workerThreads.add(worker);
 	}
 
+	//
+	// ---------- Dealing with persisting and restoring state
+	//
+
 	private void pause() throws InterruptedException {
 		pauseSemaphore.acquire(MAX_WORKERS);
 	}
@@ -97,10 +102,79 @@ public class Mediator implements IMediator {
 		pauseSemaphore.release(MAX_WORKERS);
 	}
 
-	// The following method duplication looks pretty absurd to me, but
+	public Serializable getMemento() throws InterruptedException {
+		pause();
+
+		MediatorMemento memento = new MediatorMemento();
+
+		// copy*InNewList : aggregates set and queue contents in a list
+		memento.contentToProcess = copyContentsInNewList(activeProcessings, contentsToBeProcessed);
+		memento.contentToStore = copyContentsInNewList(activeStoring, contentsToBeStored);
+		memento.linksToDownload = copyLinksInNewList(activeDownloads, linksToDownload);
+
+		memento.retriableLinks = new ArrayList<Link>(retriableLinks);
+		memento.urlsAlreadySeen = new ArrayList<String>(urlsAlreadySeen);
+		memento.filesSaved = filesSaved.get();
+
+		unpause();
+		return memento;
+	}
+
+	public void resetFromMemento(Serializable input) throws InterruptedException {
+		if (getJobsLeftCount() > 0 || getNumberOfFilesSaved() > 0) {
+			throw new RuntimeException(
+					"BUG : resetFromMemento is not meant to be called on a mediator that has already started to work.");
+		}
+		MediatorMemento memento = (MediatorMemento) input;
+
+		setAllConfigurationsOnContents(memento.contentToProcess);
+		contentsToBeProcessed.addAll(memento.contentToProcess);
+
+		setAllConfigurationsOnContents(memento.contentToStore);
+		contentsToBeStored.addAll(memento.contentToStore);
+
+		setAllConfigurationsOnLinks(memento.linksToDownload);
+		linksToDownload.addAll(memento.linksToDownload);
+
+		setAllConfigurationsOnLinks(memento.retriableLinks);
+		retriableLinks.addAll(memento.retriableLinks);
+
+		urlsAlreadySeen.addAll(memento.urlsAlreadySeen);
+
+		filesSaved.set(memento.filesSaved);
+	}
+
+	@Override
+	public void recycleRetriableLinks() {
+		try {
+			linksToDownload.addAll(retriableLinks);
+			retriableLinks.clear();
+		} catch (InterruptedException e) {
+			logger.error("Interrupted while recycling retriable links.");
+		}
+	}
+
+	@Override
+	public List<Link> getRetriableLinks() {
+		return retriableLinks;
+	}
+
+	// The following method duplications look pretty absurd to me, but
 	// it was eventually less of a pain to go with this Go-lang style repetition
 	// than trying to get around the mess of using of .clone on a generic type
 	// parameter.
+
+	private void setAllConfigurationsOnLinks(Iterable<Link> list) {
+		for (Link l : list) {
+			l.setConfiguration_afterDeserialization(configuration);
+		}
+	}
+
+	private void setAllConfigurationsOnContents(Iterable<Content> list) {
+		for (Content c : list) {
+			c.setConfiguration_afterDeserialization(configuration);
+		}
+	}
 
 	private List<Content> copyContentsInNewList(Set<Content> active, PausableBlockingQueue<Content> queue) {
 		List<Content> list = new ArrayList<>(active.size() + queue.size());
@@ -132,55 +206,8 @@ public class Mediator implements IMediator {
 		return list;
 	}
 
-	public Serializable getMemento() throws InterruptedException {
-		pause();
-
-		MediatorMemento memento = new MediatorMemento();
-		memento.contentToProcess = copyContentsInNewList(activeProcessings, contentsToBeProcessed);
-		memento.contentToStore = copyContentsInNewList(activeStoring, contentsToBeStored);
-		memento.linksToDownload = copyLinksInNewList(activeDownloads, linksToDownload);
-		memento.urlsAlreadySeen = new ArrayList<String>(urlsAlreadySeen);
-		memento.filesSaved = filesSaved.get();
-
-		unpause();
-		return memento;
-	}
-
-	private void setAllConfigurationsOnLinks(Iterable<Link> list) {
-		for (Link l : list) {
-			l.setConfiguration_afterDeserialization(configuration);
-		}
-	}
-
-	private void setAllConfigurationsOnContents(Iterable<Content> list) {
-		for (Content c : list) {
-			c.setConfiguration_afterDeserialization(configuration);
-		}
-	}
-
-	public void resetFromMemento(Serializable input) throws InterruptedException {
-		if (getJobsLeftCount() > 0 || getNumberOfFilesSaved() > 0) {
-			throw new RuntimeException(
-					"BUG : resetFromMemento is not meant to be called on a mediator that has already started to work.");
-		}
-		MediatorMemento memento = (MediatorMemento) input;
-
-		setAllConfigurationsOnContents(memento.contentToProcess);
-		contentsToBeProcessed.addAll(memento.contentToProcess);
-
-		setAllConfigurationsOnContents(memento.contentToStore);
-		contentsToBeStored.addAll(memento.contentToStore);
-
-		setAllConfigurationsOnLinks(memento.linksToDownload);
-		linksToDownload.addAll(memento.linksToDownload);
-
-		urlsAlreadySeen.addAll(memento.urlsAlreadySeen);
-
-		filesSaved.set(memento.filesSaved);
-	}
-
 	//
-	// Interaction with the download workers
+	// --------- Interaction with the download workers
 	//
 
 	@Override
@@ -216,16 +243,20 @@ public class Mediator implements IMediator {
 	}
 
 	@Override
-	public void acceptDownloadError(Link link, String message) throws InterruptedException {
-		logger.warn("Downloading error : {} (for {})", message, link);
-
+	public void acceptDownloadError(Link link, boolean retriable, String message) throws InterruptedException {
 		activeDownloads.remove(link);
-
+		if (retriable) {
+			retriableLinks.add(link);
+			logger.warn("Downloading error, stashed for retrying : {} (for {})", message, link);
+		} else {
+			logger.warn("Downloading error, dropping link : {} (for {})", message, link);
+		}
 	}
 
 	//
-	// Interaction with processing workers
-	// Processing : analyzing HTML, extracting links, transforming for storage.
+	// -------- Interaction with processing workers
+	// Processing means : analyzing HTML, extracting links, transforming for
+	// storage.
 	//
 
 	@Override

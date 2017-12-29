@@ -1,6 +1,6 @@
 ## Meet the Hamster
 
-The Hamster is made to hoard websites, partly or completely, to duplicate their content online or make them available offline. It crawls across their pages and downloads what needs be. It was designed with very large jobs in mind that require a fair amount of flexibility (such as bulletin boards), but is also well suited for simple jobs.
+The Hamster is made to hoard websites, partly or completely, to duplicate their content online or make them available offline. It trots across their pages and downloads what needs be. It was designed with very large jobs in mind that require a fair amount of flexibility (such as bulletin boards), but is also well suited for simple jobs.
 
 
 ## How to
@@ -8,6 +8,8 @@ The Hamster is made to hoard websites, partly or completely, to duplicate their 
 First, in some preferably empty directory, you run `hamster init`. That leaves you with a sample `mission_for_the_hamster.txt` file. In that file, you describe the mission in a clear and expressive configuration language. Once done, you run `hamster` and let the hamster hoard.
 
 A large job may be interrupted for whatever reason. Should that happen, just go back there and run `hamster resume`.
+
+At the end of it, some servers may have been down, or the network may have had glitches. If some targets failed to be downloaded because of what could be intermittent errors, the hamster will let you know, and guide you towards `hamster retry`, to specifically address these concerns.
 
 That's all there is to it.
 
@@ -56,7 +58,6 @@ The Hamster is very young. I'll keep improving it. Stuff I'd like to do :
 
 * allow you to configure cookies manually, and possibly improve the check-in process
 * introduce post-processing rules
-* introduce a recovery mechanism to retry downloading contents that may have been missed due to a temporarily faulty connexion, a `hamster retry` that should be as easy to use as `hamster resume`.
-* write decent automated tests !
+* write decent automated tests
 
 But most of all I'd like to get feedback. If you get anything surprising, any bug, any idea of improvement, please create a Github issue, and I'll look into it as time allows. Pull requests are of utmost interest to me.

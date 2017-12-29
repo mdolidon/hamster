@@ -1,11 +1,18 @@
 package org.mdolidon.hamster.CLI;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.io.IOUtils;
@@ -14,6 +21,9 @@ import org.apache.logging.log4j.Logger;
 import org.mdolidon.hamster.configuration.TextConfiguration;
 import org.mdolidon.hamster.core.IConfiguration;
 import org.mdolidon.hamster.core.IMediator;
+import org.mdolidon.hamster.core.Link;
+import org.mdolidon.hamster.core.Mediator;
+import org.mdolidon.hamster.core.Utils;
 import org.mdolidon.hamster.startup.IHamsterStartup;
 import org.mdolidon.hamster.startup.NormalStartup;
 import org.mdolidon.hamster.startup.ResumeStartup;
@@ -70,6 +80,22 @@ public class CLIApp {
 			return;
 		}
 
+		if (commandLine.isRetry() && commandLine.isInfoRequest()) {
+			task_retry_info();
+			return;
+		}
+		
+		if (commandLine.isRetry() && commandLine.isDontFlag()) {
+			task_dont_retry();
+			return;
+		}
+		
+
+		if (commandLine.isRetry()) {
+			task_retry();
+			return;
+		}
+
 		task_runMainJob();
 	}
 
@@ -104,39 +130,103 @@ public class CLIApp {
 	}
 
 	private void task_runMainJob() {
-		if (IHamsterStartup.MEMENTO_FILE.exists()) {
-			System.out.println(
-					"\nA " + IHamsterStartup.MEMENTO_FILE + " exists. It would let you resume an interrupted job.\n"
-							+ "If you're sure that you want to start from scratch, delete that file and relaunch hamster.\n"
-							+ "If you want to resume the job that was interrupted, launch :\n     hamster resume\n");
-			System.exit(1);
+		if (IHamsterStartup.ONGOING_MEMENTO_FILE.exists()) {
+			System.out.println("\nFound a file named " + IHamsterStartup.ONGOING_MEMENTO_FILE
+					+ ". It would let you resume an interrupted job.\n"
+					+ "If you're sure that you want to start from scratch, delete that file and relaunch hamster.\n"
+					+ "If you want to resume the job that was interrupted, launch :\n     hamster resume\n");
+			return;
+		}
+		if (IHamsterStartup.FINAL_MEMENTO_FILE.exists()) {
+			System.out.println("\nFound a file named " + IHamsterStartup.FINAL_MEMENTO_FILE
+					+ ". It would let you retry to download targets that failed\n"
+					+ "due to what may be intermittent failures (loss of connectivity, server errors...) during the last job.\n\n"
+					+ "For more information:\n    hamster retry info\n\n"
+					+ "If you're sure that you want to start from scratch :\n    hamster dont retry\n\n"
+					+ "If you want to retry on those URLs, launch :\n    hamster retry\n");
+			return;
 		}
 
 		loadConfiguration();
 		System.out.println("\nThe exploration starts at " + configuration.getStartUrl());
 		IHamsterStartup startSequence = new NormalStartup(configuration);
-		startAndEnterMainLoop(startSequence);
+		startAndEnterMainLoop(startSequence, false);
 	}
 
 	private void task_resume() {
-		if (!IHamsterStartup.MEMENTO_FILE.exists()) {
-			System.out.println(
-					"\nNo '" + IHamsterStartup.MEMENTO_FILE + "' file found. Don't know where to resume from.\n");
-			System.exit(1);
+		if (!IHamsterStartup.ONGOING_MEMENTO_FILE.exists()) {
+			System.out.println("\nNo '" + IHamsterStartup.ONGOING_MEMENTO_FILE
+					+ "' file found. Don't know where to resume from.\n");
+			return;
 		}
 		loadConfiguration();
 		System.out.println("\nResuming a job that had started at " + configuration.getStartUrl());
-		IHamsterStartup startSequence = new ResumeStartup(configuration);
-		startAndEnterMainLoop(startSequence);
+		IHamsterStartup startSequence = new ResumeStartup(configuration, IHamsterStartup.ONGOING_MEMENTO_FILE);
+		startAndEnterMainLoop(startSequence, false);
 	}
 
-	private void startAndEnterMainLoop(IHamsterStartup startSequence) {
+	private void task_retry() {
+		if (!IHamsterStartup.FINAL_MEMENTO_FILE.exists()) {
+			System.out.println(
+					"\nNo '" + IHamsterStartup.FINAL_MEMENTO_FILE + "' file found. Don't know what to retry.\n");
+			return;
+		}
+		loadConfiguration();
+		System.out.println("\nRetrying URLs on a job that had started at " + configuration.getStartUrl());
+		IHamsterStartup startSequence = new ResumeStartup(configuration, IHamsterStartup.FINAL_MEMENTO_FILE);
+		startAndEnterMainLoop(startSequence, true);
+	}
+	
+	private void task_dont_retry() {
+		File file = IHamsterStartup.FINAL_MEMENTO_FILE;
+		if (file.exists()) {
+			if(file.delete()) {
+				System.out.println("\nThe faulty targets won't be tried anymore.\n");
+			} else {
+				System.out.println("\nCould not delete " + file + "\nPlease do it manually.");
+			}
+		}
+	}
+
+	private void task_retry_info() {
+		loadConfiguration();
+		mediator = new Mediator(configuration);
+		loadRetryFileAndInjectForInfoPrint();
+		List<Link> retriableLinks = mediator.getRetriableLinks();
+
+		if (retriableLinks.isEmpty()) {
+			System.out.println("It seems that nothing needs to be retried.");
+			return;
+		}
+
+		Map<String, Integer> countByDomain = new HashMap<>();
+		for (Link l : retriableLinks) {
+			String domain = l.getTargetDomain();
+			if (countByDomain.containsKey(domain)) {
+				Integer count = countByDomain.get(domain);
+				count = new Integer(count.intValue() + 1);
+				countByDomain.put(domain, count);
+			} else {
+				countByDomain.put(domain, new Integer(1));
+			}
+		}
+		System.out.println("\nThe following failed downloads could be worth retrying :");
+		for(String domain:countByDomain.keySet()) {
+			System.out.println("- " + countByDomain.get(domain) + " on " + domain);
+		}
+		System.out.println("");
+	}
+
+	private void startAndEnterMainLoop(IHamsterStartup startSequence, boolean isRetry) {
 		startSequence.run();
 		if (startSequence.hasErrors()) {
 			System.out.println(startSequence.getErrorMessage());
 			System.exit(1);
 		}
 		mediator = startSequence.getMediator();
+		if (isRetry) {
+			mediator.recycleRetriableLinks();
+		}
 
 		// We check for the mediator to say there's no jobs left to be done.
 		// However, to avoid false positives due to the easy-going approach to
@@ -155,18 +245,22 @@ public class CLIApp {
 				Thread.sleep(300);
 			}
 
-			if (IHamsterStartup.MEMENTO_FILE.exists()) {
-				IHamsterStartup.MEMENTO_FILE.delete();
+			if (IHamsterStartup.ONGOING_MEMENTO_FILE.exists()) {
+				IHamsterStartup.ONGOING_MEMENTO_FILE.delete();
+			}
+			List<Link> retriableLinks = mediator.getRetriableLinks();
+			if (!retriableLinks.isEmpty()) {
+				Utils.writeMementoFile(mediator, IHamsterStartup.FINAL_MEMENTO_FILE);
+				System.out.println("\n" + retriableLinks.size()
+						+ " targets failed being downloaded due to what could be intermittent errors.\n"
+						+ "hamster retry info : more details\n"
+						+ "hamster retry      : make a new attempt on those targets\n"
+						+ "hamster dont retry : forget about it\n");
+			} else {
+				System.out.println("\nDone.\n");
 			}
 		} catch (InterruptedException e) {
-
 		}
-
-		// TODO : tell the user if there were any warnings, and direct him to
-		// the log
-		// file
-
-		System.out.println("\nDone.\n");
 	}
 
 	private void loadConfiguration() {
@@ -200,5 +294,32 @@ public class CLIApp {
 		int savedCount = mediator.getNumberOfFilesSaved();
 		System.out.print("  " + jobsCount + " --> " + savedCount + "       " + waiterSequence[waiterSequenceStep]
 				+ "                \r");
+	}
+
+	private void loadRetryFileAndInjectForInfoPrint() {
+		try {
+			FileInputStream fis = new FileInputStream(IHamsterStartup.FINAL_MEMENTO_FILE);
+			ObjectInputStream ois = new ObjectInputStream(fis);
+			try {
+				logger.info("Reading snapshot file");
+				Serializable memento = (Serializable) ois.readObject();
+
+				logger.trace("Injecting memento into mediator");
+				mediator.resetFromMemento(memento);
+			} catch (ClassNotFoundException e) {
+				logger.error("Could not understand the contents of the retry file : {}",
+						IHamsterStartup.FINAL_MEMENTO_FILE);
+				System.exit(1);
+			} catch (InterruptedException e) {
+			} finally {
+				ois.close();
+			}
+		} catch (FileNotFoundException e) {
+			System.out.println("\nIt seems that nothing needs to be retried.\n");
+			System.exit(1);
+		} catch (IOException e) {
+			logger.error("Can not read file : {}", IHamsterStartup.FINAL_MEMENTO_FILE);
+			System.exit(1);
+		}
 	}
 }

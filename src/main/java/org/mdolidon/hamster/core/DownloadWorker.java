@@ -1,14 +1,12 @@
 package org.mdolidon.hamster.core;
 
+import java.io.IOException;
 import java.io.InputStream;
-
 import java.net.URI;
 import java.net.URL;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -19,6 +17,8 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * This worker class is meant to run in its own separate thread. It will query a
@@ -36,14 +36,30 @@ public class DownloadWorker implements Runnable {
 	private static Logger logger = LogManager.getLogger();
 
 	private class DownloadException extends Exception {
-		public static final long serialVersionUID = 1;
+		public static final long serialVersionUID = 1L;
 
 		public DownloadException(String message) {
 			super(message);
 		}
+	}
+
+	private class NonRetriableDownloadException extends DownloadException {
+		public static final long serialVersionUID = 1L;
+
+		public NonRetriableDownloadException(String message) {
+			super(message);
+		}
 	};
 
-	CloseableHttpClient httpclient;
+	private class RetriableDownloadException extends DownloadException {
+		public static final long serialVersionUID = 1L;
+
+		public RetriableDownloadException(String message) {
+			super(message);
+		}
+	};
+
+	private CloseableHttpClient httpclient;
 	private IMediator mediator;
 	private IConfiguration configuration;
 
@@ -56,21 +72,23 @@ public class DownloadWorker implements Runnable {
 	@Override
 	public void run() {
 		logger.trace("Starting a download worker");
-		
+
 		List<HttpPost> checkinRequests = configuration.getCheckinPostRequests();
-		for(HttpPost request:checkinRequests) {
+		for (HttpPost request : checkinRequests) {
 			postForCheckin(request);
 		}
-		
-		while (true) {
+
+		for (;;) {
 			try {
 				Link link = mediator.provideLinkToDownload();
 				try {
 					Content content = getAsContent(link);
 					mediator.acceptDownloadedContent(content);
 
-				} catch (DownloadException e) {
-					mediator.acceptDownloadError(link, e.getMessage());
+				} catch (NonRetriableDownloadException e) {
+					mediator.acceptDownloadError(link, false, e.getMessage());
+				} catch (RetriableDownloadException e) {
+					mediator.acceptDownloadError(link, true, e.getMessage());
 				}
 			} catch (InterruptedException e) {
 				return;
@@ -86,7 +104,7 @@ public class DownloadWorker implements Runnable {
 	 * @return
 	 * @throws DownloadException
 	 */
-	public Content getAsContent(Link link) throws DownloadException {
+	public Content getAsContent(Link link) throws NonRetriableDownloadException, RetriableDownloadException {
 		try {
 			URL target = link.getTarget();
 			logger.info("Downloading {}", target);
@@ -120,8 +138,10 @@ public class DownloadWorker implements Runnable {
 				response.close();
 				mediator.setAuthContext(link, httpContext);
 			}
+		} catch (IOException | RetriableDownloadException e) {
+			throw new RetriableDownloadException(e.toString());
 		} catch (Exception e) {
-			throw new DownloadException(e.toString());
+			throw new NonRetriableDownloadException(e.toString());
 		}
 	}
 
@@ -144,10 +164,17 @@ public class DownloadWorker implements Runnable {
 		}
 	}
 
-	private void throwIfNoSuccess(URL target, HttpResponse response) throws Exception {
+	private void throwIfNoSuccess(URL target, HttpResponse response)
+			throws NonRetriableDownloadException, RetriableDownloadException {
+
 		int code = response.getStatusLine().getStatusCode();
+		if (code >= 500) {
+			throw new RetriableDownloadException("Got status " + Integer.toString(code));
+		}
 		if (code >= 300) {
-			throw new Exception("Got status " + Integer.toString(code));
+			// successful redirects should be handled by Apache's client ; if we're left
+			// with one, it means that something went wrong
+			throw new NonRetriableDownloadException("Got status " + Integer.toString(code));
 		}
 	}
 

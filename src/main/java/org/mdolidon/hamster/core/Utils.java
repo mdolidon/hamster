@@ -1,6 +1,10 @@
 package org.mdolidon.hamster.core;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -13,7 +17,8 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * A collection of small static helpers.
@@ -21,8 +26,11 @@ import org.apache.http.impl.client.HttpClients;
  */
 public class Utils {
 
+	private static Logger logger = LogManager.getLogger();
+
 	/**
 	 * Get a reference version number, stored as /version.txt resource.
+	 * 
 	 * @return
 	 */
 	public static String getVersion() {
@@ -36,6 +44,7 @@ public class Utils {
 
 	/**
 	 * Get a license text, stored as /license.txt resource.
+	 * 
 	 * @return
 	 */
 	public static String getLicense() {
@@ -49,6 +58,7 @@ public class Utils {
 
 	/**
 	 * Removes the first # in a string, and anything that follows.
+	 * 
 	 * @param str
 	 * @return
 	 */
@@ -63,7 +73,9 @@ public class Utils {
 	}
 
 	/**
-	 * Query a server, follow http redirections, and return the final place we ended up in.
+	 * Query a server, follow http redirections, and return the final place we ended
+	 * up in.
+	 * 
 	 * @param target
 	 * @param context
 	 * @return
@@ -90,8 +102,10 @@ public class Utils {
 	}
 
 	/**
-	 * Return a transformed string, where all characters that are even half exotic are
-	 * replaced by an underscore. Currently leaves only a to z, A to Z, 0 to 9 as well as dots. 
+	 * Return a transformed string, where all characters that are even half exotic
+	 * are replaced by an underscore. Currently leaves only a to z, A to Z, 0 to 9
+	 * as well as dots.
+	 * 
 	 * @param in
 	 * @return
 	 */
@@ -104,6 +118,59 @@ public class Utils {
 			}
 		}
 		return new String(b);
+	}
+
+	/**
+	 * Asks a mediator for its memento, and streams it to a file as a Java
+	 * serialized object.
+	 * 
+	 * @param mediator
+	 * @param file
+	 */
+	public static void writeMementoFile(IMediator mediator, File file) {
+		// There must be a nicer way than this horrible cascade of try/catch...
+
+		FileOutputStream fos;
+		ObjectOutputStream oos;
+		Serializable memento;
+		try {
+
+			logger.trace("Requesting memento");
+			memento = mediator.getMemento();
+			logger.trace("Got memento");
+		} catch (InterruptedException e) {
+			return;
+		}
+
+		try {
+			fos = new FileOutputStream(file);
+		} catch (IOException e) {
+			logger.error("Could open file stream to {}", file);
+			return;
+		}
+
+		try {
+			oos = new ObjectOutputStream(fos);
+		} catch (IOException e) {
+			logger.error("Could not open object stream to {}", file);
+			try {
+				fos.close();
+			} catch (IOException inner_e) {
+			}
+			return;
+		}
+
+		try {
+			oos.writeObject(memento);
+			oos.close();
+			logger.info("Memento successfully written to {}", file);
+		} catch (IOException e) {
+			try {
+				oos.close();
+			} catch (IOException inner_e) {
+			}
+			logger.error("Could not write file {} ; cause : {}", file, e);
+		}
 	}
 
 	private static URL getEffectiveURL(HttpRequestBase request, HttpClientContext context) throws Exception {

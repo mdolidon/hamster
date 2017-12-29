@@ -12,6 +12,8 @@ public class Help {
 			showTopic("init");
 		} else if (commandLine.isResume()) {
 			showTopic("resume");
+		} else if (commandLine.isRetry()) {
+			showTopic("retry");
 		} else if (commandLine.isConfigurationTopicAsked()) {
 			showTopic("configure");
 		} else {

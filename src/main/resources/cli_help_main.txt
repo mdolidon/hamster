@@ -21,3 +21,8 @@ hamster resume
     The hamster starts by reading the memento file, and carries on from there.
     Take note that if you change the configuration file before resuming,
     inconsistencies and broken links may appear in the offline site.
+    
+hamster retry
+    Makes a new attempt on links that could not be downloaded on the last job due
+    to what may be intermittent failures (without any certainty).
+    If that happened, the hamster will let you know and guide you.

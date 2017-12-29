@@ -134,12 +134,14 @@ public class BaseConfiguration implements IConfiguration {
 		IDownloadRule rule = downloadRules.getFirstMatch(link);
 		TargetProfile profile = rule.getTargetProfile(link);
 
+		/*
 		if (profile.isPartOfTargetSet()) {
 			logger.debug("{} should is part of the target according to a {}", link.getTargetAsString(), rule.getDescription());
 		} else {
 			logger.debug("{} should be skipped according to a {}", link.getTarget(), rule.getDescription());
 
-		}
+		}*/
+		
 		return profile;
 	}
 

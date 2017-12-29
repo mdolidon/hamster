@@ -118,6 +118,13 @@ public class Link implements Serializable, Cloneable {
 			return getTargetAsString();
 		}
 	}
+	
+	/**
+	 * This link's target URL's domain.
+	 */
+	public String getTargetDomain() {
+		return target.getAuthority();
+	}
 
 	/**
 	 * Whether this link's target is part of the overall set of content that we want

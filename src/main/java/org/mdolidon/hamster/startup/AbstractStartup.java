@@ -87,7 +87,7 @@ public abstract class AbstractStartup implements IHamsterStartup {
 	}
 	
 	protected void startSnapshotWorker() {
-		startAndRegisterWorker(new MementoWorker(mediator, MEMENTO_FILE, MEMENTO_INTERVAL_IN_SECONDS));
+		startAndRegisterWorker(new MementoWorker(mediator, ONGOING_MEMENTO_FILE, MEMENTO_INTERVAL_IN_SECONDS));
 	}
 
 	protected void startAndRegisterWorker(Runnable worker) {

@@ -1,0 +1,19 @@
+
+As a job goes on, when the hamster bumps into a link that can't be downloaded
+because of what could be an intermittent failure (network error, 
+server error...), the link is set aside in a retry list.
+When the job completes, you are informed of those failures, and the list is left
+in a file in the working directory, along with all the necessary information for 
+a clean new attempt.
+
+hamster retry info
+    Tells you more about what has failed.
+
+hamster retry
+    Run a new attempt on the failed targets. If this time they do respond
+    and if they contain new links, the links will be followed and explored
+    as usual.
+
+hamster dont retry
+    Consider the failed links are a desperate cause, and clear the retry list.
+ 
