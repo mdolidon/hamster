@@ -123,15 +123,23 @@ public class ProcessingWorker implements Runnable {
 
 			if (isPartOfTargetSet) {
 				storageHref = getRelativeHref(sourceLink.getStorageFile(), link.getStorageFile()) + link.getUrlHash();
-				if (needsDownload) {
-					linksToDownload.add(link);
-				}
 			} else {
-				// if we won't download the target, make sure we leave an absolute href
+				// if we won't the target is not part of the target set, make sure we leave an absolute href
 				// in the stored page, to go back online to the right place
 				storageHref = link.getTargetAsString();
 			}
 			el.attr(attributeKey, storageHref);
+			
+			
+			// Targets may be part of the target set, but not need to be downloaded if their offline
+			// copy was produced by a previous job.
+			
+			// Conversely, one could imagine that targets may need to be downloaded even though they're 
+			// not part of the target set, to allow visiting their links whilst not saving them.
+			if (needsDownload) {
+				linksToDownload.add(link);
+			}
+
 		} catch (MalformedURLException e) {
 			logger.info("Ignoring malformed URL : {}, found in {}", refStr, sourceLink.getTargetAsString());
 		}

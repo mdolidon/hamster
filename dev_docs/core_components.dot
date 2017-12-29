@@ -1,0 +1,45 @@
+digraph G {
+
+overlap=scale;
+ratio="compress";
+
+edge [arrowhead="vee", arrowtail="vee", dir="both"];
+node [shape=box,style=filled];
+{node [color="gold"] Content Link};
+{node [color="olivedrab"] FileSystem Network};
+{node [color="seagreen"] Mediator AuthContextHolders};
+{node [color="thistle"] DownloadWorker MementoWorker ProcessingWorker StorageWorker };
+
+
+FileSystem [label="File system"];
+Mediator [label="Mediator\n(mostly piping through blocking queues)"];
+MementoWorker [label="MementoWorker\nSnapshots the mediator"]
+ProcessingWorker [label="ProcessingWorker\nAnalyzes and rewrites HTML"]
+StorageWorker [label="StorageWorker\nStores finalized contents"]
+
+
+Mediator -> DownloadWorker [];
+DownloadWorker -> Network;
+
+Mediator -> ProcessingWorker [];
+
+Mediator -> StorageWorker [];
+StorageWorker -> FileSystem;
+
+Mediator -> AuthContextHolders;
+
+Mediator -> MementoWorker;
+MementoWorker -> FileSystem;
+
+Mediator -> CLIApp;
+
+
+
+Configuration -> CLIApp;
+Configuration -> Content;
+Configuration -> Link;
+Configuration -> Mediator;
+Configuration -> ProcessingWorker;
+Configuration -> DownloadWorker;
+
+}

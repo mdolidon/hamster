@@ -15,25 +15,27 @@ import org.mdolidon.hamster.core.Link;
 import org.mdolidon.hamster.core.Utils;
 import org.mdolidon.hamster.startup.IHamsterStartup;
 
+/**
+ * 
+ * This abstract class offers a template of members and utility methods that its
+ * subclasses may want to use to run a command line task.
+ * 
+ *
+ */
 public abstract class AbstractTask {
-	
+
 	private static Logger logger = LogManager.getLogger();
-	
+
 	private static String[] waiterSequence = { "o.......", " o......", "  o.....", "   o....", "    o...", "     o..",
 			"      o.", "       o" };
 
 	private int waiterSequenceStep = 0;
-	
-	
+
 	protected File configFile = new File("mission_for_the_hamster.txt");
-	
 
 	protected IConfiguration configuration;
 	protected IMediator mediator;
-	
-	
-	
-	
+
 	protected void startAndEnterMainLoop(IHamsterStartup startSequence, boolean isRetry) {
 		logger.trace("Calling core startup");
 		startSequence.run();
@@ -46,22 +48,20 @@ public abstract class AbstractTask {
 			mediator.recycleRetriableLinks();
 		}
 
-		// We check for the mediator to say there's no jobs left to be done.
+		// We check for the mediator to say there's no activities left to be done.
 		// However, to avoid false positives due to the easy-going approach to
-		// counting
-		// jobs,
-		// we wait to have seen 0 jobs several times before shutting down.
+		// counting activities, we wait to have seen 0 jobs several times before shutting down.
 		int timesISawZeroJobsLeft = 0;
 		try {
-			while (timesISawZeroJobsLeft < 3) {
-				if (mediator.getJobsLeftCount() == 0) {
+			do  {
+				updateStatusLine();
+				Thread.sleep(300);
+				if (mediator.getNumberOfTrackedActivities() == 0) {
 					timesISawZeroJobsLeft++;
 				} else {
 					timesISawZeroJobsLeft = 0;
 				}
-				updateStatusLine();
-				Thread.sleep(300);
-			}
+			} while (timesISawZeroJobsLeft < 2);
 
 			if (IHamsterStartup.ONGOING_MEMENTO_FILE.exists()) {
 				IHamsterStartup.ONGOING_MEMENTO_FILE.delete();
@@ -71,9 +71,9 @@ public abstract class AbstractTask {
 				Utils.writeMementoFile(mediator, IHamsterStartup.FINAL_MEMENTO_FILE);
 				System.out.println("\n" + retriableLinks.size()
 						+ " targets failed being downloaded due to what could be intermittent errors.\n"
-						+ "hamster retry info : more details\n"
-						+ "hamster retry      : make a new attempt on those targets\n"
-						+ "hamster dont retry : forget about it\n");
+						+ "    hamster retry info : more details\n"
+						+ "    hamster retry      : make a new attempt on those targets\n"
+						+ "    hamster dont retry : forget about it\n");
 			} else {
 				System.out.println("\nDone.\n");
 			}
@@ -86,7 +86,7 @@ public abstract class AbstractTask {
 			logger.trace("Reading configuration file");
 			byte[] encoded = Files.readAllBytes(configFile.toPath());
 			String configString = new String(encoded, StandardCharsets.UTF_8);
-			
+
 			configuration = new TextConfiguration(configString);
 			logger.trace("Configuration successfully loaded");
 
@@ -111,10 +111,24 @@ public abstract class AbstractTask {
 		waiterSequenceStep++;
 		waiterSequenceStep = waiterSequenceStep % waiterSequence.length;
 
-		int jobsCount = mediator.getJobsLeftCount();
+		int jobsCount = mediator.getNumberOfTrackedActivities();
 		int savedCount = mediator.getNumberOfFilesSaved();
-		System.out.print("  " + jobsCount + " --> " + savedCount + "       " + waiterSequence[waiterSequenceStep]
-				+ "                \r");
+
+		StringBuffer sb = new StringBuffer(80);
+		sb.append("   ");
+		if (mediator.isCriticallyLoaded()) {
+			sb.append("TOO MUCH ! ");
+		}
+		sb.append(jobsCount);
+		sb.append(" --> ");
+		sb.append(savedCount);
+		sb.append("       ");
+		sb.append(waiterSequence[waiterSequenceStep]);
+
+		sb.append("                                                                                ", 0,
+				80 - sb.length());
+		sb.append('\r');
+		System.out.print(sb.toString());
 	}
-	
+
 }

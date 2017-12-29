@@ -17,8 +17,7 @@ import org.apache.http.client.protocol.HttpClientContext;
 public interface IMediator {
 
 	/**
-	 * Attach a worker thread to this mediator. Thus the worker thread won't be
-	 * garbage-collected as long as the mediator references it.
+	 * Attach a worker thread to this mediator.
 	 * 
 	 * @param worker
 	 */
@@ -129,7 +128,7 @@ public interface IMediator {
 	public Content provideContentToStore() throws InterruptedException;
 
 	/**
-	 * Inform the mediator that one content has been successfully stored. U
+	 * Inform the mediator that one content has been successfully stored.
 	 * 
 	 * @throws InterruptedException
 	 */
@@ -153,7 +152,7 @@ public interface IMediator {
 	 * 
 	 * @return
 	 */
-	public int getJobsLeftCount();
+	public int getNumberOfTrackedActivities();
 
 	/**
 	 * How many content files have been saved on this job.

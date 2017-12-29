@@ -44,8 +44,6 @@ public class Mediator implements IMediator {
 	private Set<Content> activeProcessings = ConcurrentHashMap.newKeySet(20);
 	private Set<Content> activeStoring = ConcurrentHashMap.newKeySet(20);
 
-	private AtomicInteger filesSaved = new AtomicInteger(0);
-
 	//
 	//
 	// The queues between the workers.
@@ -72,7 +70,7 @@ public class Mediator implements IMediator {
 	private List<Thread> workerThreads = new ArrayList<>(MAX_WORKERS);
 	private MatcherDrivenList<AuthContextHolder> authContextHolders = new MatcherDrivenList<>();
 	private List<Link> retriableLinks = new ArrayList<>();
-
+	private AtomicInteger filesSaved = new AtomicInteger(0);
 	private boolean terminatingFlag = false;
 
 	public Mediator(IConfiguration configuration) {
@@ -121,11 +119,15 @@ public class Mediator implements IMediator {
 	}
 
 	public void resetFromMemento(Serializable input) throws InterruptedException {
-		if (getJobsLeftCount() > 0 || getNumberOfFilesSaved() > 0) {
+		if (getNumberOfTrackedActivities() > 0 || getNumberOfFilesSaved() > 0) {
 			throw new RuntimeException(
 					"BUG : resetFromMemento is not meant to be called on a mediator that has already started to work.");
 		}
 		MediatorMemento memento = (MediatorMemento) input;
+
+		// setAllConfigurationsOn* is a gimmick that's made necessary by
+		// the fact that links don't serialize their attached configuration along.
+		// They expected us to reinject it after deserializing.
 
 		setAllConfigurationsOnContents(memento.contentToProcess);
 		contentsToBeProcessed.addAll(memento.contentToProcess);
@@ -140,7 +142,6 @@ public class Mediator implements IMediator {
 		retriableLinks.addAll(memento.retriableLinks);
 
 		urlsAlreadySeen.addAll(memento.urlsAlreadySeen);
-
 		filesSaved.set(memento.filesSaved);
 	}
 
@@ -238,7 +239,9 @@ public class Mediator implements IMediator {
 		if (content.isHtml()) {
 			contentsToBeProcessed.put(content);
 		} else {
-			contentsToBeStored.put(content);
+			if (content.getSourceLink().isPartOfTargetSet()) {
+				contentsToBeStored.put(content);
+			}
 		}
 		activeDownloads.remove(content.getSourceLink());
 	}
@@ -272,7 +275,9 @@ public class Mediator implements IMediator {
 
 	@Override
 	public void acceptProcessedContent(Content content) throws InterruptedException {
-		contentsToBeStored.put(content);
+		if (content.getSourceLink().isPartOfTargetSet()) {
+			contentsToBeStored.put(content);
+		}
 		activeProcessings.remove(content);
 	}
 
@@ -342,11 +347,10 @@ public class Mediator implements IMediator {
 	//
 
 	@Override
-	public int getJobsLeftCount() {
+	public int getNumberOfTrackedActivities() {
 		// We do not synchronize here.
 		// It's OK if we're off by one or two : we do not use the result to take
-		// immediate decisions,
-		// only to show the user if there's much left to do or not.
+		// immediate decisions, only to show the user if there's much left to do or not.
 		// However, repeatedly getting 0 should mean that we're done.
 		return linksToDownload.size() + contentsToBeProcessed.size() + contentsToBeStored.size()
 				+ activeDownloads.size() + activeProcessings.size() + activeStoring.size();

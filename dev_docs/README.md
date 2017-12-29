@@ -1,4 +1,27 @@
-# Setting it up with Eclipse
+This is an ad-hoc memo. Detailed documentation is to be found as Javadoc. You can rebuild it with `gradle javadoc`.
+
+# Core system overview
+
+Any running job is animated by the same core. Typically the app's entry point will be the CLIApp, in the hamster.CLI package. The CLIApp will instanciate one of its tasks, depending on the command-line options. The most important tasks will in turn instanciate one of the startup classes from the hamster.startup package. A startup class will set up the core components to run the job.
+
+The core components revolve around two central hinges, and two main data types. The hinges are :
+
+* a configuration object (talked to as an IConfiguration) that can answer any question about *what should be done*. It embeds what is basically an interpretor pattern, which in a normal situation is built according to the user's plain text configuration. Once set up, every call to a method of the configuration object always gives the same answer when provided with the same parameters. In that sense, the configuration object is "purely functional".
+
+* a mediator object (talked to as an IMediator) that keeps track of the changing state of the application. Its primary role is to pipe elements (links and contents) between the workers. To this effect, main implementation is built around a set of blocking queues, as well as lists and sets that keep track of the current job's exact state. The secondary roles include the ability to save that state into a serializable object, that can be written to a file and used later on to recover an interrupted job, or to recycle a job's failed downloads that look like they may be worth retrying.
+
+The main data types are :
+
+* Link : essentially an URL, with a bit of added information. Links are produced by analyzing downloaded contents.
+
+* Content : essentially a raw array of bytes, with a bit of added information too, first of which its source link. Contents are produced by DownloadWorkers, and then analyzed and modified by the ProcessingWorkers to extract relevant links and change HTML attributes to keep the whole site consistent with its new local layout.
+
+The rest is pretty straightforward.
+
+![Hamster core](https://raw.githubusercontent.com/mdolidon/hamster/master/dev_docs/core_components.png)
+
+
+# Setting it up for Eclipse
 
 `gradle eclipse` and then import as an Eclipse project.
 

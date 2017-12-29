@@ -164,8 +164,7 @@ public class Utils {
 		ObjectOutputStream oos;
 		Serializable memento;
 		try {
-
-			logger.trace("Requesting memento");
+			logger.trace("Requesting memento from mediator");
 			memento = mediator.getMemento();
 			logger.trace("Got memento");
 		} catch (InterruptedException e) {
