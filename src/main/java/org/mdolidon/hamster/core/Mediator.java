@@ -146,6 +146,7 @@ public class Mediator implements IMediator {
 
 	@Override
 	public void recycleRetriableLinks() {
+		logger.trace("Recycling the retriable links");
 		try {
 			linksToDownload.addAll(retriableLinks);
 			retriableLinks.clear();

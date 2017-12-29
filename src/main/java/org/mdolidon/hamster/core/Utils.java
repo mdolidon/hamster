@@ -1,8 +1,11 @@
 package org.mdolidon.hamster.core;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.URI;
@@ -38,7 +41,7 @@ public class Utils {
 			String version = IOUtils.resourceToString("/version.txt", StandardCharsets.UTF_8);
 			return version;
 		} catch (IOException e) {
-			return "(could not read version info)";
+			return "(could not read version info ; may be a development version)";
 		}
 	}
 
@@ -120,9 +123,36 @@ public class Utils {
 		return new String(b);
 	}
 
+	
+	
+	public static void loadMementoFile(IMediator mediator, File file, String messageIfNoFileFound) throws Exception {
+		try {
+			FileInputStream fis = new FileInputStream(file);
+			ObjectInputStream ois = new ObjectInputStream(fis);
+
+			try {
+				logger.info("Reading snapshot file");
+				Serializable memento = (Serializable) ois.readObject();
+
+				logger.trace("Injecting memento into mediator");
+				mediator.resetFromMemento(memento);
+			} catch (ClassNotFoundException e) {
+				throw new Exception("Can not deserialize the snapshot : class not found exception.");
+			} catch (InterruptedException e) {
+			} finally {
+				ois.close();
+			}
+		} catch (FileNotFoundException e) {
+			throw new Exception(messageIfNoFileFound);
+		} catch (IOException e) {
+			throw new Exception("Can not read file " + file);
+		}
+	}
+	
+	
 	/**
 	 * Asks a mediator for its memento, and streams it to a file as a Java
-	 * serialized object.
+	 * serialized object. The method takes care of opening and closing the file.
 	 * 
 	 * @param mediator
 	 * @param file

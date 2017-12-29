@@ -24,7 +24,7 @@ public class NormalStartup extends AbstractStartup {
 			startDownloadWorkers();
 			startProcessingWorkers();
 			startStorageWorkers();
-			startSnapshotWorker();
+			startMementoWorker();
 
 			mediator.acceptNewLink(new Link(configuration.getStartUrl(), 0, configuration));
 

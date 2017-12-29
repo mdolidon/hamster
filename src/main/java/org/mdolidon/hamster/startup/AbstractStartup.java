@@ -3,6 +3,8 @@ package org.mdolidon.hamster.startup;
 import java.net.URL;
 
 import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mdolidon.hamster.core.DownloadWorker;
 import org.mdolidon.hamster.core.ErrorsBoard;
 import org.mdolidon.hamster.core.IConfiguration;
@@ -22,6 +24,8 @@ import org.mdolidon.hamster.core.Utils;
  * startup.
  */
 public abstract class AbstractStartup implements IHamsterStartup {
+	
+	private static Logger logger = LogManager.getLogger();
 
 	protected static int MEMENTO_INTERVAL_IN_SECONDS = 15;
 	
@@ -61,6 +65,7 @@ public abstract class AbstractStartup implements IHamsterStartup {
 	}
 
 	protected void correctStartUrl() throws Exception {
+		logger.trace("Checking if the start URL has any redirections");
 		URL configuredStartUrl = configuration.getStartUrl();
 		HttpClientContext context = mediator.getAuthContext(new Link(configuredStartUrl, 0, configuration));
 		URL correctedStartUrl = Utils.fetchEffectiveURL(configuredStartUrl, context);
@@ -70,6 +75,7 @@ public abstract class AbstractStartup implements IHamsterStartup {
 	}
 
 	protected void startDownloadWorkers() {
+		logger.trace("Starting download workers");
 		for (int i = 0; i < configuration.getMaxConcurrentRequests(); i++) {
 			startAndRegisterWorker(new DownloadWorker(mediator, configuration));
 		}
@@ -77,16 +83,19 @@ public abstract class AbstractStartup implements IHamsterStartup {
 
 	protected void startProcessingWorkers() {
 		int cores = Runtime.getRuntime().availableProcessors();
+		logger.trace("Starting processing workers");
 		for (int i = 0; i < cores; i++) {
 			startAndRegisterWorker(new ProcessingWorker(mediator, configuration));
 		}
 	}
 
 	protected void startStorageWorkers() {
+		logger.trace("Starting storage worker");
 		startAndRegisterWorker(new StorageWorker(mediator));
 	}
 	
-	protected void startSnapshotWorker() {
+	protected void startMementoWorker() {
+		logger.trace("Starting memento worker");
 		startAndRegisterWorker(new MementoWorker(mediator, ONGOING_MEMENTO_FILE, MEMENTO_INTERVAL_IN_SECONDS));
 	}
 

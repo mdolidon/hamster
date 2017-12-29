@@ -1,6 +1,6 @@
 ## Meet the Hamster
 
-The Hamster is made to hoard websites, partly or completely, to duplicate their content online or make them available offline. It trots across their pages and downloads what needs be. It was designed with very large jobs in mind that require a fair amount of flexibility (such as bulletin boards), but is also well suited for simple jobs.
+The Hamster is made to hoard websites, partly or completely, to duplicate their content online or make them available offline. It trots across their pages following rules that you set. It was designed with very large jobs in mind that require a fair amount of flexibility (such as bulletin boards) and emphasized reliability, but is also well suited for simple jobs.
 
 
 ## How to
