@@ -1,4 +1,4 @@
-package test.org.mdolidon.hamster.storageResolvers;
+package test.org.mdolidon.hamster.configuration.storageResolvers;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -18,7 +18,7 @@ public class TreeStorageResolverTest {
 
 	@Test
 	public void sameUrlMapsToSameFile() throws Exception {
-		IConfiguration cfg = new Config(startUrlStr);
+		IConfiguration cfg = new MockConfig(startUrlStr);
 		IStorageResolver r = new TreeStorageResolver(new All(), "dir");
 
 		Link l1 = new Link(new URL(startUrlStr + "/folder/index.html"), 1, cfg);
@@ -30,7 +30,7 @@ public class TreeStorageResolverTest {
 
 	@Test
 	public void sameUrlWithDifferentHashMapsToSameFile() throws Exception {
-		IConfiguration cfg = new Config(startUrlStr);
+		IConfiguration cfg = new MockConfig(startUrlStr);
 		IStorageResolver r = new TreeStorageResolver(new All(), "dir");
 
 		Link l0 = new Link(new URL(startUrlStr + "/folder/index.html"), 1, cfg);
@@ -44,7 +44,7 @@ public class TreeStorageResolverTest {
 
 	@Test
 	public void worksIfNoUnderDirSpecified() throws Exception {
-		IConfiguration cfg = new Config(startUrlStr);
+		IConfiguration cfg = new MockConfig(startUrlStr);
 		IStorageResolver r = new TreeStorageResolver(new All(), null);
 
 		Link l1 = new Link(new URL(startUrlStr + "index.html"), 1, cfg);
@@ -59,7 +59,7 @@ public class TreeStorageResolverTest {
 		// collision is tolerated if folder names end with what looks
 		// like a file extension
 
-		IConfiguration cfg = new Config(startUrlStr);
+		IConfiguration cfg = new MockConfig(startUrlStr);
 		IStorageResolver r = new TreeStorageResolver(new All(), null);
 
 		Link l1 = new Link(new URL(startUrlStr + "/folder"), 1, cfg);
@@ -71,7 +71,7 @@ public class TreeStorageResolverTest {
 
 	@Test
 	public void parentDirNameLikeLinkPath() throws Exception {
-		IConfiguration cfg = new Config(startUrlStr);
+		IConfiguration cfg = new MockConfig(startUrlStr);
 		IStorageResolver r = new TreeStorageResolver(new All(), "dir");
 
 		Link l1 = new Link(new URL(startUrlStr + "/one/index.html"), 1, cfg);
@@ -88,7 +88,7 @@ public class TreeStorageResolverTest {
 	@Test
 	public void decentFileNamesPreserved() throws Exception {
 
-		IConfiguration cfg = new Config(startUrlStr);
+		IConfiguration cfg = new MockConfig(startUrlStr);
 		IStorageResolver r = new TreeStorageResolver(new All(), null);
 
 		Link l1 = new Link(new URL(startUrlStr + "/folder/useful_prog-1.2.3.jar"), 1, cfg);

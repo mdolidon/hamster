@@ -54,10 +54,5 @@ Soon enough I'll offer better packaging, and especially a Debian package.
 
 ## Maturity
 
-The Hamster is very young. I'll keep improving it. Stuff I'd like to do :
-
-* allow you to configure cookies manually, and possibly improve the check-in process
-* introduce post-processing rules
-* write decent automated tests
-
+The Hamster is very young. I'll keep improving it. There is some more advanced functionality I'd like to implement. I also need to write decent tests. 
 But most of all I'd like to get feedback. If you get anything surprising, any bug, any idea of improvement, please create a Github issue, and I'll look into it as time allows. Pull requests are of utmost interest to me.

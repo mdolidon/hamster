@@ -13,7 +13,7 @@ public class Not implements IMatcher {
 
 	public Not(IMatcher matcher) {
 		if (matcher == null) {
-			throw new NullPointerException("Tried to build a MatcherInverter object with a null child matcher");
+			throw new NullPointerException("Tried to build a Not matcher object with a null child matcher");
 		}
 		this.matcher = matcher;
 	}

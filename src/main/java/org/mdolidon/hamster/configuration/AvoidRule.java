@@ -9,8 +9,6 @@ import org.mdolidon.hamster.core.TargetProfile;
  */
 public class AvoidRule extends AbstractDownloadRule {
 
-	IMatcher matcher;
-
 	public AvoidRule(IMatcher matcher) {
 		super(matcher, "'avoid' rule", new TargetProfile(false, false));
 	}

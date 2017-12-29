@@ -10,8 +10,6 @@ import org.mdolidon.hamster.core.TargetProfile;
 
 public class GetRule extends AbstractDownloadRule {
 
-	IMatcher matcher;
-
 	public GetRule(IMatcher matcher) {
 		super(matcher, "'get' rule", new TargetProfile(true, true));
 	}

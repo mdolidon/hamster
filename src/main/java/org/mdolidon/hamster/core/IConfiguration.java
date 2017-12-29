@@ -63,8 +63,8 @@ public interface IConfiguration {
 	 * When given a Link object, this method responds whether that link's target is
 	 * part of the overall target set (whatever distant stuff we'd like to replicate
 	 * locally), and whether it should be downloaded. Both can be different for
-	 * example in the case of an 'unknown ' rule. In normal use, this is only meant
-	 * to be called by link objects.
+	 * example in the case of an 'unknown ' rule. In normal use, this is meant
+	 * to be called by link objects ; they cache the result.
 	 * 
 	 * @param link
 	 * @return
@@ -73,8 +73,8 @@ public interface IConfiguration {
 
 	/**
 	 * Associates an offline location to a link. Two links with the same target URL
-	 * must always end up being stored in the same file. In normal use, this method is only
-	 * meant to be called by link objects.
+	 * must always end up being stored in the same file. In normal use, this method is 
+	 * meant to be called by link objects ; they cache the result.
 	 * 
 	 * @param link
 	 */

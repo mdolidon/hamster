@@ -11,7 +11,6 @@ import org.mdolidon.hamster.core.TargetProfile;
 
 public class GetUnknownRule extends AbstractDownloadRule {
 
-	IMatcher matcher;
 	TargetProfile profile_unknownTarget = new TargetProfile(true, true);
 	TargetProfile profile_knownTarget = new TargetProfile(true, false);
 

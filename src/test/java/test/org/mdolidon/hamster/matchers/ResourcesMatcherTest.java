@@ -8,7 +8,7 @@ import org.mdolidon.hamster.core.IConfiguration;
 import org.mdolidon.hamster.core.Link;
 import org.mdolidon.hamster.matchers.Resources;
 
-import test.org.mdolidon.hamster.mocks.BaseConfigMock;
+import test.org.mdolidon.hamster.mocks.BaseMockConfig;
 
 public class ResourcesMatcherTest {
 
@@ -16,7 +16,7 @@ public class ResourcesMatcherTest {
 	public void onUrls() throws Exception {
 
 		Resources matcher = new Resources();
-		IConfiguration cfg = new BaseConfigMock();
+		IConfiguration cfg = new BaseMockConfig();
 
 		Link link = new Link(new URL("http://place.by/the/fire"), 0, cfg);
 		assertFalse(matcher.matches(link));
@@ -35,7 +35,7 @@ public class ResourcesMatcherTest {
 	@Test
 	public void onLinkFlags() throws Exception {
 		Resources matcher = new Resources();
-		IConfiguration cfg = new BaseConfigMock();
+		IConfiguration cfg = new BaseMockConfig();
 		Link link = new Link(new URL("http://some.other.place/out/1234avatar"), 0, cfg);
 		assertFalse(matcher.matches(link));
 

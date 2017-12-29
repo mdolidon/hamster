@@ -7,13 +7,13 @@ import org.mdolidon.hamster.core.IConfiguration;
 import org.mdolidon.hamster.core.Link;
 import org.mdolidon.hamster.matchers.URLs;
 
-import test.org.mdolidon.hamster.mocks.BaseConfigMock;
+import test.org.mdolidon.hamster.mocks.BaseMockConfig;
 
 public class URLTargetMatcherTest {
 
 	@Test
 	public void matching() throws Exception {
-		IConfiguration cfg = new BaseConfigMock();
+		IConfiguration cfg = new BaseMockConfig();
 		URLs matcher = new URLs(".*\\.jpg");
 
 		Link link = new Link(new URL("http://place.at/image.jpg"), 0, cfg);
@@ -26,7 +26,7 @@ public class URLTargetMatcherTest {
 	@Test
 	public void replacing() throws Exception {
 		URLs matcher = new URLs(".*topic.([0-9]+).message.([0-9]+).*");
-		IConfiguration cfg = new BaseConfigMock();
+		IConfiguration cfg = new BaseMockConfig();
 
 		Link link = new Link(new URL("http://place.at/image.jpg"), 0, cfg);
 		assertFalse(matcher.matches(link));

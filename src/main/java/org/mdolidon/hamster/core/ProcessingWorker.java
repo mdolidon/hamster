@@ -27,6 +27,14 @@ import org.jsoup.select.Elements;
 
 public class ProcessingWorker implements Runnable {
 
+	private class ProcessingException extends Exception {
+		private static final long serialVersionUID = 1L;
+		ProcessingException(String message) {
+			super(message);
+		}
+	}
+	
+
 	private static Logger logger = LogManager.getLogger();
 
 	private IMediator mediator;
@@ -44,16 +52,13 @@ public class ProcessingWorker implements Runnable {
 		while (true) {
 			try {
 				Content content = mediator.provideContentToProcess();
-				Link sourceLink = content.getSourceLink();
-				URL baseUrl = content.getEffectiveLocation(); // may be mutated if a <base> element is found
-																// in the contents
-
-				logger.trace("Processing worker got document for {}", baseUrl);
-
-				boolean success = processCurrentContent(content, sourceLink, baseUrl);
-
-				if (success) {
+				try {
+					List<Link> linksToDownload = processCurrentContent(content);
+					mediator.acceptAllNewLinks(linksToDownload);
 					mediator.acceptProcessedContent(content);
+
+				} catch (ProcessingException e) {
+					mediator.acceptProcessingError(content, e.getMessage());
 				}
 			} catch (InterruptedException e) {
 				return;
@@ -61,35 +66,39 @@ public class ProcessingWorker implements Runnable {
 		}
 	}
 
-	// returns true on success
-	private boolean processCurrentContent(Content content, Link sourceLink, URL baseUrl) throws InterruptedException {
+	// Made public for testing purposes.
+	// Mutates the Content rather than copying it.
+	public List<Link> processCurrentContent(Content content) throws ProcessingException, InterruptedException {
+
+		URL baseUrl = content.getEffectiveLocation(); // may be changed in the presence of a <base> element
+		if (baseUrl == null) {
+			logger.warn("No effective location was set for {} ; using source link URL instead. May be unreliable.",
+					content.getSourceLink());
+			baseUrl = content.getSourceLink().getTarget();
+		}
+
+		logger.trace("Processing worker got document for {}", baseUrl);
+
 		InputStream is = new ByteArrayInputStream(content.getBytes());
 		Document dom;
 		List<Link> linksToDownload = new ArrayList<>(20);
 		try {
-			dom = Jsoup.parse(is, null, content.getEffectiveLocation().toString());
+			dom = Jsoup.parse(is, null, baseUrl.toString());
 
 		} catch (IOException e) {
-			mediator.acceptProcessingError(content, "Error while trying to parse HTML content");
-			return false;
+			throw new ProcessingException("Error while trying to parse HTML content");
 		}
 
-		try {
-			baseUrl = getNewBaseUrl_IfBaseElement(baseUrl, dom);
-		} catch (Exception e) {
-			mediator.acceptProcessingError(content, e.getMessage());
-			return false;
-		}
+		baseUrl = getNewBaseUrl_IfBaseElement(baseUrl, dom);
 
 		Elements linkElements = selectLinkElements(dom);
 		for (Element el : linkElements) {
-			processLinkElement(el, sourceLink, baseUrl, linksToDownload);
+			processLinkElement(el, content.getSourceLink(), baseUrl, linksToDownload);
 		}
-		mediator.acceptAllNewLinks(linksToDownload);
 
 		String processedHtml = dom.outerHtml();
 		content.setBytes(processedHtml.getBytes(dom.outputSettings().charset()));
-		return true;
+		return linksToDownload;
 	}
 
 	private Elements selectLinkElements(Document dom) {
@@ -108,6 +117,9 @@ public class ProcessingWorker implements Runnable {
 	private void processLinkElement(Element el, String attributeKey, Link sourceLink, URL baseUrl,
 			List<Link> linksToDownload) throws InterruptedException {
 
+		if(el.tagName()=="base") {
+			return;
+		}
 		String refStr = el.attr(attributeKey);
 		try {
 			String storageHref;
@@ -124,18 +136,21 @@ public class ProcessingWorker implements Runnable {
 			if (isPartOfTargetSet) {
 				storageHref = getRelativeHref(sourceLink.getStorageFile(), link.getStorageFile()) + link.getUrlHash();
 			} else {
-				// if we won't the target is not part of the target set, make sure we leave an absolute href
+				// if we won't the target is not part of the target set, make sure we leave an
+				// absolute href
 				// in the stored page, to go back online to the right place
 				storageHref = link.getTargetAsString();
 			}
 			el.attr(attributeKey, storageHref);
-			
-			
-			// Targets may be part of the target set, but not need to be downloaded if their offline
+
+			// Targets may be part of the target set, but not need to be downloaded if their
+			// offline
 			// copy was produced by a previous job.
-			
-			// Conversely, one could imagine that targets may need to be downloaded even though they're 
-			// not part of the target set, to allow visiting their links whilst not saving them.
+
+			// Conversely, one could imagine that targets may need to be downloaded even
+			// though they're
+			// not part of the target set, to allow visiting their links whilst not saving
+			// them.
 			if (needsDownload) {
 				linksToDownload.add(link);
 			}
@@ -143,7 +158,6 @@ public class ProcessingWorker implements Runnable {
 		} catch (MalformedURLException e) {
 			logger.info("Ignoring malformed URL : {}, found in {}", refStr, sourceLink.getTargetAsString());
 		}
-
 	}
 
 	private String getRelativeHref(File from, File to) {
@@ -173,13 +187,13 @@ public class ProcessingWorker implements Runnable {
 
 	}
 
-	private URL getNewBaseUrl_IfBaseElement(URL baseUrl, Document dom) throws Exception {
+	private URL getNewBaseUrl_IfBaseElement(URL baseUrl, Document dom) throws ProcessingException {
 		Elements baseElems = dom.select("base");
 		if (baseElems.isEmpty()) {
 			return baseUrl;
 		}
 		if (baseElems.size() > 1) {
-			throw new Exception(
+			throw new ProcessingException(
 					"Several <base> elements in the document. This is invalid HTML, and I don't know which one to use.");
 		}
 		Element base = baseElems.first();
@@ -188,7 +202,7 @@ public class ProcessingWorker implements Runnable {
 				// the href SHOULD be absolute, but I'm sure people WILL put relative URLs...
 				return new URL(baseUrl, base.attr("href"));
 			} catch (MalformedURLException e) {
-				throw new Exception("<base> element has a malformed URL : " + base.attr("href"));
+				throw new ProcessingException("<base> element has a malformed URL : " + base.attr("href"));
 			}
 		}
 		return baseUrl;

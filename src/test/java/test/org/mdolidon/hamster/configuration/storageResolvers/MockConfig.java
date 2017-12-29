@@ -1,13 +1,13 @@
-package test.org.mdolidon.hamster.storageResolvers;
+package test.org.mdolidon.hamster.configuration.storageResolvers;
 
 import java.net.URL;
 
-import test.org.mdolidon.hamster.mocks.BaseConfigMock;
+import test.org.mdolidon.hamster.mocks.BaseMockConfig;
 
-public class Config extends BaseConfigMock {
+public class MockConfig extends BaseMockConfig {
 	private String startUrlStr; 
 
-	public Config(String startUrlStr) {
+	public MockConfig(String startUrlStr) {
 		this.startUrlStr = startUrlStr;
 	}
 

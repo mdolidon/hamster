@@ -14,7 +14,7 @@ public class And implements IMatcher {
 
 	public And(IMatcher m1, IMatcher m2) {
 		if (m1 == null || m2 == null) {
-			throw new NullPointerException("Tried to build a MatcherInverter object with a null child matcher");
+			throw new NullPointerException("Tried to build an And matcher object with a null child matcher");
 		}
 		this.m1 = m1;
 		this.m2 = m2;

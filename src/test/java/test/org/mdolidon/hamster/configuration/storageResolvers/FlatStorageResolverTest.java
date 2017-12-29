@@ -1,4 +1,4 @@
-package test.org.mdolidon.hamster.storageResolvers;
+package test.org.mdolidon.hamster.configuration.storageResolvers;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -21,7 +21,7 @@ public class FlatStorageResolverTest {
 	
 	@Test
 	public void sameUrlMapsToSameFile() throws Exception {
-		IConfiguration cfg = new Config(startUrlStr);
+		IConfiguration cfg = new MockConfig(startUrlStr);
 		IStorageResolver r = new FlatStorageResolver(new All(), cfg, "dir");
 
 		Link l1 = new Link(new URL(startUrlStr + "/folder/index.html"), 1, cfg);
@@ -33,7 +33,7 @@ public class FlatStorageResolverTest {
 	
 	@Test
 	public void sameUrlWithDifferentHashMapsToSameFile() throws Exception {
-		IConfiguration cfg = new Config(startUrlStr);
+		IConfiguration cfg = new MockConfig(startUrlStr);
 		IStorageResolver r = new FlatStorageResolver(new All(), cfg, "dir");
 
 		Link l0 = new Link(new URL(startUrlStr + "/folder/index.html"), 1, cfg);
@@ -48,7 +48,7 @@ public class FlatStorageResolverTest {
 	
 	@Test
 	public void inSameDirectory() throws Exception {
-		IConfiguration cfg = new Config(startUrlStr);
+		IConfiguration cfg = new MockConfig(startUrlStr);
 		IStorageResolver r = new FlatStorageResolver(new All(), cfg, "dir");
 
 		Link l1 = new Link(new URL(startUrlStr + "/folder/index.html"), 1, cfg);
@@ -61,7 +61,7 @@ public class FlatStorageResolverTest {
 
 	@Test
 	public void worksIfNoUnderDirSpecified() throws Exception {
-		IConfiguration cfg = new Config(startUrlStr);
+		IConfiguration cfg = new MockConfig(startUrlStr);
 		IStorageResolver r = new FlatStorageResolver(new All(), cfg, null);
 
 		Link l1 = new Link(new URL(startUrlStr + "/folder/index.html"), 1, cfg);
@@ -74,7 +74,7 @@ public class FlatStorageResolverTest {
 
 	@Test
 	public void noCollisionIfSameFilename() throws Exception {
-		IConfiguration cfg = new Config(startUrlStr);
+		IConfiguration cfg = new MockConfig(startUrlStr);
 		IStorageResolver r = new FlatStorageResolver(new All(), cfg, null);
 
 		Link l1 = new Link(new URL(startUrlStr + "/folder/file.html"), 1, cfg);
@@ -85,7 +85,7 @@ public class FlatStorageResolverTest {
 
 	@Test
 	public void startUrlAsIndexHtml() throws Exception {
-		IConfiguration cfg = new Config(startUrlStr);
+		IConfiguration cfg = new MockConfig(startUrlStr);
 		IStorageResolver r = new FlatStorageResolver(new All(), cfg, "underDir");
 
 		Link l1 = new Link(new URL(startUrlStr), 1, cfg);

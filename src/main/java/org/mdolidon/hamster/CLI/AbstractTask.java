@@ -126,7 +126,7 @@ public abstract class AbstractTask {
 		sb.append(waiterSequence[waiterSequenceStep]);
 
 		sb.append("                                                                                ", 0,
-				80 - sb.length());
+				75 - sb.length());
 		sb.append('\r');
 		System.out.print(sb.toString());
 	}

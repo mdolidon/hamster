@@ -1,4 +1,4 @@
-package test.org.mdolidon.hamster.storageResolvers;
+package test.org.mdolidon.hamster.configuration.storageResolvers;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -20,7 +20,7 @@ public class RegexStorageResolverTest {
 
 	@Test
 	public void sameUrlWithDifferentHashMapsToSameFile() throws Exception {
-		IConfiguration cfg = new Config(startUrlStr);
+		IConfiguration cfg = new MockConfig(startUrlStr);
 		IStorageResolver r = new RegexStorageResolver(new URLs("(.*)"), "$1");
 
 		Link l0 = new Link(new URL(startUrlStr + "/folder/index.html"), 1, cfg);
@@ -34,7 +34,7 @@ public class RegexStorageResolverTest {
 
 	@Test
 	public void mapsUrlToFile() throws Exception {
-		IConfiguration cfg = new Config(startUrlStr);
+		IConfiguration cfg = new MockConfig(startUrlStr);
 		IStorageResolver r = new RegexStorageResolver(new URLs(".*topic.([0-9]+).message.([0-9]+).*"),
 				"board/$1/$2.html");
 

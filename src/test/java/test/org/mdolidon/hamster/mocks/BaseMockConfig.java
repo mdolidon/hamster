@@ -11,7 +11,7 @@ import org.mdolidon.hamster.core.IMatcher;
 import org.mdolidon.hamster.core.Link;
 import org.mdolidon.hamster.core.TargetProfile;
 
-public class BaseConfigMock implements IConfiguration {
+public class BaseMockConfig implements IConfiguration {
 
 	@Override
 	public boolean isValid() {
