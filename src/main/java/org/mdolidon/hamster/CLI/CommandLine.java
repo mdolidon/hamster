@@ -34,6 +34,9 @@ public class CommandLine {
 	@Parameter(names = { "configure"}, description = "Request the help topic about configuration")
 	private boolean configuration;
 	
+	@Parameter(names = { "version", "--version", "about","--about"}, description = "Version number")
+	private boolean version;
+	
 
 	public static CommandLine parse(String[] args) {
 		CommandLine cl = new CommandLine();
@@ -71,6 +74,10 @@ public class CommandLine {
 	
 	public boolean isDontFlag() {
 		return dont;
+	}
+	
+	public boolean isVersionAsked() {
+		return version;
 	}
 
 }
