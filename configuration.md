@@ -59,6 +59,17 @@ Here, depending on whether the hamster wants to download a page from the same do
 
 You can have as many authentication rules as you like, and the first one that matches applies. If there are no such rules, regular anonymous requests are made.
 
+### Manually defined cookies
+
+You can also introduce cookies at the beginning of a job. If during the job the target site wants to change them, they'll be changed accordingly. One cookie directive looks like :
+
+    cookies "aName" = "aValue"
+            "aSession" = "w41rdH3x"
+        on "my.forum.net/home"
+
+This is a cookie directive.You can declare several cookie directives and they will simply add up. Each directive can define one or several cookies, on a given domain and path. The domain and path spec is the usual standard ; this is one place where I dropped the matchers logic in favour of an already usual way.
+
+
 ## Step 2 : finding the links and choosing which ones to follow
 
 Once the starting page has been downloaded, and for every HTML document that's downloaded after that, the hamster scans all links. That means anything with a *src* or an *href* : hypertext links, Javascript resources, images, CSS, you name it.

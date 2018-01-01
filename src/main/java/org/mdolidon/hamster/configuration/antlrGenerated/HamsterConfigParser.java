@@ -17,51 +17,51 @@ public class HamsterConfigParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		ALL=1, AS=2, AS_TREE=3, AVOID=4, CHECK_IN_AT=5, CSS=6, DOMAIN=7, EACH=8, 
-		FLAT=9, FROM=10, GET=11, GET_UNKNOWN=12, IMAGES=13, ITEMS_ON_DOMAIN=14, 
-		JUMPS=15, JUMPS_AND_MORE=16, KB=17, MAXIMUM=18, MB=19, ON=20, OUTSIDE=21, 
-		PARALLEL_DOWNLOADS=22, PASSWORD=23, POST=24, RESOURCES=25, SAVE=26, START_AT=27, 
-		SUBPATHS=28, UNDER=29, UNKNOWN=30, UP_TO=31, URLS=32, USER=33, EQUALS=34, 
-		INTEGER_LITERAL=35, OPENING_QUOTE=36, COMMENT=37, WS=38, WORD=39, CLOSING_QUOTE=40, 
-		STRING_LITERAL=41;
+		ALL=1, AS=2, AS_TREE=3, AVOID=4, CHECK_IN_AT=5, COOKIES=6, CSS=7, DOMAIN=8, 
+		EACH=9, FLAT=10, FROM=11, GET=12, GET_UNKNOWN=13, IMAGES=14, ITEMS_ON_DOMAIN=15, 
+		JUMPS=16, JUMPS_AND_MORE=17, KB=18, MAXIMUM=19, MB=20, ON=21, OUTSIDE=22, 
+		PARALLEL_DOWNLOADS=23, PASSWORD=24, POST=25, RESOURCES=26, SAVE=27, START_AT=28, 
+		SUBPATHS=29, UNDER=30, UNKNOWN=31, UP_TO=32, URLS=33, USER=34, EQUALS=35, 
+		INTEGER_LITERAL=36, OPENING_QUOTE=37, COMMENT=38, WS=39, WORD=40, CLOSING_QUOTE=41, 
+		STRING_LITERAL=42;
 	public static final int
-		RULE_integer = 0, RULE_string = 1, RULE_config = 2, RULE_directive = 3, 
-		RULE_start_directive = 4, RULE_parallel_directive = 5, RULE_max_size_directive = 6, 
-		RULE_max_size_per_file_directive = 7, RULE_size_unit = 8, RULE_kilobytes = 9, 
-		RULE_megabytes = 10, RULE_save_directive = 11, RULE_save_as_tree = 12, 
-		RULE_save_flat = 13, RULE_save_under_clause = 14, RULE_save_regex_to_template = 15, 
-		RULE_download_directive = 16, RULE_get_rule = 17, RULE_get_unknown_rule = 18, 
-		RULE_avoid_rule = 19, RULE_authentication_directive = 20, RULE_simple_authentication_rule = 21, 
-		RULE_checkin_directive = 22, RULE_checkin_post_param = 23, RULE_matcher = 24, 
-		RULE_unknown_matcher_op = 25, RULE_matchers_product = 26, RULE_rest = 27, 
-		RULE_and_matcher = 28, RULE_and_not_matcher = 29, RULE_matcher_factor = 30, 
-		RULE_not_matcher_op = 31, RULE_all_matcher = 32, RULE_images_matcher = 33, 
-		RULE_same_domain_matcher = 34, RULE_subpaths_matcher = 35, RULE_resources_matcher = 36, 
-		RULE_css_matcher = 37, RULE_urls_matcher = 38, RULE_max_jumps_matcher = 39, 
-		RULE_min_jumps_matcher = 40;
+		RULE_integer = 0, RULE_string = 1, RULE_string_properties_map = 2, RULE_string_property = 3, 
+		RULE_config = 4, RULE_directive = 5, RULE_start_directive = 6, RULE_parallel_directive = 7, 
+		RULE_max_size_directive = 8, RULE_max_size_per_file_directive = 9, RULE_size_unit = 10, 
+		RULE_kilobytes = 11, RULE_megabytes = 12, RULE_save_directive = 13, RULE_save_as_tree = 14, 
+		RULE_save_flat = 15, RULE_save_under_clause = 16, RULE_save_regex_to_template = 17, 
+		RULE_download_directive = 18, RULE_get_rule = 19, RULE_get_unknown_rule = 20, 
+		RULE_avoid_rule = 21, RULE_authentication_directive = 22, RULE_simple_authentication_rule = 23, 
+		RULE_checkin_directive = 24, RULE_cookies_directive = 25, RULE_matcher = 26, 
+		RULE_unknown_matcher_op = 27, RULE_matchers_product = 28, RULE_rest = 29, 
+		RULE_and_matcher = 30, RULE_and_not_matcher = 31, RULE_matcher_factor = 32, 
+		RULE_not_matcher_op = 33, RULE_all_matcher = 34, RULE_images_matcher = 35, 
+		RULE_same_domain_matcher = 36, RULE_subpaths_matcher = 37, RULE_resources_matcher = 38, 
+		RULE_css_matcher = 39, RULE_urls_matcher = 40, RULE_max_jumps_matcher = 41, 
+		RULE_min_jumps_matcher = 42;
 	public static final String[] ruleNames = {
-		"integer", "string", "config", "directive", "start_directive", "parallel_directive", 
-		"max_size_directive", "max_size_per_file_directive", "size_unit", "kilobytes", 
-		"megabytes", "save_directive", "save_as_tree", "save_flat", "save_under_clause", 
-		"save_regex_to_template", "download_directive", "get_rule", "get_unknown_rule", 
-		"avoid_rule", "authentication_directive", "simple_authentication_rule", 
-		"checkin_directive", "checkin_post_param", "matcher", "unknown_matcher_op", 
-		"matchers_product", "rest", "and_matcher", "and_not_matcher", "matcher_factor", 
-		"not_matcher_op", "all_matcher", "images_matcher", "same_domain_matcher", 
-		"subpaths_matcher", "resources_matcher", "css_matcher", "urls_matcher", 
-		"max_jumps_matcher", "min_jumps_matcher"
+		"integer", "string", "string_properties_map", "string_property", "config", 
+		"directive", "start_directive", "parallel_directive", "max_size_directive", 
+		"max_size_per_file_directive", "size_unit", "kilobytes", "megabytes", 
+		"save_directive", "save_as_tree", "save_flat", "save_under_clause", "save_regex_to_template", 
+		"download_directive", "get_rule", "get_unknown_rule", "avoid_rule", "authentication_directive", 
+		"simple_authentication_rule", "checkin_directive", "cookies_directive", 
+		"matcher", "unknown_matcher_op", "matchers_product", "rest", "and_matcher", 
+		"and_not_matcher", "matcher_factor", "not_matcher_op", "all_matcher", 
+		"images_matcher", "same_domain_matcher", "subpaths_matcher", "resources_matcher", 
+		"css_matcher", "urls_matcher", "max_jumps_matcher", "min_jumps_matcher"
 	};
 
 	private static final String[] _LITERAL_NAMES = {
-		null, "'all'", "'as'", null, "'avoid'", null, "'css'", "'domain'", "'each'", 
-		"'flat'", "'from'", "'get'", null, "'images'", null, null, null, "'Kb'", 
-		"'maximum'", "'Mb'", "'on'", "'outside'", null, "'password'", "'post'", 
-		"'resources'", "'save'", null, "'subpaths'", "'under'", "'unknown'", null, 
-		"'urls'", "'user'", "'='"
+		null, "'all'", "'as'", null, "'avoid'", null, null, "'css'", "'domain'", 
+		"'each'", "'flat'", "'from'", "'get'", null, "'images'", null, null, null, 
+		"'Kb'", "'maximum'", "'Mb'", "'on'", "'outside'", null, "'password'", 
+		"'post'", "'resources'", "'save'", null, "'subpaths'", "'under'", "'unknown'", 
+		null, "'urls'", "'user'", "'='"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
-		null, "ALL", "AS", "AS_TREE", "AVOID", "CHECK_IN_AT", "CSS", "DOMAIN", 
-		"EACH", "FLAT", "FROM", "GET", "GET_UNKNOWN", "IMAGES", "ITEMS_ON_DOMAIN", 
+		null, "ALL", "AS", "AS_TREE", "AVOID", "CHECK_IN_AT", "COOKIES", "CSS", 
+		"DOMAIN", "EACH", "FLAT", "FROM", "GET", "GET_UNKNOWN", "IMAGES", "ITEMS_ON_DOMAIN", 
 		"JUMPS", "JUMPS_AND_MORE", "KB", "MAXIMUM", "MB", "ON", "OUTSIDE", "PARALLEL_DOWNLOADS", 
 		"PASSWORD", "POST", "RESOURCES", "SAVE", "START_AT", "SUBPATHS", "UNDER", 
 		"UNKNOWN", "UP_TO", "URLS", "USER", "EQUALS", "INTEGER_LITERAL", "OPENING_QUOTE", 
@@ -138,7 +138,7 @@ public class HamsterConfigParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(82);
+			setState(86);
 			match(INTEGER_LITERAL);
 			}
 		}
@@ -175,8 +175,110 @@ public class HamsterConfigParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(84);
+			setState(88);
 			match(STRING_LITERAL);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class String_properties_mapContext extends ParserRuleContext {
+		public List<String_propertyContext> string_property() {
+			return getRuleContexts(String_propertyContext.class);
+		}
+		public String_propertyContext string_property(int i) {
+			return getRuleContext(String_propertyContext.class,i);
+		}
+		public String_properties_mapContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_string_properties_map; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof HamsterConfigParserListener ) ((HamsterConfigParserListener)listener).enterString_properties_map(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof HamsterConfigParserListener ) ((HamsterConfigParserListener)listener).exitString_properties_map(this);
+		}
+	}
+
+	public final String_properties_mapContext string_properties_map() throws RecognitionException {
+		String_properties_mapContext _localctx = new String_properties_mapContext(_ctx, getState());
+		enterRule(_localctx, 4, RULE_string_properties_map);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(93);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while (_la==STRING_LITERAL) {
+				{
+				{
+				setState(90);
+				string_property();
+				}
+				}
+				setState(95);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class String_propertyContext extends ParserRuleContext {
+		public List<StringContext> string() {
+			return getRuleContexts(StringContext.class);
+		}
+		public StringContext string(int i) {
+			return getRuleContext(StringContext.class,i);
+		}
+		public TerminalNode EQUALS() { return getToken(HamsterConfigParser.EQUALS, 0); }
+		public String_propertyContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_string_property; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof HamsterConfigParserListener ) ((HamsterConfigParserListener)listener).enterString_property(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof HamsterConfigParserListener ) ((HamsterConfigParserListener)listener).exitString_property(this);
+		}
+	}
+
+	public final String_propertyContext string_property() throws RecognitionException {
+		String_propertyContext _localctx = new String_propertyContext(_ctx, getState());
+		enterRule(_localctx, 6, RULE_string_property);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(96);
+			string();
+			setState(97);
+			match(EQUALS);
+			setState(98);
+			string();
 			}
 		}
 		catch (RecognitionException re) {
@@ -214,26 +316,26 @@ public class HamsterConfigParser extends Parser {
 
 	public final ConfigContext config() throws RecognitionException {
 		ConfigContext _localctx = new ConfigContext(_ctx, getState());
-		enterRule(_localctx, 4, RULE_config);
+		enterRule(_localctx, 8, RULE_config);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(89);
+			setState(103);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << AVOID) | (1L << CHECK_IN_AT) | (1L << GET) | (1L << GET_UNKNOWN) | (1L << MAXIMUM) | (1L << SAVE) | (1L << START_AT) | (1L << USER) | (1L << INTEGER_LITERAL))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << AVOID) | (1L << CHECK_IN_AT) | (1L << COOKIES) | (1L << GET) | (1L << GET_UNKNOWN) | (1L << MAXIMUM) | (1L << SAVE) | (1L << START_AT) | (1L << USER) | (1L << INTEGER_LITERAL))) != 0)) {
 				{
 				{
-				setState(86);
+				setState(100);
 				directive();
 				}
 				}
-				setState(91);
+				setState(105);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(92);
+			setState(106);
 			match(EOF);
 			}
 		}
@@ -270,6 +372,9 @@ public class HamsterConfigParser extends Parser {
 		public Checkin_directiveContext checkin_directive() {
 			return getRuleContext(Checkin_directiveContext.class,0);
 		}
+		public Cookies_directiveContext cookies_directive() {
+			return getRuleContext(Cookies_directiveContext.class,0);
+		}
 		public DirectiveContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -286,22 +391,22 @@ public class HamsterConfigParser extends Parser {
 
 	public final DirectiveContext directive() throws RecognitionException {
 		DirectiveContext _localctx = new DirectiveContext(_ctx, getState());
-		enterRule(_localctx, 6, RULE_directive);
+		enterRule(_localctx, 10, RULE_directive);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(101);
+			setState(116);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case START_AT:
 				{
-				setState(94);
+				setState(108);
 				start_directive();
 				}
 				break;
 			case INTEGER_LITERAL:
 				{
-				setState(95);
+				setState(109);
 				parallel_directive();
 				}
 				break;
@@ -309,32 +414,38 @@ public class HamsterConfigParser extends Parser {
 			case GET:
 			case GET_UNKNOWN:
 				{
-				setState(96);
+				setState(110);
 				download_directive();
 				}
 				break;
 			case SAVE:
 				{
-				setState(97);
+				setState(111);
 				save_directive();
 				}
 				break;
 			case USER:
 				{
-				setState(98);
+				setState(112);
 				authentication_directive();
 				}
 				break;
 			case MAXIMUM:
 				{
-				setState(99);
+				setState(113);
 				max_size_directive();
 				}
 				break;
 			case CHECK_IN_AT:
 				{
-				setState(100);
+				setState(114);
 				checkin_directive();
+				}
+				break;
+			case COOKIES:
+				{
+				setState(115);
+				cookies_directive();
 				}
 				break;
 			default:
@@ -374,13 +485,13 @@ public class HamsterConfigParser extends Parser {
 
 	public final Start_directiveContext start_directive() throws RecognitionException {
 		Start_directiveContext _localctx = new Start_directiveContext(_ctx, getState());
-		enterRule(_localctx, 8, RULE_start_directive);
+		enterRule(_localctx, 12, RULE_start_directive);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(103);
+			setState(118);
 			match(START_AT);
-			setState(104);
+			setState(119);
 			string();
 			}
 		}
@@ -416,13 +527,13 @@ public class HamsterConfigParser extends Parser {
 
 	public final Parallel_directiveContext parallel_directive() throws RecognitionException {
 		Parallel_directiveContext _localctx = new Parallel_directiveContext(_ctx, getState());
-		enterRule(_localctx, 10, RULE_parallel_directive);
+		enterRule(_localctx, 14, RULE_parallel_directive);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(106);
+			setState(121);
 			integer();
-			setState(107);
+			setState(122);
 			match(PARALLEL_DOWNLOADS);
 			}
 		}
@@ -457,11 +568,11 @@ public class HamsterConfigParser extends Parser {
 
 	public final Max_size_directiveContext max_size_directive() throws RecognitionException {
 		Max_size_directiveContext _localctx = new Max_size_directiveContext(_ctx, getState());
-		enterRule(_localctx, 12, RULE_max_size_directive);
+		enterRule(_localctx, 16, RULE_max_size_directive);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(109);
+			setState(124);
 			max_size_per_file_directive();
 			}
 		}
@@ -505,27 +616,27 @@ public class HamsterConfigParser extends Parser {
 
 	public final Max_size_per_file_directiveContext max_size_per_file_directive() throws RecognitionException {
 		Max_size_per_file_directiveContext _localctx = new Max_size_per_file_directiveContext(_ctx, getState());
-		enterRule(_localctx, 14, RULE_max_size_per_file_directive);
+		enterRule(_localctx, 18, RULE_max_size_per_file_directive);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(111);
+			setState(126);
 			match(MAXIMUM);
-			setState(112);
+			setState(127);
 			integer();
-			setState(113);
+			setState(128);
 			size_unit();
-			setState(114);
+			setState(129);
 			match(EACH);
-			setState(117);
+			setState(132);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==FROM) {
 				{
-				setState(115);
+				setState(130);
 				match(FROM);
-				setState(116);
+				setState(131);
 				matcher();
 				}
 			}
@@ -566,22 +677,22 @@ public class HamsterConfigParser extends Parser {
 
 	public final Size_unitContext size_unit() throws RecognitionException {
 		Size_unitContext _localctx = new Size_unitContext(_ctx, getState());
-		enterRule(_localctx, 16, RULE_size_unit);
+		enterRule(_localctx, 20, RULE_size_unit);
 		try {
-			setState(121);
+			setState(136);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case KB:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(119);
+				setState(134);
 				kilobytes();
 				}
 				break;
 			case MB:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(120);
+				setState(135);
 				megabytes();
 				}
 				break;
@@ -618,11 +729,11 @@ public class HamsterConfigParser extends Parser {
 
 	public final KilobytesContext kilobytes() throws RecognitionException {
 		KilobytesContext _localctx = new KilobytesContext(_ctx, getState());
-		enterRule(_localctx, 18, RULE_kilobytes);
+		enterRule(_localctx, 22, RULE_kilobytes);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(123);
+			setState(138);
 			match(KB);
 			}
 		}
@@ -655,11 +766,11 @@ public class HamsterConfigParser extends Parser {
 
 	public final MegabytesContext megabytes() throws RecognitionException {
 		MegabytesContext _localctx = new MegabytesContext(_ctx, getState());
-		enterRule(_localctx, 20, RULE_megabytes);
+		enterRule(_localctx, 24, RULE_megabytes);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(125);
+			setState(140);
 			match(MB);
 			}
 		}
@@ -701,30 +812,30 @@ public class HamsterConfigParser extends Parser {
 
 	public final Save_directiveContext save_directive() throws RecognitionException {
 		Save_directiveContext _localctx = new Save_directiveContext(_ctx, getState());
-		enterRule(_localctx, 22, RULE_save_directive);
+		enterRule(_localctx, 26, RULE_save_directive);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(127);
+			setState(142);
 			match(SAVE);
-			setState(131);
+			setState(146);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,4,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,5,_ctx) ) {
 			case 1:
 				{
-				setState(128);
+				setState(143);
 				save_as_tree();
 				}
 				break;
 			case 2:
 				{
-				setState(129);
+				setState(144);
 				save_flat();
 				}
 				break;
 			case 3:
 				{
-				setState(130);
+				setState(145);
 				save_regex_to_template();
 				}
 				break;
@@ -766,29 +877,29 @@ public class HamsterConfigParser extends Parser {
 
 	public final Save_as_treeContext save_as_tree() throws RecognitionException {
 		Save_as_treeContext _localctx = new Save_as_treeContext(_ctx, getState());
-		enterRule(_localctx, 24, RULE_save_as_tree);
+		enterRule(_localctx, 28, RULE_save_as_tree);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(134);
+			setState(149);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << ALL) | (1L << CSS) | (1L << DOMAIN) | (1L << IMAGES) | (1L << ITEMS_ON_DOMAIN) | (1L << OUTSIDE) | (1L << RESOURCES) | (1L << SUBPATHS) | (1L << UNKNOWN) | (1L << UP_TO) | (1L << URLS) | (1L << INTEGER_LITERAL))) != 0)) {
 				{
-				setState(133);
+				setState(148);
 				matcher();
 				}
 			}
 
-			setState(136);
+			setState(151);
 			match(AS_TREE);
-			setState(138);
+			setState(153);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==UNDER) {
 				{
-				setState(137);
+				setState(152);
 				save_under_clause();
 				}
 			}
@@ -830,29 +941,29 @@ public class HamsterConfigParser extends Parser {
 
 	public final Save_flatContext save_flat() throws RecognitionException {
 		Save_flatContext _localctx = new Save_flatContext(_ctx, getState());
-		enterRule(_localctx, 26, RULE_save_flat);
+		enterRule(_localctx, 30, RULE_save_flat);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(141);
+			setState(156);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << ALL) | (1L << CSS) | (1L << DOMAIN) | (1L << IMAGES) | (1L << ITEMS_ON_DOMAIN) | (1L << OUTSIDE) | (1L << RESOURCES) | (1L << SUBPATHS) | (1L << UNKNOWN) | (1L << UP_TO) | (1L << URLS) | (1L << INTEGER_LITERAL))) != 0)) {
 				{
-				setState(140);
+				setState(155);
 				matcher();
 				}
 			}
 
-			setState(143);
+			setState(158);
 			match(FLAT);
-			setState(145);
+			setState(160);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==UNDER) {
 				{
-				setState(144);
+				setState(159);
 				save_under_clause();
 				}
 			}
@@ -891,13 +1002,13 @@ public class HamsterConfigParser extends Parser {
 
 	public final Save_under_clauseContext save_under_clause() throws RecognitionException {
 		Save_under_clauseContext _localctx = new Save_under_clauseContext(_ctx, getState());
-		enterRule(_localctx, 28, RULE_save_under_clause);
+		enterRule(_localctx, 32, RULE_save_under_clause);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(147);
+			setState(162);
 			match(UNDER);
-			setState(148);
+			setState(163);
 			string();
 			}
 		}
@@ -936,15 +1047,15 @@ public class HamsterConfigParser extends Parser {
 
 	public final Save_regex_to_templateContext save_regex_to_template() throws RecognitionException {
 		Save_regex_to_templateContext _localctx = new Save_regex_to_templateContext(_ctx, getState());
-		enterRule(_localctx, 30, RULE_save_regex_to_template);
+		enterRule(_localctx, 34, RULE_save_regex_to_template);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(150);
+			setState(165);
 			urls_matcher();
-			setState(151);
+			setState(166);
 			match(AS);
-			setState(152);
+			setState(167);
 			string();
 			}
 		}
@@ -985,28 +1096,28 @@ public class HamsterConfigParser extends Parser {
 
 	public final Download_directiveContext download_directive() throws RecognitionException {
 		Download_directiveContext _localctx = new Download_directiveContext(_ctx, getState());
-		enterRule(_localctx, 32, RULE_download_directive);
+		enterRule(_localctx, 36, RULE_download_directive);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(157);
+			setState(172);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case GET:
 				{
-				setState(154);
+				setState(169);
 				get_rule();
 				}
 				break;
 			case GET_UNKNOWN:
 				{
-				setState(155);
+				setState(170);
 				get_unknown_rule();
 				}
 				break;
 			case AVOID:
 				{
-				setState(156);
+				setState(171);
 				avoid_rule();
 				}
 				break;
@@ -1047,13 +1158,13 @@ public class HamsterConfigParser extends Parser {
 
 	public final Get_ruleContext get_rule() throws RecognitionException {
 		Get_ruleContext _localctx = new Get_ruleContext(_ctx, getState());
-		enterRule(_localctx, 34, RULE_get_rule);
+		enterRule(_localctx, 38, RULE_get_rule);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(159);
+			setState(174);
 			match(GET);
-			setState(160);
+			setState(175);
 			matcher();
 			}
 		}
@@ -1089,13 +1200,13 @@ public class HamsterConfigParser extends Parser {
 
 	public final Get_unknown_ruleContext get_unknown_rule() throws RecognitionException {
 		Get_unknown_ruleContext _localctx = new Get_unknown_ruleContext(_ctx, getState());
-		enterRule(_localctx, 36, RULE_get_unknown_rule);
+		enterRule(_localctx, 40, RULE_get_unknown_rule);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(162);
+			setState(177);
 			match(GET_UNKNOWN);
-			setState(163);
+			setState(178);
 			matcher();
 			}
 		}
@@ -1131,13 +1242,13 @@ public class HamsterConfigParser extends Parser {
 
 	public final Avoid_ruleContext avoid_rule() throws RecognitionException {
 		Avoid_ruleContext _localctx = new Avoid_ruleContext(_ctx, getState());
-		enterRule(_localctx, 38, RULE_avoid_rule);
+		enterRule(_localctx, 42, RULE_avoid_rule);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(165);
+			setState(180);
 			match(AVOID);
-			setState(166);
+			setState(181);
 			matcher();
 			}
 		}
@@ -1172,11 +1283,11 @@ public class HamsterConfigParser extends Parser {
 
 	public final Authentication_directiveContext authentication_directive() throws RecognitionException {
 		Authentication_directiveContext _localctx = new Authentication_directiveContext(_ctx, getState());
-		enterRule(_localctx, 40, RULE_authentication_directive);
+		enterRule(_localctx, 44, RULE_authentication_directive);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(168);
+			setState(183);
 			simple_authentication_rule();
 			}
 		}
@@ -1220,21 +1331,21 @@ public class HamsterConfigParser extends Parser {
 
 	public final Simple_authentication_ruleContext simple_authentication_rule() throws RecognitionException {
 		Simple_authentication_ruleContext _localctx = new Simple_authentication_ruleContext(_ctx, getState());
-		enterRule(_localctx, 42, RULE_simple_authentication_rule);
+		enterRule(_localctx, 46, RULE_simple_authentication_rule);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(170);
+			setState(185);
 			match(USER);
-			setState(171);
+			setState(186);
 			string();
-			setState(172);
+			setState(187);
 			match(PASSWORD);
-			setState(173);
+			setState(188);
 			string();
-			setState(174);
+			setState(189);
 			match(ON);
-			setState(175);
+			setState(190);
 			matcher();
 			}
 		}
@@ -1255,11 +1366,8 @@ public class HamsterConfigParser extends Parser {
 			return getRuleContext(StringContext.class,0);
 		}
 		public TerminalNode POST() { return getToken(HamsterConfigParser.POST, 0); }
-		public List<Checkin_post_paramContext> checkin_post_param() {
-			return getRuleContexts(Checkin_post_paramContext.class);
-		}
-		public Checkin_post_paramContext checkin_post_param(int i) {
-			return getRuleContext(Checkin_post_paramContext.class,i);
+		public String_properties_mapContext string_properties_map() {
+			return getRuleContext(String_properties_mapContext.class,0);
 		}
 		public Checkin_directiveContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1277,31 +1385,18 @@ public class HamsterConfigParser extends Parser {
 
 	public final Checkin_directiveContext checkin_directive() throws RecognitionException {
 		Checkin_directiveContext _localctx = new Checkin_directiveContext(_ctx, getState());
-		enterRule(_localctx, 44, RULE_checkin_directive);
-		int _la;
+		enterRule(_localctx, 48, RULE_checkin_directive);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(177);
+			setState(192);
 			match(CHECK_IN_AT);
-			setState(178);
+			setState(193);
 			string();
-			setState(179);
+			setState(194);
 			match(POST);
-			setState(183);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==STRING_LITERAL) {
-				{
-				{
-				setState(180);
-				checkin_post_param();
-				}
-				}
-				setState(185);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			}
+			setState(195);
+			string_properties_map();
 			}
 		}
 		catch (RecognitionException re) {
@@ -1315,39 +1410,42 @@ public class HamsterConfigParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Checkin_post_paramContext extends ParserRuleContext {
-		public List<StringContext> string() {
-			return getRuleContexts(StringContext.class);
+	public static class Cookies_directiveContext extends ParserRuleContext {
+		public TerminalNode COOKIES() { return getToken(HamsterConfigParser.COOKIES, 0); }
+		public String_properties_mapContext string_properties_map() {
+			return getRuleContext(String_properties_mapContext.class,0);
 		}
-		public StringContext string(int i) {
-			return getRuleContext(StringContext.class,i);
+		public TerminalNode ON() { return getToken(HamsterConfigParser.ON, 0); }
+		public StringContext string() {
+			return getRuleContext(StringContext.class,0);
 		}
-		public TerminalNode EQUALS() { return getToken(HamsterConfigParser.EQUALS, 0); }
-		public Checkin_post_paramContext(ParserRuleContext parent, int invokingState) {
+		public Cookies_directiveContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_checkin_post_param; }
+		@Override public int getRuleIndex() { return RULE_cookies_directive; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof HamsterConfigParserListener ) ((HamsterConfigParserListener)listener).enterCheckin_post_param(this);
+			if ( listener instanceof HamsterConfigParserListener ) ((HamsterConfigParserListener)listener).enterCookies_directive(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof HamsterConfigParserListener ) ((HamsterConfigParserListener)listener).exitCheckin_post_param(this);
+			if ( listener instanceof HamsterConfigParserListener ) ((HamsterConfigParserListener)listener).exitCookies_directive(this);
 		}
 	}
 
-	public final Checkin_post_paramContext checkin_post_param() throws RecognitionException {
-		Checkin_post_paramContext _localctx = new Checkin_post_paramContext(_ctx, getState());
-		enterRule(_localctx, 46, RULE_checkin_post_param);
+	public final Cookies_directiveContext cookies_directive() throws RecognitionException {
+		Cookies_directiveContext _localctx = new Cookies_directiveContext(_ctx, getState());
+		enterRule(_localctx, 50, RULE_cookies_directive);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(186);
-			string();
-			setState(187);
-			match(EQUALS);
-			setState(188);
+			setState(197);
+			match(COOKIES);
+			setState(198);
+			string_properties_map();
+			setState(199);
+			match(ON);
+			setState(200);
 			string();
 			}
 		}
@@ -1385,15 +1483,15 @@ public class HamsterConfigParser extends Parser {
 
 	public final MatcherContext matcher() throws RecognitionException {
 		MatcherContext _localctx = new MatcherContext(_ctx, getState());
-		enterRule(_localctx, 48, RULE_matcher);
+		enterRule(_localctx, 52, RULE_matcher);
 		try {
-			setState(192);
+			setState(204);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case UNKNOWN:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(190);
+				setState(202);
 				unknown_matcher_op();
 				}
 				break;
@@ -1410,7 +1508,7 @@ public class HamsterConfigParser extends Parser {
 			case INTEGER_LITERAL:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(191);
+				setState(203);
 				matchers_product();
 				}
 				break;
@@ -1450,13 +1548,13 @@ public class HamsterConfigParser extends Parser {
 
 	public final Unknown_matcher_opContext unknown_matcher_op() throws RecognitionException {
 		Unknown_matcher_opContext _localctx = new Unknown_matcher_opContext(_ctx, getState());
-		enterRule(_localctx, 50, RULE_unknown_matcher_op);
+		enterRule(_localctx, 54, RULE_unknown_matcher_op);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(194);
+			setState(206);
 			match(UNKNOWN);
-			setState(195);
+			setState(207);
 			matchers_product();
 			}
 		}
@@ -1494,13 +1592,13 @@ public class HamsterConfigParser extends Parser {
 
 	public final Matchers_productContext matchers_product() throws RecognitionException {
 		Matchers_productContext _localctx = new Matchers_productContext(_ctx, getState());
-		enterRule(_localctx, 52, RULE_matchers_product);
+		enterRule(_localctx, 56, RULE_matchers_product);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(197);
+			setState(209);
 			matcher_factor();
-			setState(198);
+			setState(210);
 			rest();
 			}
 		}
@@ -1541,33 +1639,33 @@ public class HamsterConfigParser extends Parser {
 
 	public final RestContext rest() throws RecognitionException {
 		RestContext _localctx = new RestContext(_ctx, getState());
-		enterRule(_localctx, 54, RULE_rest);
+		enterRule(_localctx, 58, RULE_rest);
 		try {
-			setState(207);
+			setState(219);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,13,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(202);
+				setState(214);
 				_errHandler.sync(this);
 				switch (_input.LA(1)) {
 				case ON:
 					{
-					setState(200);
+					setState(212);
 					and_matcher();
 					}
 					break;
 				case OUTSIDE:
 					{
-					setState(201);
+					setState(213);
 					and_not_matcher();
 					}
 					break;
 				default:
 					throw new NoViableAltException(this);
 				}
-				setState(204);
+				setState(216);
 				rest();
 				}
 				break;
@@ -1610,13 +1708,13 @@ public class HamsterConfigParser extends Parser {
 
 	public final And_matcherContext and_matcher() throws RecognitionException {
 		And_matcherContext _localctx = new And_matcherContext(_ctx, getState());
-		enterRule(_localctx, 56, RULE_and_matcher);
+		enterRule(_localctx, 60, RULE_and_matcher);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(209);
+			setState(221);
 			match(ON);
-			setState(210);
+			setState(222);
 			matcher_factor();
 			}
 		}
@@ -1652,13 +1750,13 @@ public class HamsterConfigParser extends Parser {
 
 	public final And_not_matcherContext and_not_matcher() throws RecognitionException {
 		And_not_matcherContext _localctx = new And_not_matcherContext(_ctx, getState());
-		enterRule(_localctx, 58, RULE_and_not_matcher);
+		enterRule(_localctx, 62, RULE_and_not_matcher);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(212);
+			setState(224);
 			match(OUTSIDE);
-			setState(213);
+			setState(225);
 			matcher_factor();
 			}
 		}
@@ -1720,71 +1818,71 @@ public class HamsterConfigParser extends Parser {
 
 	public final Matcher_factorContext matcher_factor() throws RecognitionException {
 		Matcher_factorContext _localctx = new Matcher_factorContext(_ctx, getState());
-		enterRule(_localctx, 60, RULE_matcher_factor);
+		enterRule(_localctx, 64, RULE_matcher_factor);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(225);
+			setState(237);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case OUTSIDE:
 				{
-				setState(215);
+				setState(227);
 				not_matcher_op();
 				}
 				break;
 			case ALL:
 				{
-				setState(216);
+				setState(228);
 				all_matcher();
 				}
 				break;
 			case CSS:
 				{
-				setState(217);
+				setState(229);
 				css_matcher();
 				}
 				break;
 			case IMAGES:
 				{
-				setState(218);
+				setState(230);
 				images_matcher();
 				}
 				break;
 			case UP_TO:
 				{
-				setState(219);
+				setState(231);
 				max_jumps_matcher();
 				}
 				break;
 			case INTEGER_LITERAL:
 				{
-				setState(220);
+				setState(232);
 				min_jumps_matcher();
 				}
 				break;
 			case RESOURCES:
 				{
-				setState(221);
+				setState(233);
 				resources_matcher();
 				}
 				break;
 			case DOMAIN:
 			case ITEMS_ON_DOMAIN:
 				{
-				setState(222);
+				setState(234);
 				same_domain_matcher();
 				}
 				break;
 			case SUBPATHS:
 				{
-				setState(223);
+				setState(235);
 				subpaths_matcher();
 				}
 				break;
 			case URLS:
 				{
-				setState(224);
+				setState(236);
 				urls_matcher();
 				}
 				break;
@@ -1825,13 +1923,13 @@ public class HamsterConfigParser extends Parser {
 
 	public final Not_matcher_opContext not_matcher_op() throws RecognitionException {
 		Not_matcher_opContext _localctx = new Not_matcher_opContext(_ctx, getState());
-		enterRule(_localctx, 62, RULE_not_matcher_op);
+		enterRule(_localctx, 66, RULE_not_matcher_op);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(227);
+			setState(239);
 			match(OUTSIDE);
-			setState(228);
+			setState(240);
 			matcher();
 			}
 		}
@@ -1864,11 +1962,11 @@ public class HamsterConfigParser extends Parser {
 
 	public final All_matcherContext all_matcher() throws RecognitionException {
 		All_matcherContext _localctx = new All_matcherContext(_ctx, getState());
-		enterRule(_localctx, 64, RULE_all_matcher);
+		enterRule(_localctx, 68, RULE_all_matcher);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(230);
+			setState(242);
 			match(ALL);
 			}
 		}
@@ -1901,11 +1999,11 @@ public class HamsterConfigParser extends Parser {
 
 	public final Images_matcherContext images_matcher() throws RecognitionException {
 		Images_matcherContext _localctx = new Images_matcherContext(_ctx, getState());
-		enterRule(_localctx, 66, RULE_images_matcher);
+		enterRule(_localctx, 70, RULE_images_matcher);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(232);
+			setState(244);
 			match(IMAGES);
 			}
 		}
@@ -1939,12 +2037,12 @@ public class HamsterConfigParser extends Parser {
 
 	public final Same_domain_matcherContext same_domain_matcher() throws RecognitionException {
 		Same_domain_matcherContext _localctx = new Same_domain_matcherContext(_ctx, getState());
-		enterRule(_localctx, 68, RULE_same_domain_matcher);
+		enterRule(_localctx, 72, RULE_same_domain_matcher);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(234);
+			setState(246);
 			_la = _input.LA(1);
 			if ( !(_la==DOMAIN || _la==ITEMS_ON_DOMAIN) ) {
 			_errHandler.recoverInline(this);
@@ -1985,11 +2083,11 @@ public class HamsterConfigParser extends Parser {
 
 	public final Subpaths_matcherContext subpaths_matcher() throws RecognitionException {
 		Subpaths_matcherContext _localctx = new Subpaths_matcherContext(_ctx, getState());
-		enterRule(_localctx, 70, RULE_subpaths_matcher);
+		enterRule(_localctx, 74, RULE_subpaths_matcher);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(236);
+			setState(248);
 			match(SUBPATHS);
 			}
 		}
@@ -2022,11 +2120,11 @@ public class HamsterConfigParser extends Parser {
 
 	public final Resources_matcherContext resources_matcher() throws RecognitionException {
 		Resources_matcherContext _localctx = new Resources_matcherContext(_ctx, getState());
-		enterRule(_localctx, 72, RULE_resources_matcher);
+		enterRule(_localctx, 76, RULE_resources_matcher);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(238);
+			setState(250);
 			match(RESOURCES);
 			}
 		}
@@ -2062,13 +2160,13 @@ public class HamsterConfigParser extends Parser {
 
 	public final Css_matcherContext css_matcher() throws RecognitionException {
 		Css_matcherContext _localctx = new Css_matcherContext(_ctx, getState());
-		enterRule(_localctx, 74, RULE_css_matcher);
+		enterRule(_localctx, 78, RULE_css_matcher);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(240);
+			setState(252);
 			match(CSS);
-			setState(241);
+			setState(253);
 			string();
 			}
 		}
@@ -2104,13 +2202,13 @@ public class HamsterConfigParser extends Parser {
 
 	public final Urls_matcherContext urls_matcher() throws RecognitionException {
 		Urls_matcherContext _localctx = new Urls_matcherContext(_ctx, getState());
-		enterRule(_localctx, 76, RULE_urls_matcher);
+		enterRule(_localctx, 80, RULE_urls_matcher);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(243);
+			setState(255);
 			match(URLS);
-			setState(244);
+			setState(256);
 			string();
 			}
 		}
@@ -2147,15 +2245,15 @@ public class HamsterConfigParser extends Parser {
 
 	public final Max_jumps_matcherContext max_jumps_matcher() throws RecognitionException {
 		Max_jumps_matcherContext _localctx = new Max_jumps_matcherContext(_ctx, getState());
-		enterRule(_localctx, 78, RULE_max_jumps_matcher);
+		enterRule(_localctx, 82, RULE_max_jumps_matcher);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(246);
+			setState(258);
 			match(UP_TO);
-			setState(247);
+			setState(259);
 			integer();
-			setState(248);
+			setState(260);
 			match(JUMPS);
 			}
 		}
@@ -2191,13 +2289,13 @@ public class HamsterConfigParser extends Parser {
 
 	public final Min_jumps_matcherContext min_jumps_matcher() throws RecognitionException {
 		Min_jumps_matcherContext _localctx = new Min_jumps_matcherContext(_ctx, getState());
-		enterRule(_localctx, 80, RULE_min_jumps_matcher);
+		enterRule(_localctx, 84, RULE_min_jumps_matcher);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(250);
+			setState(262);
 			integer();
-			setState(251);
+			setState(263);
 			match(JUMPS_AND_MORE);
 			}
 		}
@@ -2213,83 +2311,87 @@ public class HamsterConfigParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3+\u0100\4\2\t\2\4"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3,\u010c\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
 		"\4\32\t\32\4\33\t\33\4\34\t\34\4\35\t\35\4\36\t\36\4\37\t\37\4 \t \4!"+
-		"\t!\4\"\t\"\4#\t#\4$\t$\4%\t%\4&\t&\4\'\t\'\4(\t(\4)\t)\4*\t*\3\2\3\2"+
-		"\3\3\3\3\3\4\7\4Z\n\4\f\4\16\4]\13\4\3\4\3\4\3\5\3\5\3\5\3\5\3\5\3\5\3"+
-		"\5\5\5h\n\5\3\6\3\6\3\6\3\7\3\7\3\7\3\b\3\b\3\t\3\t\3\t\3\t\3\t\3\t\5"+
-		"\tx\n\t\3\n\3\n\5\n|\n\n\3\13\3\13\3\f\3\f\3\r\3\r\3\r\3\r\5\r\u0086\n"+
-		"\r\3\16\5\16\u0089\n\16\3\16\3\16\5\16\u008d\n\16\3\17\5\17\u0090\n\17"+
-		"\3\17\3\17\5\17\u0094\n\17\3\20\3\20\3\20\3\21\3\21\3\21\3\21\3\22\3\22"+
-		"\3\22\5\22\u00a0\n\22\3\23\3\23\3\23\3\24\3\24\3\24\3\25\3\25\3\25\3\26"+
-		"\3\26\3\27\3\27\3\27\3\27\3\27\3\27\3\27\3\30\3\30\3\30\3\30\7\30\u00b8"+
-		"\n\30\f\30\16\30\u00bb\13\30\3\31\3\31\3\31\3\31\3\32\3\32\5\32\u00c3"+
-		"\n\32\3\33\3\33\3\33\3\34\3\34\3\34\3\35\3\35\5\35\u00cd\n\35\3\35\3\35"+
-		"\3\35\5\35\u00d2\n\35\3\36\3\36\3\36\3\37\3\37\3\37\3 \3 \3 \3 \3 \3 "+
-		"\3 \3 \3 \3 \5 \u00e4\n \3!\3!\3!\3\"\3\"\3#\3#\3$\3$\3%\3%\3&\3&\3\'"+
-		"\3\'\3\'\3(\3(\3(\3)\3)\3)\3)\3*\3*\3*\3*\2\2+\2\4\6\b\n\f\16\20\22\24"+
-		"\26\30\32\34\36 \"$&(*,.\60\62\64\668:<>@BDFHJLNPR\2\3\4\2\t\t\20\20\2"+
-		"\u00f4\2T\3\2\2\2\4V\3\2\2\2\6[\3\2\2\2\bg\3\2\2\2\ni\3\2\2\2\fl\3\2\2"+
-		"\2\16o\3\2\2\2\20q\3\2\2\2\22{\3\2\2\2\24}\3\2\2\2\26\177\3\2\2\2\30\u0081"+
-		"\3\2\2\2\32\u0088\3\2\2\2\34\u008f\3\2\2\2\36\u0095\3\2\2\2 \u0098\3\2"+
-		"\2\2\"\u009f\3\2\2\2$\u00a1\3\2\2\2&\u00a4\3\2\2\2(\u00a7\3\2\2\2*\u00aa"+
-		"\3\2\2\2,\u00ac\3\2\2\2.\u00b3\3\2\2\2\60\u00bc\3\2\2\2\62\u00c2\3\2\2"+
-		"\2\64\u00c4\3\2\2\2\66\u00c7\3\2\2\28\u00d1\3\2\2\2:\u00d3\3\2\2\2<\u00d6"+
-		"\3\2\2\2>\u00e3\3\2\2\2@\u00e5\3\2\2\2B\u00e8\3\2\2\2D\u00ea\3\2\2\2F"+
-		"\u00ec\3\2\2\2H\u00ee\3\2\2\2J\u00f0\3\2\2\2L\u00f2\3\2\2\2N\u00f5\3\2"+
-		"\2\2P\u00f8\3\2\2\2R\u00fc\3\2\2\2TU\7%\2\2U\3\3\2\2\2VW\7+\2\2W\5\3\2"+
-		"\2\2XZ\5\b\5\2YX\3\2\2\2Z]\3\2\2\2[Y\3\2\2\2[\\\3\2\2\2\\^\3\2\2\2][\3"+
-		"\2\2\2^_\7\2\2\3_\7\3\2\2\2`h\5\n\6\2ah\5\f\7\2bh\5\"\22\2ch\5\30\r\2"+
-		"dh\5*\26\2eh\5\16\b\2fh\5.\30\2g`\3\2\2\2ga\3\2\2\2gb\3\2\2\2gc\3\2\2"+
-		"\2gd\3\2\2\2ge\3\2\2\2gf\3\2\2\2h\t\3\2\2\2ij\7\35\2\2jk\5\4\3\2k\13\3"+
-		"\2\2\2lm\5\2\2\2mn\7\30\2\2n\r\3\2\2\2op\5\20\t\2p\17\3\2\2\2qr\7\24\2"+
-		"\2rs\5\2\2\2st\5\22\n\2tw\7\n\2\2uv\7\f\2\2vx\5\62\32\2wu\3\2\2\2wx\3"+
-		"\2\2\2x\21\3\2\2\2y|\5\24\13\2z|\5\26\f\2{y\3\2\2\2{z\3\2\2\2|\23\3\2"+
-		"\2\2}~\7\23\2\2~\25\3\2\2\2\177\u0080\7\25\2\2\u0080\27\3\2\2\2\u0081"+
-		"\u0085\7\34\2\2\u0082\u0086\5\32\16\2\u0083\u0086\5\34\17\2\u0084\u0086"+
-		"\5 \21\2\u0085\u0082\3\2\2\2\u0085\u0083\3\2\2\2\u0085\u0084\3\2\2\2\u0086"+
-		"\31\3\2\2\2\u0087\u0089\5\62\32\2\u0088\u0087\3\2\2\2\u0088\u0089\3\2"+
-		"\2\2\u0089\u008a\3\2\2\2\u008a\u008c\7\5\2\2\u008b\u008d\5\36\20\2\u008c"+
-		"\u008b\3\2\2\2\u008c\u008d\3\2\2\2\u008d\33\3\2\2\2\u008e\u0090\5\62\32"+
-		"\2\u008f\u008e\3\2\2\2\u008f\u0090\3\2\2\2\u0090\u0091\3\2\2\2\u0091\u0093"+
-		"\7\13\2\2\u0092\u0094\5\36\20\2\u0093\u0092\3\2\2\2\u0093\u0094\3\2\2"+
-		"\2\u0094\35\3\2\2\2\u0095\u0096\7\37\2\2\u0096\u0097\5\4\3\2\u0097\37"+
-		"\3\2\2\2\u0098\u0099\5N(\2\u0099\u009a\7\4\2\2\u009a\u009b\5\4\3\2\u009b"+
-		"!\3\2\2\2\u009c\u00a0\5$\23\2\u009d\u00a0\5&\24\2\u009e\u00a0\5(\25\2"+
-		"\u009f\u009c\3\2\2\2\u009f\u009d\3\2\2\2\u009f\u009e\3\2\2\2\u00a0#\3"+
-		"\2\2\2\u00a1\u00a2\7\r\2\2\u00a2\u00a3\5\62\32\2\u00a3%\3\2\2\2\u00a4"+
-		"\u00a5\7\16\2\2\u00a5\u00a6\5\62\32\2\u00a6\'\3\2\2\2\u00a7\u00a8\7\6"+
-		"\2\2\u00a8\u00a9\5\62\32\2\u00a9)\3\2\2\2\u00aa\u00ab\5,\27\2\u00ab+\3"+
-		"\2\2\2\u00ac\u00ad\7#\2\2\u00ad\u00ae\5\4\3\2\u00ae\u00af\7\31\2\2\u00af"+
-		"\u00b0\5\4\3\2\u00b0\u00b1\7\26\2\2\u00b1\u00b2\5\62\32\2\u00b2-\3\2\2"+
-		"\2\u00b3\u00b4\7\7\2\2\u00b4\u00b5\5\4\3\2\u00b5\u00b9\7\32\2\2\u00b6"+
-		"\u00b8\5\60\31\2\u00b7\u00b6\3\2\2\2\u00b8\u00bb\3\2\2\2\u00b9\u00b7\3"+
-		"\2\2\2\u00b9\u00ba\3\2\2\2\u00ba/\3\2\2\2\u00bb\u00b9\3\2\2\2\u00bc\u00bd"+
-		"\5\4\3\2\u00bd\u00be\7$\2\2\u00be\u00bf\5\4\3\2\u00bf\61\3\2\2\2\u00c0"+
-		"\u00c3\5\64\33\2\u00c1\u00c3\5\66\34\2\u00c2\u00c0\3\2\2\2\u00c2\u00c1"+
-		"\3\2\2\2\u00c3\63\3\2\2\2\u00c4\u00c5\7 \2\2\u00c5\u00c6\5\66\34\2\u00c6"+
-		"\65\3\2\2\2\u00c7\u00c8\5> \2\u00c8\u00c9\58\35\2\u00c9\67\3\2\2\2\u00ca"+
-		"\u00cd\5:\36\2\u00cb\u00cd\5<\37\2\u00cc\u00ca\3\2\2\2\u00cc\u00cb\3\2"+
-		"\2\2\u00cd\u00ce\3\2\2\2\u00ce\u00cf\58\35\2\u00cf\u00d2\3\2\2\2\u00d0"+
-		"\u00d2\3\2\2\2\u00d1\u00cc\3\2\2\2\u00d1\u00d0\3\2\2\2\u00d29\3\2\2\2"+
-		"\u00d3\u00d4\7\26\2\2\u00d4\u00d5\5> \2\u00d5;\3\2\2\2\u00d6\u00d7\7\27"+
-		"\2\2\u00d7\u00d8\5> \2\u00d8=\3\2\2\2\u00d9\u00e4\5@!\2\u00da\u00e4\5"+
-		"B\"\2\u00db\u00e4\5L\'\2\u00dc\u00e4\5D#\2\u00dd\u00e4\5P)\2\u00de\u00e4"+
-		"\5R*\2\u00df\u00e4\5J&\2\u00e0\u00e4\5F$\2\u00e1\u00e4\5H%\2\u00e2\u00e4"+
-		"\5N(\2\u00e3\u00d9\3\2\2\2\u00e3\u00da\3\2\2\2\u00e3\u00db\3\2\2\2\u00e3"+
-		"\u00dc\3\2\2\2\u00e3\u00dd\3\2\2\2\u00e3\u00de\3\2\2\2\u00e3\u00df\3\2"+
-		"\2\2\u00e3\u00e0\3\2\2\2\u00e3\u00e1\3\2\2\2\u00e3\u00e2\3\2\2\2\u00e4"+
-		"?\3\2\2\2\u00e5\u00e6\7\27\2\2\u00e6\u00e7\5\62\32\2\u00e7A\3\2\2\2\u00e8"+
-		"\u00e9\7\3\2\2\u00e9C\3\2\2\2\u00ea\u00eb\7\17\2\2\u00ebE\3\2\2\2\u00ec"+
-		"\u00ed\t\2\2\2\u00edG\3\2\2\2\u00ee\u00ef\7\36\2\2\u00efI\3\2\2\2\u00f0"+
-		"\u00f1\7\33\2\2\u00f1K\3\2\2\2\u00f2\u00f3\7\b\2\2\u00f3\u00f4\5\4\3\2"+
-		"\u00f4M\3\2\2\2\u00f5\u00f6\7\"\2\2\u00f6\u00f7\5\4\3\2\u00f7O\3\2\2\2"+
-		"\u00f8\u00f9\7!\2\2\u00f9\u00fa\5\2\2\2\u00fa\u00fb\7\21\2\2\u00fbQ\3"+
-		"\2\2\2\u00fc\u00fd\5\2\2\2\u00fd\u00fe\7\22\2\2\u00feS\3\2\2\2\21[gw{"+
-		"\u0085\u0088\u008c\u008f\u0093\u009f\u00b9\u00c2\u00cc\u00d1\u00e3";
+		"\t!\4\"\t\"\4#\t#\4$\t$\4%\t%\4&\t&\4\'\t\'\4(\t(\4)\t)\4*\t*\4+\t+\4"+
+		",\t,\3\2\3\2\3\3\3\3\3\4\7\4^\n\4\f\4\16\4a\13\4\3\5\3\5\3\5\3\5\3\6\7"+
+		"\6h\n\6\f\6\16\6k\13\6\3\6\3\6\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\5\7w\n"+
+		"\7\3\b\3\b\3\b\3\t\3\t\3\t\3\n\3\n\3\13\3\13\3\13\3\13\3\13\3\13\5\13"+
+		"\u0087\n\13\3\f\3\f\5\f\u008b\n\f\3\r\3\r\3\16\3\16\3\17\3\17\3\17\3\17"+
+		"\5\17\u0095\n\17\3\20\5\20\u0098\n\20\3\20\3\20\5\20\u009c\n\20\3\21\5"+
+		"\21\u009f\n\21\3\21\3\21\5\21\u00a3\n\21\3\22\3\22\3\22\3\23\3\23\3\23"+
+		"\3\23\3\24\3\24\3\24\5\24\u00af\n\24\3\25\3\25\3\25\3\26\3\26\3\26\3\27"+
+		"\3\27\3\27\3\30\3\30\3\31\3\31\3\31\3\31\3\31\3\31\3\31\3\32\3\32\3\32"+
+		"\3\32\3\32\3\33\3\33\3\33\3\33\3\33\3\34\3\34\5\34\u00cf\n\34\3\35\3\35"+
+		"\3\35\3\36\3\36\3\36\3\37\3\37\5\37\u00d9\n\37\3\37\3\37\3\37\5\37\u00de"+
+		"\n\37\3 \3 \3 \3!\3!\3!\3\"\3\"\3\"\3\"\3\"\3\"\3\"\3\"\3\"\3\"\5\"\u00f0"+
+		"\n\"\3#\3#\3#\3$\3$\3%\3%\3&\3&\3\'\3\'\3(\3(\3)\3)\3)\3*\3*\3*\3+\3+"+
+		"\3+\3+\3,\3,\3,\3,\2\2-\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \"$&(*"+
+		",.\60\62\64\668:<>@BDFHJLNPRTV\2\3\4\2\n\n\21\21\2\u00ff\2X\3\2\2\2\4"+
+		"Z\3\2\2\2\6_\3\2\2\2\bb\3\2\2\2\ni\3\2\2\2\fv\3\2\2\2\16x\3\2\2\2\20{"+
+		"\3\2\2\2\22~\3\2\2\2\24\u0080\3\2\2\2\26\u008a\3\2\2\2\30\u008c\3\2\2"+
+		"\2\32\u008e\3\2\2\2\34\u0090\3\2\2\2\36\u0097\3\2\2\2 \u009e\3\2\2\2\""+
+		"\u00a4\3\2\2\2$\u00a7\3\2\2\2&\u00ae\3\2\2\2(\u00b0\3\2\2\2*\u00b3\3\2"+
+		"\2\2,\u00b6\3\2\2\2.\u00b9\3\2\2\2\60\u00bb\3\2\2\2\62\u00c2\3\2\2\2\64"+
+		"\u00c7\3\2\2\2\66\u00ce\3\2\2\28\u00d0\3\2\2\2:\u00d3\3\2\2\2<\u00dd\3"+
+		"\2\2\2>\u00df\3\2\2\2@\u00e2\3\2\2\2B\u00ef\3\2\2\2D\u00f1\3\2\2\2F\u00f4"+
+		"\3\2\2\2H\u00f6\3\2\2\2J\u00f8\3\2\2\2L\u00fa\3\2\2\2N\u00fc\3\2\2\2P"+
+		"\u00fe\3\2\2\2R\u0101\3\2\2\2T\u0104\3\2\2\2V\u0108\3\2\2\2XY\7&\2\2Y"+
+		"\3\3\2\2\2Z[\7,\2\2[\5\3\2\2\2\\^\5\b\5\2]\\\3\2\2\2^a\3\2\2\2_]\3\2\2"+
+		"\2_`\3\2\2\2`\7\3\2\2\2a_\3\2\2\2bc\5\4\3\2cd\7%\2\2de\5\4\3\2e\t\3\2"+
+		"\2\2fh\5\f\7\2gf\3\2\2\2hk\3\2\2\2ig\3\2\2\2ij\3\2\2\2jl\3\2\2\2ki\3\2"+
+		"\2\2lm\7\2\2\3m\13\3\2\2\2nw\5\16\b\2ow\5\20\t\2pw\5&\24\2qw\5\34\17\2"+
+		"rw\5.\30\2sw\5\22\n\2tw\5\62\32\2uw\5\64\33\2vn\3\2\2\2vo\3\2\2\2vp\3"+
+		"\2\2\2vq\3\2\2\2vr\3\2\2\2vs\3\2\2\2vt\3\2\2\2vu\3\2\2\2w\r\3\2\2\2xy"+
+		"\7\36\2\2yz\5\4\3\2z\17\3\2\2\2{|\5\2\2\2|}\7\31\2\2}\21\3\2\2\2~\177"+
+		"\5\24\13\2\177\23\3\2\2\2\u0080\u0081\7\25\2\2\u0081\u0082\5\2\2\2\u0082"+
+		"\u0083\5\26\f\2\u0083\u0086\7\13\2\2\u0084\u0085\7\r\2\2\u0085\u0087\5"+
+		"\66\34\2\u0086\u0084\3\2\2\2\u0086\u0087\3\2\2\2\u0087\25\3\2\2\2\u0088"+
+		"\u008b\5\30\r\2\u0089\u008b\5\32\16\2\u008a\u0088\3\2\2\2\u008a\u0089"+
+		"\3\2\2\2\u008b\27\3\2\2\2\u008c\u008d\7\24\2\2\u008d\31\3\2\2\2\u008e"+
+		"\u008f\7\26\2\2\u008f\33\3\2\2\2\u0090\u0094\7\35\2\2\u0091\u0095\5\36"+
+		"\20\2\u0092\u0095\5 \21\2\u0093\u0095\5$\23\2\u0094\u0091\3\2\2\2\u0094"+
+		"\u0092\3\2\2\2\u0094\u0093\3\2\2\2\u0095\35\3\2\2\2\u0096\u0098\5\66\34"+
+		"\2\u0097\u0096\3\2\2\2\u0097\u0098\3\2\2\2\u0098\u0099\3\2\2\2\u0099\u009b"+
+		"\7\5\2\2\u009a\u009c\5\"\22\2\u009b\u009a\3\2\2\2\u009b\u009c\3\2\2\2"+
+		"\u009c\37\3\2\2\2\u009d\u009f\5\66\34\2\u009e\u009d\3\2\2\2\u009e\u009f"+
+		"\3\2\2\2\u009f\u00a0\3\2\2\2\u00a0\u00a2\7\f\2\2\u00a1\u00a3\5\"\22\2"+
+		"\u00a2\u00a1\3\2\2\2\u00a2\u00a3\3\2\2\2\u00a3!\3\2\2\2\u00a4\u00a5\7"+
+		" \2\2\u00a5\u00a6\5\4\3\2\u00a6#\3\2\2\2\u00a7\u00a8\5R*\2\u00a8\u00a9"+
+		"\7\4\2\2\u00a9\u00aa\5\4\3\2\u00aa%\3\2\2\2\u00ab\u00af\5(\25\2\u00ac"+
+		"\u00af\5*\26\2\u00ad\u00af\5,\27\2\u00ae\u00ab\3\2\2\2\u00ae\u00ac\3\2"+
+		"\2\2\u00ae\u00ad\3\2\2\2\u00af\'\3\2\2\2\u00b0\u00b1\7\16\2\2\u00b1\u00b2"+
+		"\5\66\34\2\u00b2)\3\2\2\2\u00b3\u00b4\7\17\2\2\u00b4\u00b5\5\66\34\2\u00b5"+
+		"+\3\2\2\2\u00b6\u00b7\7\6\2\2\u00b7\u00b8\5\66\34\2\u00b8-\3\2\2\2\u00b9"+
+		"\u00ba\5\60\31\2\u00ba/\3\2\2\2\u00bb\u00bc\7$\2\2\u00bc\u00bd\5\4\3\2"+
+		"\u00bd\u00be\7\32\2\2\u00be\u00bf\5\4\3\2\u00bf\u00c0\7\27\2\2\u00c0\u00c1"+
+		"\5\66\34\2\u00c1\61\3\2\2\2\u00c2\u00c3\7\7\2\2\u00c3\u00c4\5\4\3\2\u00c4"+
+		"\u00c5\7\33\2\2\u00c5\u00c6\5\6\4\2\u00c6\63\3\2\2\2\u00c7\u00c8\7\b\2"+
+		"\2\u00c8\u00c9\5\6\4\2\u00c9\u00ca\7\27\2\2\u00ca\u00cb\5\4\3\2\u00cb"+
+		"\65\3\2\2\2\u00cc\u00cf\58\35\2\u00cd\u00cf\5:\36\2\u00ce\u00cc\3\2\2"+
+		"\2\u00ce\u00cd\3\2\2\2\u00cf\67\3\2\2\2\u00d0\u00d1\7!\2\2\u00d1\u00d2"+
+		"\5:\36\2\u00d29\3\2\2\2\u00d3\u00d4\5B\"\2\u00d4\u00d5\5<\37\2\u00d5;"+
+		"\3\2\2\2\u00d6\u00d9\5> \2\u00d7\u00d9\5@!\2\u00d8\u00d6\3\2\2\2\u00d8"+
+		"\u00d7\3\2\2\2\u00d9\u00da\3\2\2\2\u00da\u00db\5<\37\2\u00db\u00de\3\2"+
+		"\2\2\u00dc\u00de\3\2\2\2\u00dd\u00d8\3\2\2\2\u00dd\u00dc\3\2\2\2\u00de"+
+		"=\3\2\2\2\u00df\u00e0\7\27\2\2\u00e0\u00e1\5B\"\2\u00e1?\3\2\2\2\u00e2"+
+		"\u00e3\7\30\2\2\u00e3\u00e4\5B\"\2\u00e4A\3\2\2\2\u00e5\u00f0\5D#\2\u00e6"+
+		"\u00f0\5F$\2\u00e7\u00f0\5P)\2\u00e8\u00f0\5H%\2\u00e9\u00f0\5T+\2\u00ea"+
+		"\u00f0\5V,\2\u00eb\u00f0\5N(\2\u00ec\u00f0\5J&\2\u00ed\u00f0\5L\'\2\u00ee"+
+		"\u00f0\5R*\2\u00ef\u00e5\3\2\2\2\u00ef\u00e6\3\2\2\2\u00ef\u00e7\3\2\2"+
+		"\2\u00ef\u00e8\3\2\2\2\u00ef\u00e9\3\2\2\2\u00ef\u00ea\3\2\2\2\u00ef\u00eb"+
+		"\3\2\2\2\u00ef\u00ec\3\2\2\2\u00ef\u00ed\3\2\2\2\u00ef\u00ee\3\2\2\2\u00f0"+
+		"C\3\2\2\2\u00f1\u00f2\7\30\2\2\u00f2\u00f3\5\66\34\2\u00f3E\3\2\2\2\u00f4"+
+		"\u00f5\7\3\2\2\u00f5G\3\2\2\2\u00f6\u00f7\7\20\2\2\u00f7I\3\2\2\2\u00f8"+
+		"\u00f9\t\2\2\2\u00f9K\3\2\2\2\u00fa\u00fb\7\37\2\2\u00fbM\3\2\2\2\u00fc"+
+		"\u00fd\7\34\2\2\u00fdO\3\2\2\2\u00fe\u00ff\7\t\2\2\u00ff\u0100\5\4\3\2"+
+		"\u0100Q\3\2\2\2\u0101\u0102\7#\2\2\u0102\u0103\5\4\3\2\u0103S\3\2\2\2"+
+		"\u0104\u0105\7\"\2\2\u0105\u0106\5\2\2\2\u0106\u0107\7\22\2\2\u0107U\3"+
+		"\2\2\2\u0108\u0109\5\2\2\2\u0109\u010a\7\23\2\2\u010aW\3\2\2\2\21_iv\u0086"+
+		"\u008a\u0094\u0097\u009b\u009e\u00a2\u00ae\u00ce\u00d8\u00dd\u00ef";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

@@ -81,9 +81,9 @@ public class BaseMockConfig implements IConfiguration {
 	}
 
 	@Override
-	public void initHttpContextAuthProvider(HttpClientContext context, Link link) {
+	public HttpClientContext makeHttpContext(Link link) {
 		// TODO Auto-generated method stub
-
+		return null;
 	}
 
 	@Override

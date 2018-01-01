@@ -6,6 +6,7 @@ AS : 'as' ;
 AS_TREE : 'as' ' '+ 'tree' ;
 AVOID : 'avoid' ;
 CHECK_IN_AT : 'check' ' '+ 'in' ' '+ 'at' ;
+COOKIES : 'cookie' 's'? ;
 CSS : 'css' ;
 DOMAIN : 'domain' ;
 EACH : 'each' ;

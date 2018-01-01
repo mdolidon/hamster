@@ -40,6 +40,30 @@ public class HamsterConfigParserBaseListener implements HamsterConfigParserListe
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterString_properties_map(HamsterConfigParser.String_properties_mapContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitString_properties_map(HamsterConfigParser.String_properties_mapContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterString_property(HamsterConfigParser.String_propertyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitString_property(HamsterConfigParser.String_propertyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterConfig(HamsterConfigParser.ConfigContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -292,13 +316,13 @@ public class HamsterConfigParserBaseListener implements HamsterConfigParserListe
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCheckin_post_param(HamsterConfigParser.Checkin_post_paramContext ctx) { }
+	@Override public void enterCookies_directive(HamsterConfigParser.Cookies_directiveContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCheckin_post_param(HamsterConfigParser.Checkin_post_paramContext ctx) { }
+	@Override public void exitCookies_directive(HamsterConfigParser.Cookies_directiveContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

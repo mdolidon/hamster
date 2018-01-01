@@ -29,11 +29,11 @@ public class ProcessingWorker implements Runnable {
 
 	private class ProcessingException extends Exception {
 		private static final long serialVersionUID = 1L;
+
 		ProcessingException(String message) {
 			super(message);
 		}
 	}
-	
 
 	private static Logger logger = LogManager.getLogger();
 
@@ -54,7 +54,9 @@ public class ProcessingWorker implements Runnable {
 				Content content = mediator.provideContentToProcess();
 				try {
 					List<Link> linksToDownload = processCurrentContent(content);
-					mediator.acceptAllNewLinks(linksToDownload);
+					if (!linksToDownload.isEmpty()) {
+						mediator.acceptAllNewLinks(linksToDownload);
+					}
 					mediator.acceptProcessedContent(content);
 
 				} catch (ProcessingException e) {
@@ -117,7 +119,7 @@ public class ProcessingWorker implements Runnable {
 	private void processLinkElement(Element el, String attributeKey, Link sourceLink, URL baseUrl,
 			List<Link> linksToDownload) throws InterruptedException {
 
-		if(el.tagName()=="base") {
+		if (el.tagName() == "base") {
 			return;
 		}
 		String refStr = el.attr(attributeKey);

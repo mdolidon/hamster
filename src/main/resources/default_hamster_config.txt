@@ -30,7 +30,7 @@ get resources on domain
 #     check in at "http://.../login.php" post "name"="me" "password"="5678"
 #     maximum N Kb each [from MATCHER]   # (Kb or Mb)
 #     N parallel downloads
-#
+#     cookies "x"="y" "z"="zz" on "domain.com/path"
 # 
 # Matchers
 # 

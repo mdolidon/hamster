@@ -99,14 +99,13 @@ public interface IConfiguration {
 	public List<IMatcher> listAuthContextMatchers();
 
 	/**
-	 * Mutate an HTTP context, inserting relevant authentication information into
+	 * Make an new HTTP context, inserting relevant authentication information into
 	 * it, for a scope that's selected by the provided link.
-	 * 
-	 * @param context
-	 *            Will be mutated.
 	 * @param link
+	 * 
+	 * @return TODO
 	 */
-	public void initHttpContextAuthProvider(HttpClientContext context, Link link);
+	public HttpClientContext makeHttpContext(Link link);
 
 	/**
 	 * Get a list of POST requests to be performed before any exploration. Those

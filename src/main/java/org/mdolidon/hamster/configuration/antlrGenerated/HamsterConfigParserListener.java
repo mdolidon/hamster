@@ -28,6 +28,26 @@ public interface HamsterConfigParserListener extends ParseTreeListener {
 	 */
 	void exitString(HamsterConfigParser.StringContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link HamsterConfigParser#string_properties_map}.
+	 * @param ctx the parse tree
+	 */
+	void enterString_properties_map(HamsterConfigParser.String_properties_mapContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HamsterConfigParser#string_properties_map}.
+	 * @param ctx the parse tree
+	 */
+	void exitString_properties_map(HamsterConfigParser.String_properties_mapContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HamsterConfigParser#string_property}.
+	 * @param ctx the parse tree
+	 */
+	void enterString_property(HamsterConfigParser.String_propertyContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HamsterConfigParser#string_property}.
+	 * @param ctx the parse tree
+	 */
+	void exitString_property(HamsterConfigParser.String_propertyContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link HamsterConfigParser#config}.
 	 * @param ctx the parse tree
 	 */
@@ -238,15 +258,15 @@ public interface HamsterConfigParserListener extends ParseTreeListener {
 	 */
 	void exitCheckin_directive(HamsterConfigParser.Checkin_directiveContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link HamsterConfigParser#checkin_post_param}.
+	 * Enter a parse tree produced by {@link HamsterConfigParser#cookies_directive}.
 	 * @param ctx the parse tree
 	 */
-	void enterCheckin_post_param(HamsterConfigParser.Checkin_post_paramContext ctx);
+	void enterCookies_directive(HamsterConfigParser.Cookies_directiveContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link HamsterConfigParser#checkin_post_param}.
+	 * Exit a parse tree produced by {@link HamsterConfigParser#cookies_directive}.
 	 * @param ctx the parse tree
 	 */
-	void exitCheckin_post_param(HamsterConfigParser.Checkin_post_paramContext ctx);
+	void exitCookies_directive(HamsterConfigParser.Cookies_directiveContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link HamsterConfigParser#matcher}.
 	 * @param ctx the parse tree

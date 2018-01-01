@@ -18,7 +18,7 @@ deploy: $(JAVA_SRC)
 	mv *.java *.tokens $(TARGETDIR)
 
 clean:
-	-rm -r *.tokens *.java $(PACKAGEDIR) latestJava
+	-rm -r *.tokens *.java $(PACKAGEDIR) latestJava *.interp
 
 ################################################################
 

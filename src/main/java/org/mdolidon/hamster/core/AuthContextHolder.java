@@ -1,7 +1,6 @@
 package org.mdolidon.hamster.core;
 
 import org.apache.http.client.protocol.HttpClientContext;
-import org.apache.http.impl.client.BasicCookieStore;
 
 
 
@@ -43,7 +42,7 @@ public class AuthContextHolder implements IMatcher {
 	 * Get this thread's context, as stored within this holder.
 	 * When first called, the holder will refer to the IConfiguration object
 	 * to create the applicable initial context for this link (e.g. to insert the proper
-	 * user and password).
+	 * user and password, cookies...).
 	 */
 	public HttpClientContext getThreadContext(Link link) {
 		if(!matches(link)) {
@@ -53,9 +52,8 @@ public class AuthContextHolder implements IMatcher {
 		if (context != null) {
 			return context;
 		}
-		context = HttpClientContext.create();
-		context.setCookieStore(new BasicCookieStore());
-		configuration.initHttpContextAuthProvider(context, link);
+
+		context = configuration.makeHttpContext(link);
 		return context;
 	}
 	

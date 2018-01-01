@@ -1,5 +1,8 @@
 start at "http://truc.com"
 
+cookie "truc"="1234" on  ".truc.com/path"
+cookies "session"="abcd" "user"="xyz" on ".truc.com/path"
+
 get   unknown   items    on    domain
 save unknown up to 5 jumps flat
 

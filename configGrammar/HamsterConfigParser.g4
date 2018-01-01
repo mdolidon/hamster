@@ -2,15 +2,22 @@ parser grammar HamsterConfigParser;
 
 options { tokenVocab = HamsterConfigLexer; }
 
+// ---------------------------------------------------------------------------
+
 integer : INTEGER_LITERAL ;
 string : STRING_LITERAL ;
+
+string_properties_map : string_property*;
+string_property : string EQUALS string ;
+
+// ---------------------------------------------------------------------------
 
 config: directive* EOF;
 
 directive: ( start_directive | parallel_directive |
              download_directive | save_directive |
              authentication_directive | max_size_directive |
-             checkin_directive );
+             checkin_directive | cookies_directive );
 
 start_directive : START_AT string ;
 
@@ -36,8 +43,9 @@ avoid_rule : AVOID matcher ;
 authentication_directive : simple_authentication_rule ;
 simple_authentication_rule : USER string PASSWORD string ON matcher ;
 
-checkin_directive : CHECK_IN_AT string POST checkin_post_param* ;
-checkin_post_param : string EQUALS string ;
+checkin_directive : CHECK_IN_AT string POST string_properties_map ;
+
+cookies_directive : COOKIES string_properties_map ON string ;
 
 
 // MATCHERS

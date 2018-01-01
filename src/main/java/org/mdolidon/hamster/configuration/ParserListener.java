@@ -4,7 +4,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParserBaseListener;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.All_matcherContext;
@@ -12,7 +14,7 @@ import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.And
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.And_not_matcherContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Avoid_ruleContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Checkin_directiveContext;
-import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Checkin_post_paramContext;
+import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Cookies_directiveContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Css_matcherContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Download_directiveContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Get_ruleContext;
@@ -37,6 +39,8 @@ import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Sav
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Simple_authentication_ruleContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Start_directiveContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.StringContext;
+import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.String_properties_mapContext;
+import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.String_propertyContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Subpaths_matcherContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Unknown_matcher_opContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Urls_matcherContext;
@@ -59,6 +63,9 @@ public class ParserListener extends HamsterConfigParserBaseListener {
 	private Deque<IMatcher> matchersStack = new ArrayDeque<>(4); // initial cap
 	private Deque<Integer> integersStack = new ArrayDeque<>(4); // initial cap
 	private Deque<String> stringsStack = new ArrayDeque<>(4); // initial cap
+
+	// an accumulatable string->string map
+	private Map<String, String> strToStrMap = new HashMap<>(4);
 
 	// some rule-specific storage
 	private String save_under_folderStr;
@@ -109,6 +116,18 @@ public class ParserListener extends HamsterConfigParserBaseListener {
 	public void exitMegabytes(MegabytesContext ctx) {
 		int i = popInteger().intValue();
 		pushInteger(Integer.valueOf(i * 1024 * 1024));
+	}
+
+	@Override
+	public void enterString_properties_map(String_properties_mapContext ctx) {
+		strToStrMap = new HashMap<>(4);
+	}
+
+	@Override
+	public void exitString_property(String_propertyContext ctx) {
+		String value = popString();
+		String key = popString();
+		strToStrMap.put(key, value);
 	}
 
 	//
@@ -218,13 +237,11 @@ public class ParserListener extends HamsterConfigParserBaseListener {
 	public void exitGet_unknown_rule(Get_unknown_ruleContext ctx) {
 		configuration.addDownloadRule(new GetUnknownRule(popMatcher()));
 	}
-	
+
 	@Override
 	public void exitAvoid_rule(Avoid_ruleContext ctx) {
 		configuration.addDownloadRule(new AvoidRule(popMatcher()));
 	}
-	
-
 
 	//
 	// Authentication rules
@@ -244,12 +261,8 @@ public class ParserListener extends HamsterConfigParserBaseListener {
 	//
 
 	@Override
-	public void enterCheckin_directive(Checkin_directiveContext ctx) {
-		currentCheckinDirective = new CheckinDirective();
-	}
-
-	@Override
 	public void exitCheckin_directive(Checkin_directiveContext ctx) {
+		CheckinDirective checkin = new CheckinDirective();
 		String urlStr = popString();
 		try {
 			currentCheckinDirective.setUrl(urlStr);
@@ -257,14 +270,22 @@ public class ParserListener extends HamsterConfigParserBaseListener {
 			errorsBoard.note("Malformed URL in check-in directive : " + urlStr);
 			return;
 		}
+
+		for (String key : strToStrMap.keySet()) {
+			checkin.addPostParameter(key, strToStrMap.get(key));
+		}
+
 		configuration.addCheckin(currentCheckinDirective);
 	}
 
+	//
+	// Cookies
+	//
+
 	@Override
-	public void exitCheckin_post_param(Checkin_post_paramContext ctx) {
-		String value = popString();
-		String name = popString();
-		currentCheckinDirective.addPostParameter(name, value);
+	public void exitCookies_directive(Cookies_directiveContext ctx) {
+		CookiesDirective ckd = new CookiesDirective(strToStrMap, popString());
+		configuration.addCookiesDirective(ckd);
 	}
 
 	//

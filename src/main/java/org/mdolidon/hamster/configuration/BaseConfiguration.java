@@ -13,17 +13,20 @@ import java.util.List;
 import org.apache.logging.log4j.Logger;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.logging.log4j.LogManager;
 import org.mdolidon.hamster.core.IConfiguration;
 import org.mdolidon.hamster.core.IMatcher;
 import org.mdolidon.hamster.core.Link;
 import org.mdolidon.hamster.core.MatcherDrivenList;
 import org.mdolidon.hamster.core.TargetProfile;
+import org.mdolidon.hamster.core.Utils;
 import org.mdolidon.hamster.matchers.All;
 
 /**
  * This is a standalone implementation of IConfiguration, that embeds all the
- * necessary logic to answer queries, but lets a caller or a subclass define the rules.
+ * necessary logic to answer queries, but lets a caller or a subclass define the
+ * rules.
  */
 public class BaseConfiguration implements IConfiguration {
 
@@ -36,10 +39,10 @@ public class BaseConfiguration implements IConfiguration {
 	private MatcherDrivenList<IDownloadRule> downloadRules = new MatcherDrivenList<>();
 	private MatcherDrivenList<IAuthenticationRule> authenticationRules = new MatcherDrivenList<>();
 	private MatcherDrivenList<IntegerRule> maxContentSizeRules = new MatcherDrivenList<>();
-	
+
 	private List<IMatcher> authenticationRulesMatchers = new ArrayList<>();
 	private List<CheckinDirective> checkInDirectives = new ArrayList<>();
-	
+	private List<CookiesDirective> cookiesDirectives = new ArrayList<>();
 
 	public BaseConfiguration() throws Exception {
 		storageRules.setDefault(new FlatStorageResolver(new All(), this, null));
@@ -109,17 +112,17 @@ public class BaseConfiguration implements IConfiguration {
 	public void addDownloadRule(IDownloadRule rule) {
 		downloadRules.add(rule);
 	}
-	
+
 	public void addCheckin(CheckinDirective directive) {
 		checkInDirectives.add(directive);
 	}
-	
+
 	@Override
 	public List<HttpPost> getCheckinPostRequests() {
 		List<HttpPost> requests = new ArrayList<>();
-		for(CheckinDirective directive : checkInDirectives) {
+		for (CheckinDirective directive : checkInDirectives) {
 			HttpPost request = directive.getPostRequest();
-			if(request!=null) {
+			if (request != null) {
 				requests.add(request);
 			}
 		}
@@ -131,17 +134,24 @@ public class BaseConfiguration implements IConfiguration {
 		if (link == null) {
 			throw new NullPointerException();
 		}
+
+		if (Utils.getBeforeHash(getStartUrlAsString()).equals(link.getTargetAsStringWithoutHash())) {
+			return new TargetProfile(true, true);
+		}
+
 		IDownloadRule rule = downloadRules.getFirstMatch(link);
 		TargetProfile profile = rule.getTargetProfile(link);
 
 		/*
-		if (profile.isPartOfTargetSet()) {
-			logger.debug("{} should is part of the target according to a {}", link.getTargetAsString(), rule.getDescription());
-		} else {
-			logger.debug("{} should be skipped according to a {}", link.getTarget(), rule.getDescription());
+		 * if (profile.isPartOfTargetSet()) {
+		 * logger.debug("{} should is part of the target according to a {}",
+		 * link.getTargetAsString(), rule.getDescription()); } else {
+		 * logger.debug("{} should be skipped according to a {}", link.getTarget(),
+		 * rule.getDescription());
+		 * 
+		 * }
+		 */
 
-		}*/
-		
 		return profile;
 	}
 
@@ -156,9 +166,20 @@ public class BaseConfiguration implements IConfiguration {
 		return authenticationRulesMatchers;
 	}
 
-	public void initHttpContextAuthProvider(HttpClientContext context, Link link) {
+	public HttpClientContext makeHttpContext(Link link) {
+		HttpClientContext context = HttpClientContext.create();
+		context.setCookieStore(new BasicCookieStore());
+
 		IAuthenticationRule rule = authenticationRules.getFirstMatch(link);
 		rule.applyToHttpContext(context);
+		for (CookiesDirective ckd : cookiesDirectives) {
+			ckd.addCookiesToClientContext(context);
+		}
+		return context;
+	}
+
+	public void addCookiesDirective(CookiesDirective cookiesDirective) {
+		cookiesDirectives.add(cookiesDirective);
 	}
 
 	public void addMaximumSizeRule(IntegerRule rule) {
