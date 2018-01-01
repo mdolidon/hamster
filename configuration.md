@@ -69,9 +69,11 @@ For each of the links that are found, the hamster has to decide whether to downl
 
 `avoid MATCHER` : links that satisfy the matcher will be discarded.
 
+Obviously, one given page won't ever be downloaded twice during the same job.
+
 A special mention for :
 
-`get unknown MATCHER` : links that satisfy the matcher will be downloaded if there isn't already an offline file representing their target. If there is already an offline copy, that file is acknowledge and the links will point to it even though the content won't be downloaded again. This is useful if you use the hamster to mirror an evolving remote site, to allow for incremental updates.
+`get unknown MATCHER` : This is useful if you use the hamster to mirror an evolving remote site, to allow for incremental updates. Links that satisfy the matcher will be downloaded if there isn't already an offline file representing their target. If there is already an offline copy, that file is acknowledged and the links will point to it even though the content won't be downloaded again.
 
 
 ## Step 3 : downloading the links that were selected

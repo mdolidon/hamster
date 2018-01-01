@@ -1,17 +1,20 @@
 package test.org.mdolidon.hamster.core.ProcessingWorker;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import org.jsoup.nodes.Element;
 import org.junit.Test;
 import org.mdolidon.hamster.core.Content;
 import org.mdolidon.hamster.core.IConfiguration;
 import org.mdolidon.hamster.core.Link;
 import org.mdolidon.hamster.core.ProcessingWorker;
+import org.mdolidon.hamster.core.TargetProfile;
 
 import test.org.mdolidon.hamster.mocks.BaseMockMediator;
 
@@ -36,6 +39,38 @@ public class ProcessingWorkerTest {
 		assertEquals(1, result.links.size());
 		Link l = result.links.get(0);
 		assertTrue(l.getTargetAsString().contains("place.com/world/YY"));
+	}
+
+	@Test
+	public void testedLinkContainsSourceJsoupElement() throws Exception {
+		MockConfig cfg = new MockConfig("http://place.com");
+		cfg.setDelegateForTargetProfile(this); // will call the getTargetProfile defined right below
+		String pageText = "<html><body>Hello <a href=\"/world/YY\">world</a></body></html>";
+		@SuppressWarnings("unused")
+		ProcessingTestResult result = runOnString(pageText, cfg);
+	}
+	
+	// used by the test above
+	public TargetProfile getTargetProfile(Link link) {
+		assertNotNull(link.getSourceElement());
+		return new TargetProfile(true,true);
+	}
+	
+
+	@Test
+	public void returnedLinkDoesNotContainSourceJsoupElement() throws Exception {
+		String pageText = "<html><body>Hello <a href=\"/world/YY\">world</a></body></html>";
+		ProcessingTestResult result = runOnString(pageText);
+
+		assertEquals(1, result.links.size());
+		Link l = result.links.get(0);
+		try {
+			@SuppressWarnings("unused")
+			Element el = l.getSourceElement();
+			assertTrue("The link object should have thrown.", false);
+		} catch (NullPointerException e) {
+			assertTrue(true);
+		}
 	}
 
 	@Test
@@ -140,17 +175,15 @@ public class ProcessingWorkerTest {
 
 	// ----------------------------------
 
-	private Content makeContentFromString(String pageText, IConfiguration cfg) throws Exception {
-		Link location = new Link(new URL("http://place.com/home/index.html"), 1, cfg);
-		Content page = new Content(location);
-		page.setBytes(pageText.getBytes());
-		return page;
-	}
+
 
 	private ProcessingTestResult runOnString(String pageText) throws Exception {
 		IConfiguration cfg = new MockConfig("http://place.com");
-		Content page = makeContentFromString(pageText, cfg);
+		return runOnString(pageText, cfg);
+	}
 
+	private ProcessingTestResult runOnString(String pageText, IConfiguration cfg) throws Exception {
+		Content page = makeContentFromString(pageText, cfg);
 		ProcessingWorker worker = new ProcessingWorker(null, cfg); // the processing worker only needs a mediator when
 																	// running autonomously, but we won't test the
 																	// overly simple outer loop of the worker
@@ -159,5 +192,12 @@ public class ProcessingWorkerTest {
 		r.content = page;
 		r.links = linksToDownload;
 		return r;
+	}
+	
+	private Content makeContentFromString(String pageText, IConfiguration cfg) throws Exception {
+		Link location = new Link(new URL("http://place.com/home/index.html"), 1, cfg);
+		Content page = new Content(location);
+		page.setBytes(pageText.getBytes());
+		return page;
 	}
 }

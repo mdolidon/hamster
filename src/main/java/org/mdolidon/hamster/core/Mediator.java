@@ -92,11 +92,20 @@ public class Mediator implements IMediator {
 	// ---------- Dealing with persisting and restoring state
 	//
 
-	private void pause() throws InterruptedException {
+	/**
+	 * Pauses all queues, allowing to make a consistent snapshot of the whole state.
+	 * Made public for testing, but better call getMemento directly.
+	 * 
+	 * @throws InterruptedException
+	 */
+	public void pause() throws InterruptedException {
 		pauseSemaphore.acquire(MAX_WORKERS);
 	}
 
-	private void unpause() {
+	/**
+	 * Allows queues to continue their activity.
+	 */
+	public void unpause() {
 		pauseSemaphore.release(MAX_WORKERS);
 	}
 

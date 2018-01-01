@@ -2,6 +2,7 @@ package test.org.mdolidon.hamster.mocks;
 
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.client.methods.HttpPost;
@@ -15,14 +16,12 @@ public class BaseMockConfig implements IConfiguration {
 
 	@Override
 	public boolean isValid() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public String getErrorMessage() {
-		// TODO Auto-generated method stub
-		return null;
+		return "";
 	}
 
 	@Override
@@ -51,8 +50,17 @@ public class BaseMockConfig implements IConfiguration {
 
 	@Override
 	public TargetProfile getTargetProfile(Link link) {
-		// TODO Auto-generated method stub
-		return null;
+		String urlStr = link.getTargetAsString();
+		if (urlStr.contains("NN")) {
+			return new TargetProfile(false, false);
+		} else if (urlStr.contains("YN")) {
+			return new TargetProfile(true, false);
+		} else if (urlStr.contains("YY")) {
+			return new TargetProfile(true, true);
+		} else if (urlStr.contains("NY")) {
+			return new TargetProfile(false, true);
+		}
+		return new TargetProfile(true, true);
 	}
 
 	@Override
@@ -69,8 +77,7 @@ public class BaseMockConfig implements IConfiguration {
 
 	@Override
 	public List<IMatcher> listAuthContextMatchers() {
-		// TODO Auto-generated method stub
-		return null;
+		return new ArrayList<IMatcher>();
 	}
 
 	@Override
