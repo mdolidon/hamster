@@ -1,6 +1,6 @@
 ## Meet the Hamster
 
-The Hamster is made to hoard websites, partly or completely, to duplicate their content online or make them available offline. It trots across their pages following rules that you set. It was designed with very large jobs in mind that require a fair amount of flexibility (such as bulletin boards) and emphasized reliability, but is also well suited for simple jobs.
+The Hamster is made to hoard websites, partly or completely, to duplicate their content online or make them available offline in an adapted form. It trots across their pages following rules that you set. It was designed with very large jobs in mind that require a fair amount of flexibility (such as bulletin boards) and emphasized reliability, but is also well suited for simple jobs.
 
 
 ## How to
@@ -46,13 +46,15 @@ How I maintain my company's statically served Maven mirror from an Artifactory s
 
 ## Downloading and installing
 
-For now, in these early days, Hamster is available as a runnable .jar on my website : http://kibu.fr/hamster/
-Best wrap this in a shell script. It's been seen working on Linux and Windows, provided that a Java 8 Runtime is available.
+Ready to roll Hamsters can be found on my website : http://kibu.fr/hamster/
 
-Soon enough I'll offer better packaging, and especially a Debian package.
+Debian and affiliate users will find a Debian package, to be installed with `sudo dpkg --install hamster*.deb` ; from there on, a `hamster` command will be available in the shell.
 
+Other Linux, OSX and Windows users can download the runnable .jar and wrap it in a shells script. A Java 8 Runtime is necessary.
+
+At last, if you prefer to build it yourself, the commands you're looking for are `gradle shadowJar` for a simple build (output in `build/libs`), or `gradle release` for the full story with the creation of a Debian package ; that last one needs *dpkg* to be installed.
 
 ## Maturity
 
-The Hamster is very young. I'll keep improving it. There is some more advanced functionality I'd like to implement. I also need to write decent tests. 
+The Hamster is young. I'll keep improving it. There is some more advanced functionality I'd like to implement. I also need to continue writing tests. 
 But most of all I'd like to get feedback. If you get anything surprising, any bug, any idea of improvement, please create a Github issue, and I'll look into it as time allows. Pull requests are of utmost interest to me.

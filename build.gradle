@@ -48,15 +48,43 @@ task setVersionResource {
 shadowJar.mustRunAfter(setVersionResource)
 
 task release {
-  description "Build a shadow Jar with a clean version number"
+
+  description "Build a shadow Jar with a clean version number, and the Debian package"
   dependsOn ([setVersionResource, shadowJar].toSet())
 
+  // Fully imperative
+
   doLast {
+    versionResource.delete()
+
+    // The properly named shadow Jar
     copy {
       from "build/libs/hamster-all.jar"
       into "."
-      rename  { "hamster-" + version + ".jar" }
+      rename  { "hamster-${version}.jar" }
     }
-    versionResource.delete()
+
+    def jar = file("hamster-${version}.jar")
+
+    // The Debian Package
+
+    def oldJars = fileTree("deb_scaffolding/hamster/usr/lib/hamster") 
+    oldJars.each { it.delete() }
+
+    copy {
+      from jar
+      into "deb_scaffolding/hamster/usr/lib/hamster"
+    }
+
+
+    def controlFile = file("deb_scaffolding/hamster/DEBIAN/control")
+    def manifestSkeleton = controlFile.text
+    def manifest = manifestSkeleton.replaceAll("Version:.*", "Version: ${version}").replaceAll("Installed-Size:.*", "Installed-Size: " + (int)Math.ceil(jar.size()/1024))
+    controlFile.text = manifest
+
+    "dpkg --build hamster".execute(null, new File("deb_scaffolding"))
+
+    def debFile = file("deb_scaffolding/hamster.deb")
+    debFile.renameTo("hamster-${version}.deb")
   }
 }

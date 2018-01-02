@@ -1,0 +1,4 @@
+#!/bin/bash
+
+JAR=`ls -1 /usr/lib/hamster/hamster-*.jar | tail -n 1`
+java -jar $JAR  "$@"

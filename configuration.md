@@ -10,7 +10,7 @@ The order of the rules and directives may matter amongst rules of the same kind 
 
 As far as the hamster is concerned, this :
 
-    avoid resources
+    avoid images
     get domain
 
     save as tree
@@ -18,7 +18,7 @@ As far as the hamster is concerned, this :
 
 means exactly the same as this :
 
-    avoid resources save as tree under "my_blog" get domain
+    avoid images save as tree under "my_blog" get domain
 
 
 If a `#` is found on a line, everything that follows up to the line ending is considered to be a comment and ignored.
@@ -93,7 +93,7 @@ You can tune the downloading process with :
 
 `5 parallel downloads` : the hamster will try to keep 5 connections open for this job. The default is 10.
 
-`maximum N Kb/Mb each [from MATCHER]`, such as : `maximum 100 Mb each` or `maximum 100 Kb each from outside domain`. Lets you limit the size of any individual content, and prevent downloading anything that is foreseeably larger than your limit. However if the remote site did not indicate the content size in the headers, and after a successful download the contents came out larger than the limit, then they will be kept, as there is no reason to discard an effort that has already been fruitful. The default is 5 Mb.
+`maximum N Kb/Mb each [from MATCHER]`, such as : `maximum 100 Mb each` or `maximum 100 Kb each from outside domain`. Lets you limit the size of any individual content, and prevent downloading anything that is foreseeably larger than your limit. However if the remote site did not indicate the content size in the headers, and after a successful download the contents came out larger than the limit, then they will be kept, as there is no reason to discard an effort that has already been fruitful. If there are several of these rules, the first applicable one applies, and the default maximum size is 5 Mb.
 
 ## Step 4 : saving the downloaded content
 
@@ -138,4 +138,4 @@ Basic matchers can be combined with :
 
 `MATCHER_A outside MATCHER_B`, such as `images outside domain` : matches if A matches and B does not match.
 
-`unknown MATCHER` (must be first) : matches if MATCHER matches and there is no local file for it already. Useful for updates.
+`unknown MATCHER` : matches if MATCHER matches and there is no local file for it already. Useful for updates.

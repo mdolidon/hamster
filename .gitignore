@@ -1,4 +1,5 @@
 *.jar
+*.deb
 .classpath
 .gradle
 .interp
