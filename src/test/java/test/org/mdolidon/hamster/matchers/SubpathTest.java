@@ -7,7 +7,7 @@ import org.mdolidon.hamster.configuration.BaseConfiguration;
 import org.mdolidon.hamster.core.Link;
 import org.mdolidon.hamster.matchers.Subpaths;
 
-public class SubpathMatcherTest {
+public class SubpathTest {
 
 	@Test
 	public void basicTests() throws Exception {

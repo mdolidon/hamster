@@ -14,6 +14,8 @@ import org.mdolidon.hamster.core.TargetProfile;
 
 public class BaseMockConfig implements IConfiguration {
 
+	private URL startUrl;
+
 	@Override
 	public boolean isValid() {
 		return true;
@@ -26,8 +28,11 @@ public class BaseMockConfig implements IConfiguration {
 
 	@Override
 	public URL getStartUrl() {
-		// TODO Auto-generated method stub
-		return null;
+		return startUrl;
+	}
+
+	public void setStartUrl(URL url) {
+		startUrl = url;
 	}
 
 	@Override

@@ -14,7 +14,7 @@ public class Images implements IMatcher {
 	public Images() {
 		try {
 
-			extensionsMatcher = new URLs(".*\\.jpg|.*\\.jpeg|.*\\.gif|.*\\.png");
+			extensionsMatcher = new URLs(".*\\.jpg|.*\\.jpeg|.*\\.gif|.*\\.png", true); // true : ignore case
 
 		} catch (Exception e) {
 			System.err.println("!! bug : Images matcher uses an invalid regex.");

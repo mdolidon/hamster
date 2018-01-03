@@ -123,7 +123,7 @@ public class Content implements Serializable, Cloneable {
 			return false;
 		}
 		if (mimeType != null && !mimeType.isEmpty()) {
-			return mimeType.startsWith("text/html");
+			return mimeType.startsWith("text/html") || mimeType.startsWith("application/xhtml+xml");
 		}
 
 		// now we have no mime type to rely on, we peek at the beginning of the contents

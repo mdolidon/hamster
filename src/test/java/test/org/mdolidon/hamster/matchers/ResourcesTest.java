@@ -10,7 +10,7 @@ import org.mdolidon.hamster.matchers.Resources;
 
 import test.org.mdolidon.hamster.mocks.BaseMockConfig;
 
-public class ResourcesMatcherTest {
+public class ResourcesTest {
 
 	@Test
 	public void onUrls() throws Exception {
@@ -28,6 +28,18 @@ public class ResourcesMatcherTest {
 		assertTrue(matcher.matches(link));
 
 		link = new Link(new URL("http://some.other.place/out/there/image.png"), 0, cfg);
+		assertTrue(matcher.matches(link));
+
+	}
+	
+	@Test
+	public void onUpperCaseUrls() throws Exception {
+
+		Resources matcher = new Resources();
+		IConfiguration cfg = new BaseMockConfig();
+
+
+		Link link = new Link(new URL("http://place.by/style.CSS"), 0, cfg);
 		assertTrue(matcher.matches(link));
 
 	}

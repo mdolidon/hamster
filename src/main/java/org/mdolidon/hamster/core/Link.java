@@ -123,7 +123,7 @@ public class Link implements Serializable, Cloneable {
 	 * This link's target URL's domain.
 	 */
 	public String getTargetDomain() {
-		return target.getAuthority();
+		return target.getHost();
 	}
 
 	/**

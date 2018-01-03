@@ -9,7 +9,7 @@ import org.mdolidon.hamster.matchers.URLs;
 
 import test.org.mdolidon.hamster.mocks.BaseMockConfig;
 
-public class URLTargetMatcherTest {
+public class URLsTest {
 
 	@Test
 	public void matching() throws Exception {
@@ -37,7 +37,6 @@ public class URLTargetMatcherTest {
 		URLs.MatchDetails md = matcher.matchWithDetails(link);
 		assertTrue(md.isMatch());
 		assertEquals("tidy/444/555.html", md.runTemplate("tidy/$1/$2.html"));
-
 	}
 
 }

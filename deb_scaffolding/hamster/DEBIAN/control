@@ -1,10 +1,10 @@
 Package: hamster
-Version: 0.4
+Version: 0.5
 Maintainer: Mathias Dolidon <mathias.dolidon@gmail.com>
 Description: HTTP mirroring / offline-browsing tool
 Section: web
 Priority: optional
-Installed-Size: 4307
+Installed-Size: 4306
 Architecture: all
 Homepage: https://github.com/mdolidon/hamster
 Depends: default-jre | java8-runtime

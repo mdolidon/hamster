@@ -1,17 +1,15 @@
 package org.mdolidon.hamster.matchers;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import org.mdolidon.hamster.core.IMatcher;
 import org.mdolidon.hamster.core.Link;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-
 /**
- * Matches if the link's URL matches a regular expression passed in the constructor.
+ * Matches if the link's URL matches a regular expression passed in the
+ * constructor.
  *
  */
 public class URLs implements IMatcher {
@@ -23,7 +21,7 @@ public class URLs implements IMatcher {
 
 		private boolean isMatch;
 		private Matcher regexMatcher;
-		
+
 		public MatchDetails(Link link) {
 			String urlStr = link.getTargetAsStringWithoutHash();
 			regexMatcher = pattern.matcher(urlStr);
@@ -34,27 +32,26 @@ public class URLs implements IMatcher {
 			return isMatch;
 		}
 
-		public List<String> getGroups() {
-			List<String> groups = new ArrayList<>(3);
-			groups.add("");
-			if (isMatch) {
-				int groupCount = regexMatcher.groupCount(); // ditch group 0 (full match)
-				for (int i = 1; i <= groupCount; i++) {
-					groups.add(regexMatcher.group(i));
-				}
-			}
-			return groups;
-		}
-		
+
 		public String runTemplate(String template) {
 			return regexMatcher.replaceFirst(template);
 		}
 	}
 
+	// Main public constructor
 	public URLs(String patternString) throws Exception {
+		this(patternString, false);
+	}
+
+	// More specialized constructor for knowledgeable clients
+	public URLs(String patternString, boolean ignoreCase) throws Exception {
 		this.patternString = patternString;
 		try {
-			pattern = Pattern.compile(patternString);
+			int flags = 0;
+			if(ignoreCase) {
+				flags = Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE;
+			}
+			pattern = Pattern.compile(patternString, flags);
 		} catch (PatternSyntaxException e) {
 			throw new Exception(patternString + " : invalid URL regex pattern.");
 		}

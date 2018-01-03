@@ -292,8 +292,8 @@ public class Mediator implements IMediator {
 
 	@Override
 	public void acceptProcessingError(Content content, String message) throws InterruptedException {
-		logger.error("Processing error : {} (for {})", message, content.getSourceLink());
-		activeProcessings.remove(content);
+		logger.error("Processing error. The content will be stored anyway but its links may be broken. {} (for {})", message, content.getSourceLink());
+		acceptProcessedContent(content);
 	}
 
 	@Override

@@ -113,7 +113,7 @@ So far we've seen where to use matchers. It is now time to present them one by o
 
 `css "selector"`, such as `css ".footer a"` : matches if the link was found in an HTML element that triggers the given CSS selector. This matcher is only allowed in *get* and *avoid* rules.
 
-`domain` : matches anything that's on the same domain as the starting page. To make your configuration more fluid to read, you can also use the alternative form `items on domain`, that has exacty the same effect.
+`domain` : matches anything that's on the same domain as the starting page. To make your configuration more fluid to read, you can also use the alternative form `items on domain`, that has exacty the same effect. Protocols and ports are allowed to differ. However different subdomains will be considered to be different domains. If you start on *www.place.com* and want to get *docs.place.com*, use the *urls* matcher.
 
 `images` : anything with an extension that looks like an image, or that was found in an *img* tag.
 
