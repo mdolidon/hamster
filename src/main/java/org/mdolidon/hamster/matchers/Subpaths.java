@@ -43,11 +43,10 @@ public class Subpaths implements IMatcher {
 			URI linkURI = link.getTarget().toURI();
 			URI relativeLinkURI = startURI.relativize(linkURI);
 			if (relativeLinkURI.toString().equals(linkURI.toString())) {
-				// If the returned relative uri is similar to the link intially given, it means
-				// that it could
-				// not be put in relative form ; relativize does never return links starting
-				// with "../"
-				// Therefore it means that the link is not a subpath of the starting url.
+				// If the returned relative uri is similar to the link initially given, it means
+				// that it could not be put in relative form ; relativize does never return
+				// links starting with "../". Therefore it means that the link is not a subpath 
+				// of the starting url.
 				return false;
 			} else {
 				return true;
@@ -56,7 +55,7 @@ public class Subpaths implements IMatcher {
 			return false;
 		}
 	}
-	
+
 	@Override
 	public String getDescription() {
 		return "'subpaths' matcher";

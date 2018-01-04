@@ -20,6 +20,9 @@ public class ResourcesTest {
 
 		Link link = new Link(new URL("http://place.by/the/fire"), 0, cfg);
 		assertFalse(matcher.matches(link));
+		
+		link = new Link(new URL("http://place.by/index.html"), 0, cfg);
+		assertFalse(matcher.matches(link));
 
 		link = new Link(new URL("http://place.by/flash.swf"), 0, cfg);
 		assertTrue(matcher.matches(link));
