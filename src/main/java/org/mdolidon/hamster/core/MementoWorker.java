@@ -1,6 +1,7 @@
 package org.mdolidon.hamster.core;
 
 import java.io.File;
+import java.io.Serializable;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,7 +29,8 @@ public class MementoWorker implements Runnable {
 		for (;;) {
 			try {
 				Thread.sleep(intervalInSeconds * 1000);
-				Utils.writeMementoFile(mediator, file);
+				Serializable memento = mediator.getMemento();
+				Utils.persistSerializableObject(memento, file);
 			} catch (InterruptedException e) {
 				return;
 			}

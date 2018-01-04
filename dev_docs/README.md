@@ -2,7 +2,7 @@ This is an ad-hoc memo. Detailed documentation is to be found as Javadoc. You ca
 
 # Core system overview
 
-Any running job is animated by the same core. Typically the app's entry point will be the CLIApp, in the hamster.CLI package. The CLIApp will instanciate one of its tasks, depending on the command-line options. The most important tasks will in turn instanciate one of the startup classes from the hamster.startup package. A startup class will set up the core components to run the job.
+Any running job is animated by the same core. Typically the app's entry point will be the CLIApp, in the hamster.CLI package. The CLIApp will instanciate one of its tasks, depending on the command-line options. The most important tasks will in turn instanciate the core's startup classe from the hamster.startup package. That startup class will set up the core components to run the job.
 
 The core components revolve around two central hinges, and two main data types. The hinges are :
 

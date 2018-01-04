@@ -1,5 +1,5 @@
-*.jar
 *.deb
+*.jar
 .classpath
 .gradle
 .interp
@@ -7,4 +7,5 @@
 .settings
 bin
 build
+hamster.log
 playground

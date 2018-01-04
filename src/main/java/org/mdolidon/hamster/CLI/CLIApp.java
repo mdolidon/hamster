@@ -62,7 +62,7 @@ public class CLIApp {
 	}
 	
 	public static void showVersion() {
-		String version = Utils.getVersion();
+		String version = Utils.getHamsterVersion();
 		System.out.println("Hamster version : " + version);
 		System.out.println("Author          : Mathias Dolidon");
 		System.out.println("License         : Apache 2.0");

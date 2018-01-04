@@ -2,36 +2,101 @@ package org.mdolidon.hamster.startup;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.mdolidon.hamster.core.DownloadWorker;
+import org.mdolidon.hamster.core.ErrorsBoard;
 import org.mdolidon.hamster.core.IConfiguration;
-import org.mdolidon.hamster.core.Link;
+import org.mdolidon.hamster.core.IMediator;
+import org.mdolidon.hamster.core.Mediator;
+import org.mdolidon.hamster.core.MementoWorker;
+import org.mdolidon.hamster.core.ProcessingWorker;
+import org.mdolidon.hamster.core.StorageWorker;
+import org.mdolidon.hamster.core.Utils;
 
 /**
- * Implements the start up sequence for a normal new job.
- *
+ * Startup : - intanciating a mediator - starting worker threads and injecting
+ * them into the mediator
  */
-public class NormalStartup extends AbstractStartup {
+public class NormalStartup implements IHamsterStartup {
+
 	private static Logger logger = LogManager.getLogger();
 
+	protected static int MEMENTO_INTERVAL_IN_SECONDS = 15;
+
+	private ErrorsBoard errors = new ErrorsBoard();
+	protected IConfiguration configuration;
+	protected IMediator mediator;
+
 	public NormalStartup(IConfiguration configuration) {
-		super(configuration);
+		if (!configuration.isValid()) {
+			throw new RuntimeException("BUG : attempted to start up in spite of an invalid configuration.");
+		}
+		this.configuration = configuration;
+		mediator = new Mediator(configuration);
 	}
 
 	@Override
 	public void run() {
 		try {
-			correctStartUrl();
-
 			startDownloadWorkers();
 			startProcessingWorkers();
 			startStorageWorkers();
 			startMementoWorker();
 
-			mediator.acceptNewLink(new Link(configuration.getStartUrl(), 0, configuration));
-
 		} catch (Exception e) {
-			logger.error(e);
-			noteError(e.toString());
+			noteError(e.getMessage());
 		}
+	};
+
+	@Override
+	public IMediator getMediator() {
+		return mediator;
+	}
+
+	@Override
+	public boolean hasErrors() {
+		return errors.hasErrors();
+	}
+
+	@Override
+	public String getErrorMessage() {
+		return errors.getErrorMessage();
+	}
+
+	protected void noteError(String msg) {
+		errors.note(msg);
+	}
+
+	protected void startDownloadWorkers() {
+		logger.trace("Starting download workers");
+		for (int i = 0; i < configuration.getMaxConcurrentRequests(); i++) {
+			startAndRegisterWorker(new DownloadWorker(mediator, configuration));
+		}
+	}
+
+	protected void startProcessingWorkers() {
+		int cores = Runtime.getRuntime().availableProcessors();
+		logger.trace("Starting processing workers");
+		for (int i = 0; i < cores; i++) {
+			startAndRegisterWorker(new ProcessingWorker(mediator, configuration));
+		}
+	}
+
+	protected void startStorageWorkers() {
+		logger.trace("Starting storage worker");
+		startAndRegisterWorker(new StorageWorker(mediator));
+	}
+
+	protected void startMementoWorker() {
+		logger.trace("Starting memento worker");
+		startAndRegisterWorker(new MementoWorker(mediator, Utils.ONGOING_MEMENTO_FILE, MEMENTO_INTERVAL_IN_SECONDS));
+	}
+
+	protected void startAndRegisterWorker(Runnable worker) {
+		Runnable wrapper = new FailFastThreadWrapper(worker);
+		Thread t = new Thread(wrapper);
+		t.setDaemon(true);
+		t.start();
+		mediator.registerWorker(t);
 	}
 
 }

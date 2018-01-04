@@ -36,7 +36,7 @@ public class Utils {
 	 * 
 	 * @return
 	 */
-	public static String getVersion() {
+	public static String getHamsterVersion() {
 		try {
 			String version = IOUtils.resourceToString("/version.txt", StandardCharsets.UTF_8);
 			return version;
@@ -50,7 +50,7 @@ public class Utils {
 	 * 
 	 * @return
 	 */
-	public static String getLicense() {
+	public static String getHamsterLicense() {
 		try {
 			String version = IOUtils.resourceToString("/license.txt", StandardCharsets.UTF_8);
 			return version;
@@ -123,22 +123,18 @@ public class Utils {
 		return new String(b);
 	}
 
-	
-	
-	public static void loadMementoFile(IMediator mediator, File file, String messageIfNoFileFound) throws Exception {
+	public static Serializable loadSerializedObject(File file, String messageIfNoFileFound) throws Exception {
 		try {
 			FileInputStream fis = new FileInputStream(file);
 			ObjectInputStream ois = new ObjectInputStream(fis);
 
 			try {
 				logger.info("Reading snapshot file");
-				Serializable memento = (Serializable) ois.readObject();
-
-				logger.trace("Injecting memento into mediator");
-				mediator.resetFromMemento(memento);
+				Serializable liveObject = (Serializable) ois.readObject();
+				return liveObject;
+				
 			} catch (ClassNotFoundException e) {
 				throw new Exception("Can not deserialize the snapshot : class not found exception.");
-			} catch (InterruptedException e) {
 			} finally {
 				ois.close();
 			}
@@ -148,28 +144,13 @@ public class Utils {
 			throw new Exception("Can not read file " + file);
 		}
 	}
-	
-	
-	/**
-	 * Asks a mediator for its memento, and streams it to a file as a Java
-	 * serialized object. The method takes care of opening and closing the file.
-	 * 
-	 * @param mediator
-	 * @param file
-	 */
-	public static void writeMementoFile(IMediator mediator, File file) {
+
+
+	public static void persistSerializableObject(Serializable memento, File file) {
 		// There must be a nicer way than this horrible cascade of try/catch...
 
 		FileOutputStream fos;
 		ObjectOutputStream oos;
-		Serializable memento;
-		try {
-			logger.trace("Requesting memento from mediator");
-			memento = mediator.getMemento();
-			logger.trace("Got memento");
-		} catch (InterruptedException e) {
-			return;
-		}
 
 		try {
 			fos = new FileOutputStream(file);
@@ -211,4 +192,10 @@ public class Utils {
 
 		return effectiveUri.toURL();
 	}
+
+	// UI components may want to refer to the snapshot file
+	// This is a bit simple and brutal, but if one day we want a variable name, the
+	// change is easy enough to make.
+	public static final File ONGOING_MEMENTO_FILE = new File("hamster.memento");
+	public static final File FINAL_MEMENTO_FILE = new File("hamster.retry");
 }

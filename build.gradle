@@ -50,7 +50,7 @@ shadowJar.mustRunAfter(setVersionResource)
 task release {
 
   description "Build a shadow Jar with a clean version number, and the Debian package"
-  dependsOn ([setVersionResource, shadowJar].toSet())
+  dependsOn ([test, setVersionResource, shadowJar] as Set)
 
   // Fully imperative
 
@@ -70,6 +70,10 @@ task release {
 
     def oldJars = fileTree("deb_scaffolding/hamster/usr/lib/hamster") 
     oldJars.each { it.delete() }
+    def oldDeb = file("deb_scaffolding/hamster.deb")
+    if(oldDeb.exists()) {
+        oldDeb.delete()
+    }
 
     copy {
       from jar

@@ -2,10 +2,13 @@ package org.mdolidon.hamster.CLI;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
 
+import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mdolidon.hamster.configuration.TextConfiguration;
@@ -32,54 +35,10 @@ public abstract class AbstractTask {
 	private int waiterSequenceStep = 0;
 
 	protected File configFile = new File("mission_for_the_hamster.txt");
-
 	protected IConfiguration configuration;
 	protected IMediator mediator;
 
-	protected void startAndEnterMainLoop(IHamsterStartup startSequence, boolean isRetry) {
-		logger.trace("Calling core startup");
-		startSequence.run();
-		if (startSequence.hasErrors()) {
-			System.out.println(startSequence.getErrorMessage());
-			System.exit(1);
-		}
-		mediator = startSequence.getMediator();
-		if (isRetry) {
-			mediator.recycleRetriableLinks();
-		}
 
-		// We check for the mediator to say there's no activities left to be done.
-		// However, to avoid false positives due to the easy-going approach to
-		// counting activities, we wait to have seen 0 jobs several times before shutting down.
-		int timesISawZeroJobsLeft = 0;
-		try {
-			do  {
-				updateStatusLine();
-				Thread.sleep(300);
-				if (mediator.getNumberOfTrackedActivities() == 0) {
-					timesISawZeroJobsLeft++;
-				} else {
-					timesISawZeroJobsLeft = 0;
-				}
-			} while (timesISawZeroJobsLeft < 2);
-
-			if (IHamsterStartup.ONGOING_MEMENTO_FILE.exists()) {
-				IHamsterStartup.ONGOING_MEMENTO_FILE.delete();
-			}
-			List<Link> retriableLinks = mediator.getRetriableLinks();
-			if (!retriableLinks.isEmpty()) {
-				Utils.writeMementoFile(mediator, IHamsterStartup.FINAL_MEMENTO_FILE);
-				System.out.println("\n" + retriableLinks.size()
-						+ " targets failed being downloaded due to what could be intermittent errors.\n"
-						+ "    hamster retry info : more details\n"
-						+ "    hamster retry      : make a new attempt on those targets\n"
-						+ "    hamster dont retry : forget about it\n");
-			} else {
-				System.out.println("\nDone.\n");
-			}
-		} catch (InterruptedException e) {
-		}
-	}
 
 	protected void loadConfiguration() {
 		try {
@@ -104,6 +63,66 @@ public abstract class AbstractTask {
 			System.out.println("Your " + configFile + " has errors :");
 			System.out.println(configuration.getErrorMessage());
 			System.exit(1);
+		}
+	}
+	
+
+	protected void correctStartUrl() throws Exception {
+		logger.trace("Checking if the start URL has any redirections");
+		URL configuredStartUrl = configuration.getStartUrl();
+		HttpClientContext context = mediator.getAuthContext(new Link(configuredStartUrl, 0, configuration));
+		URL correctedStartUrl = Utils.fetchEffectiveURL(configuredStartUrl, context);
+		if (!correctedStartUrl.toString().equals(configuration.getStartUrl().toString())) {
+			configuration.correctStartUrl(correctedStartUrl);
+		}
+	}
+	
+
+	
+	protected void startAndEnterMainLoop(IHamsterStartup startSequence) {
+		logger.trace("Calling core startup");
+		startSequence.run();
+		if (startSequence.hasErrors()) {
+			System.out.println(startSequence.getErrorMessage());
+			System.exit(1);
+		}
+		if(mediator==null) {
+			logger.error("BUG : it is AbstractTask's subclasses responsibility to set the mediator property.");
+			System.exit(1);
+		}
+	
+		// We check for the mediator to say there's no activities left to be done.
+		// However, to avoid false positives due to the easy-going approach to
+		// counting activities, we wait to have seen 0 jobs several times before
+		// shutting down.
+		int timesISawZeroJobsLeft = 0;
+		try {
+			do {
+				updateStatusLine();
+				Thread.sleep(300);
+				if (mediator.getNumberOfTrackedActivities() == 0) {
+					timesISawZeroJobsLeft++;
+				} else {
+					timesISawZeroJobsLeft = 0;
+				}
+			} while (timesISawZeroJobsLeft < 2);
+
+			if (Utils.ONGOING_MEMENTO_FILE.exists()) {
+				Utils.ONGOING_MEMENTO_FILE.delete();
+			}
+			List<Link> retriableLinks = mediator.getRetriableLinks();
+			if (!retriableLinks.isEmpty()) {
+				Serializable memento = mediator.getMemento();
+				Utils.persistSerializableObject(memento, Utils.FINAL_MEMENTO_FILE);
+				System.out.println("\n" + retriableLinks.size()
+						+ " targets failed being downloaded due to what could be intermittent errors.\n"
+						+ "    hamster retry info : more details\n"
+						+ "    hamster retry      : make a new attempt on those targets\n"
+						+ "    hamster dont retry : forget about it\n");
+			} else {
+				System.out.println("\nDone.\n");
+			}
+		} catch (InterruptedException e) {
 		}
 	}
 

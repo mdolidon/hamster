@@ -2,12 +2,12 @@ package org.mdolidon.hamster.CLI;
 
 import java.io.File;
 
-import org.mdolidon.hamster.startup.IHamsterStartup;
+import org.mdolidon.hamster.core.Utils;
 
 public class DontRetryTask extends AbstractTask {
 	
 	public DontRetryTask() {
-		File file = IHamsterStartup.FINAL_MEMENTO_FILE;
+		File file = Utils.FINAL_MEMENTO_FILE;
 		if (file.exists()) {
 			if (file.delete()) {
 				System.out.println("\nThe faulty targets won't be tried anymore.\n");

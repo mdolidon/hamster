@@ -1,5 +1,6 @@
 package org.mdolidon.hamster.CLI;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,7 +8,6 @@ import java.util.Map;
 import org.mdolidon.hamster.core.Link;
 import org.mdolidon.hamster.core.Mediator;
 import org.mdolidon.hamster.core.Utils;
-import org.mdolidon.hamster.startup.IHamsterStartup;
 
 public class RetryInfoTask extends AbstractTask {
 
@@ -16,8 +16,9 @@ public class RetryInfoTask extends AbstractTask {
 		mediator = new Mediator(configuration);
 
 		try {
-			Utils.loadMementoFile(mediator, IHamsterStartup.FINAL_MEMENTO_FILE,
+			Serializable memento = Utils.loadSerializedObject(Utils.FINAL_MEMENTO_FILE,
 					"\nIt seems that nothing needs to be retried.\n");
+			mediator.resetFromMemento(memento);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			return;
