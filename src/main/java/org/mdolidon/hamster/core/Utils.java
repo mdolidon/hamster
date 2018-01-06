@@ -75,34 +75,7 @@ public class Utils {
 		}
 	}
 
-	/**
-	 * Query a server, follow http redirections, and return the final place we ended
-	 * up in.
-	 * 
-	 * @param target
-	 * @param context
-	 * @return
-	 * @throws Exception
-	 */
-	public static URL fetchEffectiveURL(URL target, HttpClientContext context) throws Exception {
-		try {
-			CloseableHttpClient httpclient = HttpClients.createDefault();
-			HttpGet httpGet = new HttpGet(target.toURI());
-			CloseableHttpResponse response = httpclient.execute(httpGet, context);
 
-			try {
-				int code = response.getStatusLine().getStatusCode();
-				if (code >= 300) {
-					throw new Exception("Got status " + code + " when checking effective location of " + target);
-				}
-				return getEffectiveURL(httpGet, context);
-			} finally {
-				response.close();
-			}
-		} catch (Exception e) {
-			throw new Exception(e.getMessage());
-		}
-	}
 
 	/**
 	 * Return a transformed string, where all characters that are even half exotic
@@ -183,15 +156,7 @@ public class Utils {
 		}
 	}
 
-	private static URL getEffectiveURL(HttpRequestBase request, HttpClientContext context) throws Exception {
-		URI effectiveUri = request.getURI();
-		List<URI> locations = context.getRedirectLocations();
-		if (locations != null) {
-			effectiveUri = locations.get(locations.size() - 1);
-		}
 
-		return effectiveUri.toURL();
-	}
 
 	// UI components may want to refer to the snapshot file
 	// This is a bit simple and brutal, but if one day we want a variable name, the

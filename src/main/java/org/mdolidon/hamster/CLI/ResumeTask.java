@@ -28,7 +28,6 @@ public class ResumeTask extends AbstractTask {
 			System.out.println("\nResuming a job that had started at " + configuration.getStartUrl());
 			startSequence = new NormalStartup(configuration);
 			mediator = startSequence.getMediator();
-			correctStartUrl();
 
 			Serializable memento = Utils.loadSerializedObject(Utils.ONGOING_MEMENTO_FILE,
 					"Could not find file to resume from : " + Utils.ONGOING_MEMENTO_FILE);

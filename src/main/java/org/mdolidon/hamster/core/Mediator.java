@@ -122,6 +122,8 @@ public class Mediator implements IMediator {
 		memento.retriableLinks = new ArrayList<Link>(retriableLinks);
 		memento.urlsAlreadySeen = new ArrayList<String>(urlsAlreadySeen);
 		memento.filesSaved = filesSaved.get();
+		
+		memento.effectiveStartUrl = configuration.getStartUrl();
 
 		unpause();
 		return memento;
@@ -133,6 +135,11 @@ public class Mediator implements IMediator {
 					"BUG : resetFromMemento is not meant to be called on a mediator that has already started to work.");
 		}
 		MediatorMemento memento = (MediatorMemento) input;
+
+		if (!Utils.getBeforeHash(memento.effectiveStartUrl.toString())
+				.equals(Utils.getBeforeHash(configuration.getStartUrlAsString()))) {
+			configuration.correctStartUrl(memento.effectiveStartUrl);
+		}
 
 		// setAllConfigurationsOn* is a gimmick that's made necessary by
 		// the fact that links don't serialize their attached configuration along.
@@ -292,7 +299,8 @@ public class Mediator implements IMediator {
 
 	@Override
 	public void acceptProcessingError(Content content, String message) throws InterruptedException {
-		logger.error("Processing error. The content will be stored anyway but its links may be broken. {} (for {})", message, content.getSourceLink());
+		logger.error("Processing error. The content will be stored anyway but its links may be broken. {} (for {})",
+				message, content.getSourceLink());
 		acceptProcessedContent(content);
 	}
 

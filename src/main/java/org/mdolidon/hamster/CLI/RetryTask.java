@@ -29,7 +29,6 @@ public class RetryTask extends AbstractTask {
 
 			startSequence = new NormalStartup(configuration);
 			mediator = startSequence.getMediator();
-			correctStartUrl();
 
 			Serializable memento = Utils.loadSerializedObject(Utils.FINAL_MEMENTO_FILE,
 					"Could not find file to resume from : " + Utils.FINAL_MEMENTO_FILE);

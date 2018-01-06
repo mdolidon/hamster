@@ -37,13 +37,12 @@ public class BaseMockConfig implements IConfiguration {
 
 	@Override
 	public String getStartUrlAsString() {
-		// TODO Auto-generated method stub
-		return null;
+		return startUrl.toString();
 	}
 
 	@Override
 	public void correctStartUrl(URL url) {
-		// TODO Auto-generated method stub
+		setStartUrl(url);
 
 	}
 

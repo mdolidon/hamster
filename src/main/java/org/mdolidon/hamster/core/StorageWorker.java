@@ -29,12 +29,11 @@ public class StorageWorker implements Runnable {
 			try {
 				Content content = mediator.provideContentToStore();
 				Link link = content.getSourceLink();
-				logger.trace("Got content to store for {}", link.getTargetAsString());
 
 				File file = link.getStorageFile();
 				if (file == null) {
 					mediator.acceptStorageError(content,
-							"Storage worker received a document without a resolved storage location for {}. Resolving...");
+							"Storage worker received a document that can not provide a storage location ; source : {}.");
 					continue;
 				}
 

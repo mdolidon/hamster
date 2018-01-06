@@ -1,6 +1,7 @@
 package org.mdolidon.hamster.core;
 
 import java.io.Serializable;
+import java.net.URL;
 import java.util.List;
 
 public class MediatorMemento implements Serializable {
@@ -13,5 +14,6 @@ public class MediatorMemento implements Serializable {
 	public List<Content> contentToStore;
 	public List<Link> retriableLinks;
 	public int filesSaved;
+	public URL effectiveStartUrl;
 	
 }

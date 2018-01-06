@@ -116,6 +116,13 @@ public class DownloadWorker implements Runnable {
 			try {
 				throwIfNoSuccess(target, response);
 				URL effectiveUrl = getEffectiveURL(httpGet, httpContext);
+
+				if (link.getJumpsFromStartingURL() == 0
+						&& !link.getTargetAsStringWithoutHash().equals(Utils.getBeforeHash(effectiveUrl.toString()))) {
+					logger.info("Correcting start URL to its redirected location : {}", effectiveUrl);
+					configuration.correctStartUrl(effectiveUrl);
+				}
+
 				HttpEntity entity = response.getEntity();
 
 				long length = entity.getContentLength();

@@ -3,12 +3,10 @@ package org.mdolidon.hamster.CLI;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
 
-import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mdolidon.hamster.configuration.TextConfiguration;
@@ -65,18 +63,6 @@ public abstract class AbstractTask {
 			System.exit(1);
 		}
 	}
-	
-
-	protected void correctStartUrl() throws Exception {
-		logger.trace("Checking if the start URL has any redirections");
-		URL configuredStartUrl = configuration.getStartUrl();
-		HttpClientContext context = mediator.getAuthContext(new Link(configuredStartUrl, 0, configuration));
-		URL correctedStartUrl = Utils.fetchEffectiveURL(configuredStartUrl, context);
-		if (!correctedStartUrl.toString().equals(configuration.getStartUrl().toString())) {
-			configuration.correctStartUrl(correctedStartUrl);
-		}
-	}
-	
 
 	
 	protected void startAndEnterMainLoop(IHamsterStartup startSequence) {

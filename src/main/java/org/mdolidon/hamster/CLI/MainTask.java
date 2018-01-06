@@ -31,8 +31,7 @@ public class MainTask extends AbstractTask {
 			loadConfiguration();
 			System.out.println("\nThe exploration starts at " + configuration.getStartUrl());
 			startSequence = new NormalStartup(configuration);
-			mediator = startSequence.getMediator();
-			correctStartUrl();
+			mediator = startSequence.getMediator();		
 			
 			mediator.acceptNewLink(new Link(configuration.getStartUrl(), 0, configuration));
 

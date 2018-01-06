@@ -1,4 +1,4 @@
-def version = '0.5'
+def version = '0.6'
 def versionResource = file("src/main/resources/version.txt")
 
 

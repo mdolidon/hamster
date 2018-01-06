@@ -45,6 +45,7 @@ public class MediatorTest {
 	@Test
 	public void getMementoAndResetFromMementoDoIdentity() throws Exception {
 		BaseMockConfig cfg = new BaseMockConfig();
+		cfg.setStartUrl(new URL("http://on-earth.com/for/now"));
 		IMediator mediator_a = makeMediatorWithSomeContent(cfg);
 		Serializable memento = mediator_a.getMemento();
 		IMediator mediator_b = new Mediator(cfg);
