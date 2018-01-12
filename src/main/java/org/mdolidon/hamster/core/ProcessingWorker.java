@@ -139,8 +139,7 @@ public class ProcessingWorker implements Runnable {
 				storageHref = getRelativeHref(sourceLink.getStorageFile(), link.getStorageFile()) + link.getUrlHash();
 			} else {
 				// if we won't the target is not part of the target set, make sure we leave an
-				// absolute href
-				// in the stored page, to go back online to the right place
+				// absolute href in the stored page, to go back online to the right place
 				storageHref = link.getTargetAsString();
 			}
 			el.attr(attributeKey, storageHref);
@@ -181,11 +180,13 @@ public class ProcessingWorker implements Runnable {
 	}
 
 	private String pathToHref(Path path) {
-		if (File.pathSeparatorChar == '/') {
-			return path.toString();
-		} else {
-			return path.toString().replace(File.pathSeparatorChar, '/');
-		}
+		// Testing File.pathSeparatorChar was apparently not enough to prevent
+		// a Windows-running instance to put antislashes in the resulting html.
+		// Therefore I take this more brutal approach.
+		// It should not result in any other bugs, since antislashes are not a valid
+		// character in URLs.
+
+		return path.toString().replace('\\', '/');
 
 	}
 
