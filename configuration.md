@@ -91,9 +91,9 @@ A special mention for :
 
 You can tune the downloading process with :
 
-`5 parallel downloads` : the hamster will try to keep 5 connections open for this job. The default is 10.
+`N parallel downloads` : the hamster will try to keep N connections open for this job. The default is 10.
 
-`maximum N kb/mb each [from MATCHER]`, such as : `maximum 100 Mb each` or `maximum 100 Kb each from outside domain`. Lets you limit the size of any individual content, and prevent downloading anything that is foreseeably larger than your limit. However if the remote site did not indicate the content size in the headers, and after a successful download the contents came out larger than the limit, then they will be kept, as there is no reason to discard an effort that has already been fruitful. If there are several of these rules, the first applicable one applies, and the default maximum size is 5 Mb.
+`maximum N kb/mb each [from MATCHER]`, such as : `maximum 100 mb each` or `maximum 100 kb each from outside domain`. Lets you limit the size of any individual content, and prevent downloading anything that is foreseeably larger than your limit. However if the remote site did not indicate the content size in the headers, and after a successful download the contents came out larger than the limit, then they will be kept, as there is no reason to discard an effort that has already been fruitful. If there are several of these rules, the first applicable one applies, and the default maximum size is 5 Mb.
 
 `no size limit [from MATCHER]` : goes ahead to download contents regardless of their expected size.
 

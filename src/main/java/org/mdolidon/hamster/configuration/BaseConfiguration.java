@@ -10,17 +10,16 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.logging.log4j.Logger;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mdolidon.hamster.core.IConfiguration;
 import org.mdolidon.hamster.core.IMatcher;
 import org.mdolidon.hamster.core.Link;
 import org.mdolidon.hamster.core.MatcherDrivenList;
 import org.mdolidon.hamster.core.TargetProfile;
-import org.mdolidon.hamster.core.Utils;
 import org.mdolidon.hamster.matchers.All;
 
 /**
@@ -135,22 +134,13 @@ public class BaseConfiguration implements IConfiguration {
 			throw new NullPointerException();
 		}
 
-		if (Utils.getBeforeHash(getStartUrlAsString()).equals(link.getTargetAsStringWithoutHash())) {
+		if (link.getJumpsFromStartingURL() == 0) {
+			logger.debug("Identified start URL. It will be included in the target+download set.");
 			return new TargetProfile(true, true);
 		}
 
 		IDownloadRule rule = downloadRules.getFirstMatch(link);
 		TargetProfile profile = rule.getTargetProfile(link);
-
-		/*
-		 * if (profile.isPartOfTargetSet()) {
-		 * logger.debug("{} should is part of the target according to a {}",
-		 * link.getTargetAsString(), rule.getDescription()); } else {
-		 * logger.debug("{} should be skipped according to a {}", link.getTarget(),
-		 * rule.getDescription());
-		 * 
-		 * }
-		 */
 
 		return profile;
 	}
@@ -185,8 +175,8 @@ public class BaseConfiguration implements IConfiguration {
 	public void addContentSizeRule(IContentSizeRule rule) {
 		contentSizeRules.add(rule);
 	}
-	
-    @Override
+
+	@Override
 	public boolean isAcceptableContentSize(Link link, long size) {
 		return contentSizeRules.getFirstMatch(link).isAcceptableContentSize(link, size);
 	}
