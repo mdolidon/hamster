@@ -3,15 +3,14 @@
 HAMSTER CONFIGURATION LANGUAGE REFERENCE
 
 
-You can get the same information by typing hamster help configure.
-Besides, hamster init includes a cheat-sheet in the mission file.
+(hamster init includes a cheat-sheet in the mission file)
 
 
 Basic syntax rules
 
 White space only matters in so far that it separates keywords. Line
 breaks do not matter as long as they are not in the middle of a keyword
-or value.
+or value. All keywords are lower-case.
 
 The order of the rules and directives may matter amongst rules of the
 same kind (for example, when there are several different storage rules,
@@ -20,7 +19,7 @@ any order that fits you best.
 
 As far as the hamster is concerned, this :
 
-    avoid resources
+    avoid images
     get domain
 
     save as tree
@@ -28,7 +27,7 @@ As far as the hamster is concerned, this :
 
 means exactly the same as this :
 
-    avoid resources save as tree under "my_blog" get domain
+    avoid images save as tree under "my_blog" get domain
 
 If a # is found on a line, everything that follows up to the line ending
 is considered to be a comment and ignored.
@@ -142,14 +141,18 @@ You can tune the downloading process with :
 5 parallel downloads : the hamster will try to keep 5 connections open
 for this job. The default is 10.
 
-maximum N Kb/Mb each [from MATCHER], such as : maximum 100 Mb each or
+maximum N kb/mb each [from MATCHER], such as : maximum 100 Mb each or
 maximum 100 Kb each from outside domain. Lets you limit the size of any
 individual content, and prevent downloading anything that is foreseeably
 larger than your limit. However if the remote site did not indicate the
 content size in the headers, and after a successful download the
 contents came out larger than the limit, then they will be kept, as
 there is no reason to discard an effort that has already been fruitful.
-The default is 5 Mb.
+If there are several of these rules, the first applicable one applies,
+and the default maximum size is 5 Mb.
+
+no size limit [from MATCHER] : goes ahead to download contents
+regardless of their expected size.
 
 
 Step 4 : saving the downloaded content
@@ -193,6 +196,10 @@ only allowed in _get_ and _avoid_ rules.
 domain : matches anything that's on the same domain as the starting
 page. To make your configuration more fluid to read, you can also use
 the alternative form items on domain, that has exacty the same effect.
+Protocols and ports are allowed to differ. However different subdomains
+will be considered to be different domains. If you start on
+_www.place.com_ and want to get _docs.place.com_, use the _urls_
+matcher.
 
 images : anything with an extension that looks like an image, or that
 was found in an _img_ tag.
@@ -228,5 +235,6 @@ B match.
 MATCHER_A outside MATCHER_B, such as images outside domain : matches if
 A matches and B does not match.
 
-unknown MATCHER (must be first) : matches if MATCHER matches and there
-is no local file for it already. Useful for updates.
+unknown MATCHER : matches if MATCHER matches and there is no local file
+for it already. Useful for updates.
+

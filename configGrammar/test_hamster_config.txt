@@ -1,14 +1,8 @@
-start at "http://truc.com"
 
-cookie "truc"="1234" on  ".truc.com/path"
-cookies "session"="abcd" "user"="xyz" on ".truc.com/path"
+start at "xxx"
 
-get   unknown   items    on    domain
-save unknown up to 5 jumps flat
+maximum 100 Kb each from outside domain
+no size limit from domain
 
-# save urls ".*topic.([0-9]+)" as "topics/$1"
-
-# check in at "http://truc.com/ucp.php"
-#   post
-#      "user" = "moi"
-#      "password" = "1234"
+no size limit
+maximum 100kb each

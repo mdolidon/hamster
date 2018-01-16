@@ -98,6 +98,16 @@ public interface HamsterConfigParserListener extends ParseTreeListener {
 	 */
 	void exitMax_size_directive(HamsterConfigParser.Max_size_directiveContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link HamsterConfigParser#no_max_size_directive}.
+	 * @param ctx the parse tree
+	 */
+	void enterNo_max_size_directive(HamsterConfigParser.No_max_size_directiveContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HamsterConfigParser#no_max_size_directive}.
+	 * @param ctx the parse tree
+	 */
+	void exitNo_max_size_directive(HamsterConfigParser.No_max_size_directiveContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link HamsterConfigParser#max_size_per_file_directive}.
 	 * @param ctx the parse tree
 	 */

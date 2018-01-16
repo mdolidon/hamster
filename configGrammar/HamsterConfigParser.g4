@@ -23,7 +23,8 @@ start_directive : START_AT string ;
 
 parallel_directive : integer PARALLEL_DOWNLOADS ;
 
-max_size_directive : max_size_per_file_directive ;
+max_size_directive : ( max_size_per_file_directive | no_max_size_directive );
+no_max_size_directive : NO_SIZE_LIMIT (FROM matcher)? ;
 max_size_per_file_directive : MAXIMUM integer size_unit EACH (FROM matcher)? ;
 size_unit : kilobytes | megabytes ;
 kilobytes : KB ;

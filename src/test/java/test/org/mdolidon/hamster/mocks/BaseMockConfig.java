@@ -74,9 +74,9 @@ public class BaseMockConfig implements IConfiguration {
 	}
 
 	@Override
-	public int getMaxContentSize(Link link) {
+	public boolean isAcceptableContentSize(Link link, long size) {
 		// TODO Auto-generated method stub
-		return 0;
+		return true;
 	}
 
 	@Override

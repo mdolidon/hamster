@@ -4,7 +4,7 @@ You can get the same information by typing `hamster help configure`. Besides, `h
 
 ## Basic syntax rules
 
-White space only matters in so far that it separates keywords. Line breaks do not matter as long as they are not in the middle of a keyword or value.
+White space only matters in so far that it separates keywords. Line breaks do not matter as long as they are not in the middle of a keyword or value. All keywords are lower-case.
 
 The order of the rules and directives may matter amongst rules of the same kind (for example, when there are several different storage rules, the first applicable rule wins). But apart of that, rules can appear in any order that fits you best.
 
@@ -93,7 +93,9 @@ You can tune the downloading process with :
 
 `5 parallel downloads` : the hamster will try to keep 5 connections open for this job. The default is 10.
 
-`maximum N Kb/Mb each [from MATCHER]`, such as : `maximum 100 Mb each` or `maximum 100 Kb each from outside domain`. Lets you limit the size of any individual content, and prevent downloading anything that is foreseeably larger than your limit. However if the remote site did not indicate the content size in the headers, and after a successful download the contents came out larger than the limit, then they will be kept, as there is no reason to discard an effort that has already been fruitful. If there are several of these rules, the first applicable one applies, and the default maximum size is 5 Mb.
+`maximum N kb/mb each [from MATCHER]`, such as : `maximum 100 Mb each` or `maximum 100 Kb each from outside domain`. Lets you limit the size of any individual content, and prevent downloading anything that is foreseeably larger than your limit. However if the remote site did not indicate the content size in the headers, and after a successful download the contents came out larger than the limit, then they will be kept, as there is no reason to discard an effort that has already been fruitful. If there are several of these rules, the first applicable one applies, and the default maximum size is 5 Mb.
+
+`no size limit [from MATCHER]` : goes ahead to download contents regardless of their expected size.
 
 ## Step 4 : saving the downloaded content
 

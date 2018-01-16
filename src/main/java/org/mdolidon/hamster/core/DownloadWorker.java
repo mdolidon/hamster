@@ -126,7 +126,7 @@ public class DownloadWorker implements Runnable {
 				HttpEntity entity = response.getEntity();
 
 				long length = entity.getContentLength();
-				if (length > configuration.getMaxContentSize(link)) {
+				if (length > 0 && !configuration.isAcceptableContentSize(link, length)) {
 					throw new Exception("Target is expected to be too large. Not downloading.");
 				}
 				InputStream contentStream = entity.getContent();

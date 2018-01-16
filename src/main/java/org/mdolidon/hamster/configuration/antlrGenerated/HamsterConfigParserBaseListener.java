@@ -124,6 +124,18 @@ public class HamsterConfigParserBaseListener implements HamsterConfigParserListe
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterNo_max_size_directive(HamsterConfigParser.No_max_size_directiveContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNo_max_size_directive(HamsterConfigParser.No_max_size_directiveContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterMax_size_per_file_directive(HamsterConfigParser.Max_size_per_file_directiveContext ctx) { }
 	/**
 	 * {@inheritDoc}

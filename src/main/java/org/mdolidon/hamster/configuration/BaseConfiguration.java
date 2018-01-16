@@ -38,7 +38,7 @@ public class BaseConfiguration implements IConfiguration {
 	private MatcherDrivenList<IStorageResolver> storageRules = new MatcherDrivenList<>();
 	private MatcherDrivenList<IDownloadRule> downloadRules = new MatcherDrivenList<>();
 	private MatcherDrivenList<IAuthenticationRule> authenticationRules = new MatcherDrivenList<>();
-	private MatcherDrivenList<IntegerRule> maxContentSizeRules = new MatcherDrivenList<>();
+	private MatcherDrivenList<IContentSizeRule> contentSizeRules = new MatcherDrivenList<>();
 
 	private List<IMatcher> authenticationRulesMatchers = new ArrayList<>();
 	private List<CheckinDirective> checkInDirectives = new ArrayList<>();
@@ -48,7 +48,7 @@ public class BaseConfiguration implements IConfiguration {
 		storageRules.setDefault(new FlatStorageResolver(new All(), this, null));
 		downloadRules.setDefault(new AvoidRule(new All()));
 		authenticationRules.setDefault(new AnonymousAuthenticationRule(new All()));
-		maxContentSizeRules.setDefault(new IntegerRule(new All(), 5000000));
+		contentSizeRules.setDefault(new ConstantContentSizeRule(5242880, new All()));
 	}
 
 	@Override
@@ -182,13 +182,13 @@ public class BaseConfiguration implements IConfiguration {
 		cookiesDirectives.add(cookiesDirective);
 	}
 
-	public void addMaximumSizeRule(IntegerRule rule) {
-		maxContentSizeRules.add(rule);
+	public void addContentSizeRule(IContentSizeRule rule) {
+		contentSizeRules.add(rule);
 	}
-
-	@Override
-	public int getMaxContentSize(Link link) {
-		return maxContentSizeRules.getFirstMatch(link).intValue();
+	
+    @Override
+	public boolean isAcceptableContentSize(Link link, long size) {
+		return contentSizeRules.getFirstMatch(link).isAcceptableContentSize(link, size);
 	}
 
 	// Guarantees to return a relative path

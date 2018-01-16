@@ -2,7 +2,7 @@
 
 The Hamster is made to hoard websites, partly or completely, to make them available online or offline in an adapted form. 
 
-Its main difference over other mirroring and offline-reading tools is the **simple yet expressive configuration language that lets it easily wrap around complex situation**. With regards to flexibility, it really is the tool that I missed before writing it. 
+Its main difference over other mirroring and offline-reading tools is the **simple yet expressive configuration language that lets it easily wrap around complex situation**. With regards to this balance, it really is the tool that I missed before writing it. 
 
 The hamster was designed with very large jobs in mind that require a fair amount of flexibility (such as bulletin boards) and emphasized reliability, but is also well suited for simple jobs.
 
@@ -45,8 +45,7 @@ How I maintain my company's statically served Maven mirror from an Artifactory s
     get all on up to 4 jumps
     get unknown items on domain
 
-    maximum 300 Mb each
-
+    no size limit
     save as tree
 
 [The full configuration language reference is here.](https://github.com/mdolidon/hamster/tree/master/configuration.md)

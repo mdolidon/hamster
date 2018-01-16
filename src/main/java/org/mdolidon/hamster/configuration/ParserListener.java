@@ -27,6 +27,7 @@ import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Max
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Max_size_per_file_directiveContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.MegabytesContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Min_jumps_matcherContext;
+import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.No_max_size_directiveContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Not_matcher_opContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Parallel_directiveContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Resources_matcherContext;
@@ -115,7 +116,7 @@ public class ParserListener extends HamsterConfigParserBaseListener {
 	@Override
 	public void exitMegabytes(MegabytesContext ctx) {
 		int i = popInteger().intValue();
-		pushInteger(Integer.valueOf(i * 1024 * 1024));
+		pushInteger(Integer.valueOf(i * 1048576));
 	}
 
 	@Override
@@ -176,9 +177,14 @@ public class ParserListener extends HamsterConfigParserBaseListener {
 
 	@Override
 	public void exitMax_size_per_file_directive(Max_size_per_file_directiveContext ctx) {
-		configuration.addMaximumSizeRule(new IntegerRule(popMatcher(), popInteger().intValue()));
+		configuration.addContentSizeRule(new ConstantContentSizeRule(popInteger().longValue(), popMatcher()));
 	}
 
+	@Override
+	public void exitNo_max_size_directive(No_max_size_directiveContext ctx) {
+		configuration.addContentSizeRule(new IllimitedContentSizeRule(popMatcher()));
+	}
+	
 	//
 	// Save directives
 	//

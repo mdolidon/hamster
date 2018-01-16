@@ -81,13 +81,12 @@ public interface IConfiguration {
 	public File getStorageFile(Link link);
 
 	/**
-	 * How many bytes are allowed to be downloaded for each single content, for a
-	 * given link.
+	 * Whether the expected content size fits within our download rules.
 	 * 
 	 * @param link
 	 * @return
 	 */
-	public int getMaxContentSize(Link link);
+	public boolean isAcceptableContentSize(Link link, long size);
 
 	/**
 	 * Return the list of matchers used to define authentication scopes. This list
