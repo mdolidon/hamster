@@ -27,11 +27,6 @@ public class RegexStorageResolver implements IStorageResolver {
 	}
 
 	@Override
-	public String getDescription() {
-		return "storage resolver from " + matcher.getDescription() + " to '" + template + "'";
-	}
-
-	@Override
 	public File getStorageFile(Link link) {
 		URLs.MatchDetails md = matcher.matchWithDetails(link);
 		if (!md.isMatch()) {

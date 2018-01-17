@@ -15,7 +15,6 @@ import org.mdolidon.hamster.core.Link;
 public class URLs implements IMatcher {
 
 	private Pattern pattern;
-	private String patternString;
 
 	public class MatchDetails {
 
@@ -45,7 +44,6 @@ public class URLs implements IMatcher {
 
 	// More specialized constructor for knowledgeable clients
 	public URLs(String patternString, boolean ignoreCase) throws Exception {
-		this.patternString = patternString;
 		try {
 			int flags = 0;
 			if(ignoreCase) {
@@ -61,11 +59,6 @@ public class URLs implements IMatcher {
 	public boolean matches(Link link) {
 		MatchDetails md = new MatchDetails(link);
 		return md.isMatch();
-	}
-
-	@Override
-	public String getDescription() {
-		return "'urls' matcher on \"" + patternString + "\"";
 	}
 
 	public MatchDetails matchWithDetails(Link link) {

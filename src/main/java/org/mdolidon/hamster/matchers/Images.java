@@ -13,9 +13,7 @@ public class Images implements IMatcher {
 
 	public Images() {
 		try {
-
 			extensionsMatcher = new URLs(".*\\.jpg|.*\\.jpeg|.*\\.gif|.*\\.png", true); // true : ignore case
-
 		} catch (Exception e) {
 			System.err.println("!! bug : Images matcher uses an invalid regex.");
 		}
@@ -24,10 +22,5 @@ public class Images implements IMatcher {
 	@Override
 	public boolean matches(Link link) {
 		return link.isFlag_image() || extensionsMatcher.matches(link);
-	}
-
-	@Override
-	public String getDescription() {
-		return "'images' matcher";
 	}
 }

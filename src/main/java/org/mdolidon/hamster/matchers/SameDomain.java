@@ -37,9 +37,4 @@ public class SameDomain implements IMatcher {
 			return false;
 		}
 	}
-
-	@Override
-	public String getDescription() {
-		return "'domain' matcher";
-	}
 }

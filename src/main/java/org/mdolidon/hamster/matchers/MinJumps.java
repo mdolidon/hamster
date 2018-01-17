@@ -21,9 +21,4 @@ public class MinJumps implements IMatcher {
 	public boolean matches(Link link) {
 		return link.getJumpsFromStartingURL() >= minJumps;
 	}
-
-	public String getDescription() {
-		return "'" + minJumps + " jumps and more' matcher";
-	}
-
 }

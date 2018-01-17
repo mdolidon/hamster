@@ -18,11 +18,6 @@ public class AnonymousAuthenticationRule implements IAuthenticationRule {
 		this.matcher = matcher;
 		
 	}
-	
-	@Override
-	public String getDescription() {
-		return "Anonymous authentication on " + matcher.getDescription();
-	}
 
 	@Override
 	public boolean matches(Link link) {

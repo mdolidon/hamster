@@ -20,9 +20,4 @@ public class MaxJumps implements IMatcher {
 	public boolean matches(Link link) {
 		return link.getJumpsFromStartingURL() <= maxJumps;
 	}
-
-	@Override
-	public String getDescription() {
-		return "'" + maxJumps + " jumps and less' matcher";
-	}
 }

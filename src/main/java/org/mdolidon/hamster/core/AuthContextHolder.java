@@ -33,10 +33,6 @@ public class AuthContextHolder implements IMatcher {
 		return matcher.matches(link);
 	}
 
-	@Override
-	public String getDescription() {
-		return "Authentication context holder on " + matcher.getDescription();
-	};
 
 	/**
 	 * Get this thread's context, as stored within this holder.

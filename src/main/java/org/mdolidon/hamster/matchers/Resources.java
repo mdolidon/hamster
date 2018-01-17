@@ -27,9 +27,4 @@ public class Resources implements IMatcher {
 	public boolean matches(Link link) {
 		return imagesMatcher.matches(link) || extensionsMatcher.matches(link);
 	}
-
-	@Override
-	public String getDescription() {
-		return "'resources' matcher";
-	}
 }

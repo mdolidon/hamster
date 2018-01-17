@@ -24,9 +24,4 @@ public class And implements IMatcher {
 	public boolean matches(Link link) {
 		return m1.matches(link) && m2.matches(link);
 	}
-
-	@Override
-	public String getDescription() {
-		return "(" + m1.getDescription() + " AND " + m2.getDescription() + ")";
-	}
 }

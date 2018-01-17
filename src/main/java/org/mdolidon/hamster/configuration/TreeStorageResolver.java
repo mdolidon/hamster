@@ -50,11 +50,6 @@ public class TreeStorageResolver implements IStorageResolver {
 	}
 
 	@Override
-	public String getDescription() {
-		return "tree storage rule with " + matcher.getDescription();
-	}
-
-	@Override
 	public File getStorageFile(Link link) {
 		String urlStr = link.getTargetAsStringWithoutHash();
 		return getUrlPathAsFile(urlStr);

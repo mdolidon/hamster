@@ -26,10 +26,4 @@ public class Unknown implements IMatcher {
 		}
 		return true;
 	}
-
-	@Override
-	public String getDescription() {
-		return childMatcher.getDescription() + " if the local file does not exist.";
-	}
-
 }

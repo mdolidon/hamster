@@ -22,11 +22,6 @@ public abstract class AbstractDownloadRule implements IDownloadRule {
 	}
 
 	@Override
-	public String getDescription() {
-		return name + " with " + matcher.getDescription();
-	}
-
-	@Override
 	public TargetProfile getTargetProfile(Link link) {
 		return constantTargetProfile;
 	}

@@ -55,10 +55,4 @@ public class Subpaths implements IMatcher {
 			return false;
 		}
 	}
-
-	@Override
-	public String getDescription() {
-		return "'subpaths' matcher";
-	}
-
 }

@@ -28,12 +28,6 @@ public class SimpleAuthenticationRule implements IAuthenticationRule {
 	}
 
 	@Override
-	public String getDescription() {
-		return "Simple authentication rule for user " + user + " matching on " + matcher.getDescription();
-	}
-
-
-	@Override
 	public boolean matches(Link link) {
 		return matcher.matches(link);
 	}

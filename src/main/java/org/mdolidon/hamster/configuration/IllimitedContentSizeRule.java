@@ -17,12 +17,6 @@ public class IllimitedContentSizeRule implements IContentSizeRule {
 		return matcher.matches(link);
 	}
 
-
-	@Override
-	public String getDescription() {
-		return "description will be deprecated...";
-	}
-
 	@Override
 	public boolean isAcceptableContentSize(Link link, long size) {
 		return true;

@@ -11,16 +11,9 @@ public interface IMatcher {
 
 	/**
 	 * Tells whether a link is within this object's scope of action, or not.
+	 * 
 	 * @param link
 	 * @return
 	 */
 	public boolean matches(Link link);
-	
-	/**
-	 * Give a friendly description of the object (mostly for debugging purposes).
-	 * @return
-	 */
-	public String getDescription();
-	
-
 }

@@ -24,9 +24,4 @@ public class Css implements IMatcher {
 		}
 		return sourceElement.is(selector);
 	}
-
-	@Override
-	public String getDescription() {
-		return "'css' matcher, looking for '" + selector + "'";
-	}
 }

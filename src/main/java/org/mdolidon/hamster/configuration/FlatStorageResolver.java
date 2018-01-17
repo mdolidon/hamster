@@ -31,11 +31,6 @@ public class FlatStorageResolver implements IStorageResolver {
 	}
 
 	@Override
-	public String getDescription() {
-		return "flat storage rule with " + matcher.getDescription();
-	}
-
-	@Override
 	public boolean matches(Link link) {
 		return matcher.matches(link);
 	}

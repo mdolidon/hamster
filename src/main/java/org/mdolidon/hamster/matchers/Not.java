@@ -22,9 +22,4 @@ public class Not implements IMatcher {
 	public boolean matches(Link link) {
 		return !matcher.matches(link);
 	}
-
-	@Override
-	public String getDescription() {
-		return "(NOT " + matcher.getDescription() + ")";
-	}
 }

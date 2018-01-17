@@ -19,11 +19,6 @@ public class ConstantContentSizeRule implements IContentSizeRule {
 	}
 
 	@Override
-	public String getDescription() {
-		return "description is deprecated... will disappear soon";
-	}
-
-	@Override
 	public boolean isAcceptableContentSize(Link link, long size) {
 		return size <= maxSize;
 	}

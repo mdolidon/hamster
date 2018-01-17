@@ -13,10 +13,4 @@ public class All implements IMatcher {
 	public boolean matches(Link link) {
     	return true;
 	}
-
-	@Override
-	public String getDescription() {
-		return "'all' matcher";
-	}
-	
 }
