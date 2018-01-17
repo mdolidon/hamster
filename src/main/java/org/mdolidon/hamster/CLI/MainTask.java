@@ -10,8 +10,8 @@ public class MainTask extends AbstractTask {
 	public MainTask() {
 		if (Utils.ONGOING_MEMENTO_FILE.exists()) {
 			System.out.println("\nFound a file named " + Utils.ONGOING_MEMENTO_FILE
-					+ ". It would let you resume an interrupted job.\n"
-					+ "If you're sure that you want to start from scratch, delete that file and relaunch hamster.\n"
+					+ ". It would let you resume an interrupted job.\n\n"
+					+ "If you're sure that you want to start from scratch, launch :\n     hamster dont resume\n\n"
 					+ "If you want to resume the job that was interrupted, launch :\n     hamster resume\n");
 			return;
 		}

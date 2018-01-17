@@ -46,6 +46,8 @@ public class CLIApp {
 
 		if (commandLine.isInit()) {
 			new InitTask();
+		} else if (commandLine.isResume() && commandLine.isDontFlag()) {
+			new DontResumeTask();
 		} else if (commandLine.isResume()) {
 			new ResumeTask();
 		} else if (commandLine.isRetry() && commandLine.isInfoRequest()) {
