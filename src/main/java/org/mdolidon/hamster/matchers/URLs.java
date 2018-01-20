@@ -31,7 +31,6 @@ public class URLs implements IMatcher {
 			return isMatch;
 		}
 
-
 		public String runTemplate(String template) {
 			return regexMatcher.replaceFirst(template);
 		}

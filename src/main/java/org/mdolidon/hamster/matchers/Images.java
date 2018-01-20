@@ -8,16 +8,10 @@ import org.mdolidon.hamster.core.Link;
  *
  */
 public class Images implements IMatcher {
+	
+	private String[] extensions = {"jpg","jpeg","gif","png"};
+	private IMatcher extensionsMatcher = new URLExtensions(extensions);
 
-	private URLs extensionsMatcher;
-
-	public Images() {
-		try {
-			extensionsMatcher = new URLs(".*\\.jpg|.*\\.jpeg|.*\\.gif|.*\\.png", true); // true : ignore case
-		} catch (Exception e) {
-			System.err.println("!! bug : Images matcher uses an invalid regex.");
-		}
-	}
 
 	@Override
 	public boolean matches(Link link) {

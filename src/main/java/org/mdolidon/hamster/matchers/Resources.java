@@ -9,19 +9,9 @@ import org.mdolidon.hamster.core.Link;
  *
  */
 public class Resources implements IMatcher {
-
-	private URLs extensionsMatcher;
-	private Images imagesMatcher = new Images();
-
-	public Resources() {
-		try {
-			extensionsMatcher = new URLs(
-					".*\\.css|.*\\.js|.*\\.mp3|.*\\.ogg|.*\\.swf|.*\\.mov|.*\\.aif|.*\\.aiff|.*\\.aifc|.*\\.avi|.*\\.wav|.*\\.txt",
-					true); // true : ignore case
-		} catch (Exception e) {
-			System.err.println("!! bug : Resources matcher uses an invalid regex.");
-		}
-	}
+	private String[] extensions = {"css","js","mp3","ogg","swf","mov","aif","aiff","aifc","avi","wav","txt"};
+	private IMatcher extensionsMatcher= new URLExtensions(extensions);
+	private IMatcher imagesMatcher = new Images();
 
 	@Override
 	public boolean matches(Link link) {
