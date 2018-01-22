@@ -5,6 +5,8 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
+import org.mdolidon.hamster.matchers.URLExtensions;
+
 /**
  * 
  * Content objects will contain whatever data was downloaded from a given source
@@ -15,6 +17,9 @@ import java.util.Arrays;
 public class Content implements Serializable, Cloneable {
 
 	private static final long serialVersionUID = 1L;
+
+	private static String[] cssExtStr = { "css" };
+	private static IMatcher cssExt = new URLExtensions(cssExtStr);
 
 	private Link sourceLink;
 	private String mimeType;
@@ -138,6 +143,17 @@ public class Content implements Serializable, Cloneable {
 		// and all we're concerned about is <ascii 127 anyway
 		String contentStart = new String(contentStartBytes, StandardCharsets.ISO_8859_1);
 		return (contentStart.contains(smallHtmlOpener) || contentStart.contains(bigHtmlOpener));
+	}
+
+	/**
+	 * 
+	 * @return true if this content is likely CSS, according to MIME type or URL
+	 */
+	public boolean isCss() {
+		if (mimeType != null && !mimeType.isEmpty()) {
+			return mimeType.startsWith("text/css");
+		}
+		return cssExt.matches(getSourceLink());
 	}
 
 }

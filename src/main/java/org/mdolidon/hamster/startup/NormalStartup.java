@@ -8,7 +8,7 @@ import org.mdolidon.hamster.core.IConfiguration;
 import org.mdolidon.hamster.core.IMediator;
 import org.mdolidon.hamster.core.Mediator;
 import org.mdolidon.hamster.core.MementoWorker;
-import org.mdolidon.hamster.core.ProcessingWorker;
+import org.mdolidon.hamster.core.HTMLProcessingWorker;
 import org.mdolidon.hamster.core.StorageWorker;
 import org.mdolidon.hamster.core.Utils;
 
@@ -77,7 +77,7 @@ public class NormalStartup implements IHamsterStartup {
 		int cores = Runtime.getRuntime().availableProcessors();
 		logger.trace("Starting processing workers");
 		for (int i = 0; i < cores; i++) {
-			startAndRegisterWorker(new ProcessingWorker(mediator, configuration));
+			startAndRegisterWorker(new HTMLProcessingWorker(mediator, configuration));
 		}
 	}
 

@@ -20,7 +20,12 @@ public class Css implements IMatcher {
 	public boolean matches(Link link) {
 		Element sourceElement = link.getSourceElement();
 		if(sourceElement==null) {
-			throw new RuntimeException("Tried to use a CSS matcher while the link was not bound to its source element.");
+			
+			// we don't want this matcher to raise an exception if called without a
+			// JSOUP element. We may run a whole array of matchers on links that
+			// were not extracted from HTML in the first place (CSS import for example)
+			// and one or several CSS matchers may be among them.
+			return false; 
 		}
 		return sourceElement.is(selector);
 	}

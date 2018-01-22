@@ -41,7 +41,8 @@ public class Mediator implements IMediator {
 	//
 
 	private Set<Link> activeDownloads = ConcurrentHashMap.newKeySet(20);
-	private Set<Content> activeProcessings = ConcurrentHashMap.newKeySet(20);
+	private Set<Content> activeHTMLProcessing = ConcurrentHashMap.newKeySet(20);
+	private Set<Content> activeCSSProcessing = ConcurrentHashMap.newKeySet(20);
 	private Set<Content> activeStoring = ConcurrentHashMap.newKeySet(20);
 
 	//
@@ -55,7 +56,9 @@ public class Mediator implements IMediator {
 
 	// Other buffers that can absorb temporary speed variations between the workers.
 	// but should slow down overly fast producers if necessary.
-	private PausableBlockingQueue<Content> contentsToBeProcessed = new PausableBlockingQueue<>(pauseSemaphore,
+	private PausableBlockingQueue<Content> htmlContentsToBeProcessed = new PausableBlockingQueue<>(pauseSemaphore,
+			LARGE_OBJECTS_QUEUES_CAP, LARGE_OBJECTS_QUEUES_CAP);
+	private PausableBlockingQueue<Content> cssContentsToBeProcessed = new PausableBlockingQueue<>(pauseSemaphore,
 			LARGE_OBJECTS_QUEUES_CAP, LARGE_OBJECTS_QUEUES_CAP);
 	private PausableBlockingQueue<Content> contentsToBeStored = new PausableBlockingQueue<>(pauseSemaphore,
 			LARGE_OBJECTS_QUEUES_CAP, LARGE_OBJECTS_QUEUES_CAP);
@@ -72,6 +75,8 @@ public class Mediator implements IMediator {
 	private List<Link> retriableLinks = new ArrayList<>();
 	private AtomicInteger filesSaved = new AtomicInteger(0);
 	private boolean terminatingFlag = false;
+
+
 
 	public Mediator(IConfiguration configuration) {
 		this.configuration = configuration;
@@ -115,7 +120,8 @@ public class Mediator implements IMediator {
 		MediatorMemento memento = new MediatorMemento();
 
 		// copy*InNewList : aggregates set and queue contents in a list
-		memento.contentToProcess = copyContentsInNewList(activeProcessings, contentsToBeProcessed);
+		memento.htmlContentToProcess = copyContentsInNewList(activeHTMLProcessing, htmlContentsToBeProcessed);
+		memento.cssContentToProcess = copyContentsInNewList(activeCSSProcessing, cssContentsToBeProcessed);
 		memento.contentToStore = copyContentsInNewList(activeStoring, contentsToBeStored);
 		memento.linksToDownload = copyLinksInNewList(activeDownloads, linksToDownload);
 
@@ -145,8 +151,8 @@ public class Mediator implements IMediator {
 		// the fact that links don't serialize their attached configuration along.
 		// They expected us to reinject it after deserializing.
 
-		setAllConfigurationsOnContents(memento.contentToProcess);
-		contentsToBeProcessed.addAll(memento.contentToProcess);
+		setAllConfigurationsOnContents(memento.htmlContentToProcess);
+		htmlContentsToBeProcessed.addAll(memento.htmlContentToProcess);
 
 		setAllConfigurationsOnContents(memento.contentToStore);
 		contentsToBeStored.addAll(memento.contentToStore);
@@ -253,7 +259,7 @@ public class Mediator implements IMediator {
 	@Override
 	public void acceptDownloadedContent(Content content) throws InterruptedException {
 		if (content.isHtml()) {
-			contentsToBeProcessed.put(content);
+			htmlContentsToBeProcessed.put(content);
 		} else {
 			if (content.getSourceLink().isPartOfTargetSet()) {
 				contentsToBeStored.put(content);
@@ -275,34 +281,66 @@ public class Mediator implements IMediator {
 
 	//
 	// -------- Interaction with processing workers
-	// Processing means : analyzing HTML, extracting links, transforming for
+	// Processing means : analyzing contents (HTML and CSS), extracting links, transforming for
 	// storage.
 	//
 
 	@Override
-	public Content provideContentToProcess() throws InterruptedException {
+	public Content provideHTMLContentToProcess() throws InterruptedException {
 		if (terminatingFlag) {
 			throw new InterruptedException();
 		}
-		Content content = contentsToBeProcessed.take();
-		activeProcessings.add(content);
+		Content content = htmlContentsToBeProcessed.take();
+		activeHTMLProcessing.add(content);
 		return content;
 	}
 
 	@Override
-	public void acceptProcessedContent(Content content) throws InterruptedException {
+	public void acceptProcessedHTMLContent(Content content) throws InterruptedException {
 		if (content.getSourceLink().isPartOfTargetSet()) {
 			contentsToBeStored.put(content);
 		}
-		activeProcessings.remove(content);
+		activeHTMLProcessing.remove(content);
 	}
 
 	@Override
-	public void acceptProcessingError(Content content, String message) throws InterruptedException {
+	public void acceptHTMLProcessingError(Content content, String message) throws InterruptedException {
 		logger.error("Processing error. The content will be stored anyway but its links may be broken. {} (for {})",
 				message, content.getSourceLink());
-		acceptProcessedContent(content);
+		acceptProcessedHTMLContent(content);
 	}
+	
+	
+	@Override
+	public Content provideCSSContentToProcess() throws InterruptedException {
+		if (terminatingFlag) {
+			throw new InterruptedException();
+		}
+		Content content = cssContentsToBeProcessed.take();
+		activeCSSProcessing.add(content);
+		return content;
+	}
+
+	@Override
+	public void acceptProcessedCSSContent(Content content) throws InterruptedException {
+		if (content.getSourceLink().isPartOfTargetSet()) {
+			contentsToBeStored.put(content);
+		}
+		activeCSSProcessing.remove(content);
+	}
+
+	@Override
+	public void acceptCSSProcessingError(Content content, String message) throws InterruptedException {
+		logger.error("Processing error. The content will be stored anyway but its links may be broken. {} (for {})",
+				message, content.getSourceLink());
+		acceptProcessedCSSContent(content);
+	}
+	
+	
+	
+	
+	
+	
 
 	@Override
 	public void acceptNewLink(Link link) throws InterruptedException {
@@ -369,8 +407,8 @@ public class Mediator implements IMediator {
 		// It's OK if we're off by one or two : we do not use the result to take
 		// immediate decisions, only to show the user if there's much left to do or not.
 		// However, repeatedly getting 0 should mean that we're done.
-		return linksToDownload.size() + contentsToBeProcessed.size() + contentsToBeStored.size()
-				+ activeDownloads.size() + activeProcessings.size() + activeStoring.size();
+		return linksToDownload.size() + htmlContentsToBeProcessed.size() + contentsToBeStored.size()
+				+ activeDownloads.size() + activeHTMLProcessing.size() + activeStoring.size();
 	}
 
 	@Override

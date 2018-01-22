@@ -63,7 +63,7 @@ public class BaseMockMediator implements IMediator {
 
 
 	@Override
-	public synchronized Content provideContentToProcess() throws InterruptedException {
+	public synchronized Content provideHTMLContentToProcess() throws InterruptedException {
 		if (contentsToProvideForProcessing.isEmpty()) {
 			for (;;) {
 					this.wait();
@@ -74,13 +74,13 @@ public class BaseMockMediator implements IMediator {
 	}
 
 	@Override
-	public synchronized void  acceptProcessedContent(Content content) throws InterruptedException {
+	public synchronized void  acceptProcessedHTMLContent(Content content) throws InterruptedException {
 		processedContent.add(content);
 
 	}
 
 	@Override
-	public synchronized void  acceptProcessingError(Content content, String message) throws InterruptedException {
+	public synchronized void  acceptHTMLProcessingError(Content content, String message) throws InterruptedException {
 		// TODO Auto-generated method stub
 
 	}
@@ -154,6 +154,24 @@ public class BaseMockMediator implements IMediator {
 	public List<Link> getRetriableLinks() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Content provideCSSContentToProcess() throws InterruptedException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void acceptProcessedCSSContent(Content content) throws InterruptedException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void acceptCSSProcessingError(Content content, String message) throws InterruptedException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

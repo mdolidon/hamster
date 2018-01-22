@@ -1,4 +1,4 @@
-package test.org.mdolidon.hamster.core.ProcessingWorker;
+package test.org.mdolidon.hamster.core.HTMLProcessingWorker;
 
 import java.io.File;
 import java.lang.reflect.Method;

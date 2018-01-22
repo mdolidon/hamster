@@ -25,7 +25,7 @@ import org.jsoup.select.Elements;
  * the mediator.
  */
 
-public class ProcessingWorker implements Runnable {
+public class HTMLProcessingWorker implements Runnable {
 
 	// I could have listed acceptable protocols, but I do the opposite instead.
 	// This lets us be easily tolerant with the way http(s) urls are written.
@@ -45,7 +45,7 @@ public class ProcessingWorker implements Runnable {
 	private IMediator mediator;
 	private IConfiguration configuration;
 
-	public ProcessingWorker(IMediator mediator, IConfiguration configuration) {
+	public HTMLProcessingWorker(IMediator mediator, IConfiguration configuration) {
 		this.mediator = mediator;
 		this.configuration = configuration;
 	}
@@ -56,16 +56,16 @@ public class ProcessingWorker implements Runnable {
 
 		while (true) {
 			try {
-				Content content = mediator.provideContentToProcess();
+				Content content = mediator.provideHTMLContentToProcess();
 				try {
 					List<Link> linksToDownload = processCurrentContent(content);
 					if (!linksToDownload.isEmpty()) {
 						mediator.acceptAllNewLinks(linksToDownload);
 					}
-					mediator.acceptProcessedContent(content);
+					mediator.acceptProcessedHTMLContent(content);
 
 				} catch (ProcessingException e) {
-					mediator.acceptProcessingError(content, e.getMessage());
+					mediator.acceptHTMLProcessingError(content, e.getMessage());
 				}
 			} catch (InterruptedException e) {
 				return;

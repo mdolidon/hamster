@@ -74,7 +74,7 @@ public interface IMediator {
 	 * 
 	 * @throws InterruptedException
 	 */
-	public Content provideContentToProcess() throws InterruptedException;
+	public Content provideHTMLContentToProcess() throws InterruptedException;
 
 	/**
 	 * Give the mediator some content that's been rewritten for local usage, and
@@ -83,7 +83,7 @@ public interface IMediator {
 	 * @param content
 	 * @throws InterruptedException
 	 */
-	public void acceptProcessedContent(Content content) throws InterruptedException;
+	public void acceptProcessedHTMLContent(Content content) throws InterruptedException;
 
 	/**
 	 * Inform the mediator that some content could not be correctly reworked for
@@ -93,7 +93,7 @@ public interface IMediator {
 	 * @param message
 	 * @throws InterruptedException
 	 */
-	public void acceptProcessingError(Content content, String message) throws InterruptedException;
+	public void acceptHTMLProcessingError(Content content, String message) throws InterruptedException;
 
 	/**
 	 * Notify the mediator about a new link that has been discovered and checked.
@@ -117,6 +117,36 @@ public interface IMediator {
 	 */
 	public void acceptAllNewLinks(Collection<Link> incomingLinks) throws InterruptedException;
 
+	/**
+	 * Ask the mediator for a Content that needs to be rewritten for offline usage.
+	 * The caller becomes responsible for this content.
+	 * 
+	 * @throws InterruptedException
+	 */
+	Content provideCSSContentToProcess() throws InterruptedException;
+
+	/**
+	 * Give the mediator some content that's been rewritten for local usage, and
+	 * should be ready for storage.
+	 * 
+	 * @param content
+	 * @throws InterruptedException
+	 */
+	void acceptProcessedCSSContent(Content content) throws InterruptedException;
+
+	
+	/**
+	 * Inform the mediator that some content could not be correctly reworked for
+	 * offline storage.
+	 * 
+	 * @param link
+	 * @param message
+	 * @throws InterruptedException
+	 */
+	void acceptCSSProcessingError(Content content, String message) throws InterruptedException;
+	
+	
+	
 	/**
 	 * Ask the mediator for a Content that needs to be stored. The content's source
 	 * link should have been resolved to an offline file, that marks the wanted
@@ -206,4 +236,6 @@ public interface IMediator {
 	 * connectivity, server error...)
 	 */
 	public List<Link> getRetriableLinks();
+
+
 }

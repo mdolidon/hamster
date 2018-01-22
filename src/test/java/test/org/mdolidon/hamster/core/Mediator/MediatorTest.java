@@ -53,7 +53,7 @@ public class MediatorTest {
 
 		assertEquals(4, mediator_b.getNumberOfTrackedActivities());
 
-		Content ct_should_html = mediator_b.provideContentToProcess();
+		Content ct_should_html = mediator_b.provideHTMLContentToProcess();
 		assertTrue(new String(ct_should_html.getBytes()).contains("This is valid html"));
 		Content ct_should_data = mediator_b.provideContentToStore();
 		assertTrue(ct_should_data.getBytes().length == 6);
@@ -74,13 +74,13 @@ public class MediatorTest {
 		// cast to access innards ; we don't cast in the app, because we don't
 		// want to access innards !
 		MediatorMemento memento = (MediatorMemento) mediator.getMemento();
-		Content mementoHtmlContent = memento.contentToProcess.get(0);
+		Content mementoHtmlContent = memento.htmlContentToProcess.get(0);
 		assertTrue(new String(mementoHtmlContent.getBytes()).contains("valid html"));
 		assertTrue(mementoHtmlContent.isHtml()); // if the content does not recognize itself as html,
 		// the mediator will route it the wrong way and this test case would fail by
 		// someone else's fault
 
-		Content liveHtmlContent = mediator.provideContentToProcess();
+		Content liveHtmlContent = mediator.provideHTMLContentToProcess();
 		assertTrue(new String(liveHtmlContent.getBytes()).contains("valid html"));
 		liveHtmlContent
 				.setBytes("<html><body>THIS HAS BEEN PROCESSED BEFORE THE MEMENTO WAS SAVED</body></html>".getBytes());

@@ -1,4 +1,4 @@
-package test.org.mdolidon.hamster.core.ProcessingWorker;
+package test.org.mdolidon.hamster.core.HTMLProcessingWorker;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -13,7 +13,7 @@ import org.junit.Test;
 import org.mdolidon.hamster.core.Content;
 import org.mdolidon.hamster.core.IConfiguration;
 import org.mdolidon.hamster.core.Link;
-import org.mdolidon.hamster.core.ProcessingWorker;
+import org.mdolidon.hamster.core.HTMLProcessingWorker;
 import org.mdolidon.hamster.core.TargetProfile;
 
 import test.org.mdolidon.hamster.mocks.BaseMockMediator;
@@ -24,7 +24,7 @@ import test.org.mdolidon.hamster.mocks.BaseMockMediator;
  * 
  * The tested page pretends to be http://place.com/home/index.html
  */
-public class ProcessingWorkerTest {
+public class HTMLProcessingWorkerTest {
 
 	private class ProcessingTestResult {
 		public Content content;
@@ -163,7 +163,7 @@ public class ProcessingWorkerTest {
 		String pageText = "<html><body>Hello <a href=\"h:/world&/YY/1\">w1</a><a href=\"/world/YY/2\">w2</a></body></html>";
 		mediator.contentsToProvideForProcessing.addLast(makeContentFromString(pageText, cfg));
 
-		ProcessingWorker worker = new ProcessingWorker(mediator, cfg);
+		HTMLProcessingWorker worker = new HTMLProcessingWorker(mediator, cfg);
 		Thread wthread = new Thread(worker);
 		wthread.start();
 		Thread.sleep(50); // no I wouldn't do this in the app code...
@@ -184,7 +184,7 @@ public class ProcessingWorkerTest {
 
 	private ProcessingTestResult runOnString(String pageText, IConfiguration cfg) throws Exception {
 		Content page = makeContentFromString(pageText, cfg);
-		ProcessingWorker worker = new ProcessingWorker(null, cfg); // the processing worker only needs a mediator when
+		HTMLProcessingWorker worker = new HTMLProcessingWorker(null, cfg); // the processing worker only needs a mediator when
 																	// running autonomously, but we won't test the
 																	// overly simple outer loop of the worker
 		List<Link> linksToDownload = worker.processCurrentContent(page);
