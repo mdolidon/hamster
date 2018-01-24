@@ -76,8 +76,6 @@ public class Mediator implements IMediator {
 	private AtomicInteger filesSaved = new AtomicInteger(0);
 	private boolean terminatingFlag = false;
 
-
-
 	public Mediator(IConfiguration configuration) {
 		this.configuration = configuration;
 		authContextHolders.setDefault(new AuthContextHolder(new All(), configuration));
@@ -128,7 +126,7 @@ public class Mediator implements IMediator {
 		memento.retriableLinks = new ArrayList<Link>(retriableLinks);
 		memento.urlsAlreadySeen = new ArrayList<String>(urlsAlreadySeen);
 		memento.filesSaved = filesSaved.get();
-		
+
 		memento.effectiveStartUrl = configuration.getStartUrl();
 
 		unpause();
@@ -258,12 +256,15 @@ public class Mediator implements IMediator {
 
 	@Override
 	public void acceptDownloadedContent(Content content) throws InterruptedException {
+
 		if (content.isHtml()) {
 			htmlContentsToBeProcessed.put(content);
-		} else {
-			if (content.getSourceLink().isPartOfTargetSet()) {
-				contentsToBeStored.put(content);
-			}
+
+		} else if (content.isCss()) {
+			cssContentsToBeProcessed.put(content);
+
+		} else if (content.getSourceLink().isPartOfTargetSet()) {
+			contentsToBeStored.put(content);
 		}
 		activeDownloads.remove(content.getSourceLink());
 	}
@@ -281,7 +282,8 @@ public class Mediator implements IMediator {
 
 	//
 	// -------- Interaction with processing workers
-	// Processing means : analyzing contents (HTML and CSS), extracting links, transforming for
+	// Processing means : analyzing contents (HTML and CSS), extracting links,
+	// transforming for
 	// storage.
 	//
 
@@ -309,8 +311,7 @@ public class Mediator implements IMediator {
 				message, content.getSourceLink());
 		acceptProcessedHTMLContent(content);
 	}
-	
-	
+
 	@Override
 	public Content provideCSSContentToProcess() throws InterruptedException {
 		if (terminatingFlag) {
@@ -335,12 +336,6 @@ public class Mediator implements IMediator {
 				message, content.getSourceLink());
 		acceptProcessedCSSContent(content);
 	}
-	
-	
-	
-	
-	
-	
 
 	@Override
 	public void acceptNewLink(Link link) throws InterruptedException {

@@ -31,7 +31,7 @@ public class BaseMockMediator implements IMediator {
 	public synchronized Link provideLinkToDownload() throws InterruptedException {
 		if (linksToProvideForDownloading.isEmpty()) {
 			for (;;) {
-					this.wait();
+				this.wait();
 			} // this is only a mock !!! we expect the list to be filled before consumption ;
 				// Once empty, we never give anything back again.
 		}
@@ -56,17 +56,17 @@ public class BaseMockMediator implements IMediator {
 	}
 
 	@Override
-	public synchronized void acceptDownloadError(Link link, boolean retriable, String message) throws InterruptedException {
+	public synchronized void acceptDownloadError(Link link, boolean retriable, String message)
+			throws InterruptedException {
 		// TODO Auto-generated method stub
 
 	}
-
 
 	@Override
 	public synchronized Content provideHTMLContentToProcess() throws InterruptedException {
 		if (contentsToProvideForProcessing.isEmpty()) {
 			for (;;) {
-					this.wait();
+				this.wait();
 			} // this is only a mock !!! we expect the list to be filled before consumption ;
 				// Once empty, we never give anything back again.
 		}
@@ -74,25 +74,25 @@ public class BaseMockMediator implements IMediator {
 	}
 
 	@Override
-	public synchronized void  acceptProcessedHTMLContent(Content content) throws InterruptedException {
+	public synchronized void acceptProcessedHTMLContent(Content content) throws InterruptedException {
 		processedContent.add(content);
 
 	}
 
 	@Override
-	public synchronized void  acceptHTMLProcessingError(Content content, String message) throws InterruptedException {
+	public synchronized void acceptHTMLProcessingError(Content content, String message) throws InterruptedException {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public synchronized void  acceptNewLink(Link link) throws InterruptedException {
+	public synchronized void acceptNewLink(Link link) throws InterruptedException {
 		acceptedLinks.add(link);
 
 	}
 
 	@Override
-	public synchronized void  acceptAllNewLinks(Collection<Link> incomingLinks) throws InterruptedException {
+	public synchronized void acceptAllNewLinks(Collection<Link> incomingLinks) throws InterruptedException {
 		acceptedLinks.addAll(incomingLinks);
 	}
 
@@ -158,20 +158,18 @@ public class BaseMockMediator implements IMediator {
 
 	@Override
 	public Content provideCSSContentToProcess() throws InterruptedException {
-		// TODO Auto-generated method stub
-		return null;
+		// no difference in this mock between HTML and CSS
+		return provideHTMLContentToProcess();
 	}
 
 	@Override
 	public void acceptProcessedCSSContent(Content content) throws InterruptedException {
-		// TODO Auto-generated method stub
-		
+		acceptProcessedHTMLContent(content);
 	}
 
 	@Override
 	public void acceptCSSProcessingError(Content content, String message) throws InterruptedException {
-		// TODO Auto-generated method stub
-		
+		acceptHTMLProcessingError(content, message);
 	}
 
 }

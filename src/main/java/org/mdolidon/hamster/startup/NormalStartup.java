@@ -2,6 +2,7 @@ package org.mdolidon.hamster.startup;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.mdolidon.hamster.core.CSSProcessingWorker;
 import org.mdolidon.hamster.core.DownloadWorker;
 import org.mdolidon.hamster.core.ErrorsBoard;
 import org.mdolidon.hamster.core.IConfiguration;
@@ -38,7 +39,8 @@ public class NormalStartup implements IHamsterStartup {
 	public void run() {
 		try {
 			startDownloadWorkers();
-			startProcessingWorkers();
+			startHTMLProcessingWorkers();
+			startCSSProcessingWorkers();
 			startStorageWorkers();
 			startMementoWorker();
 
@@ -73,12 +75,18 @@ public class NormalStartup implements IHamsterStartup {
 		}
 	}
 
-	protected void startProcessingWorkers() {
+	protected void startHTMLProcessingWorkers() {
 		int cores = Runtime.getRuntime().availableProcessors();
-		logger.trace("Starting processing workers");
+		logger.trace("Starting HTML processing workers");
 		for (int i = 0; i < cores; i++) {
 			startAndRegisterWorker(new HTMLProcessingWorker(mediator, configuration));
 		}
+	}
+	
+	protected void startCSSProcessingWorkers() {
+		int cores = Runtime.getRuntime().availableProcessors();
+		logger.trace("Starting CSS processing worker");
+		startAndRegisterWorker(new CSSProcessingWorker(mediator, configuration));
 	}
 
 	protected void startStorageWorkers() {

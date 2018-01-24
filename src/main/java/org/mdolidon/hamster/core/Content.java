@@ -150,8 +150,8 @@ public class Content implements Serializable, Cloneable {
 	 * @return true if this content is likely CSS, according to MIME type or URL
 	 */
 	public boolean isCss() {
-		if (mimeType != null && !mimeType.isEmpty()) {
-			return mimeType.startsWith("text/css");
+		if (mimeType != null && !mimeType.isEmpty() && mimeType.startsWith("text/css")) {
+			return true;
 		}
 		return cssExt.matches(getSourceLink());
 	}

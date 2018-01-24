@@ -1,4 +1,4 @@
-def version = '0.10'
+def version = '0.11'
 def versionResource = file("src/main/resources/version.txt")
 
 
@@ -87,8 +87,10 @@ task release {
     controlFile.text = manifest
 
     "dpkg --build hamster".execute(null, new File("deb_scaffolding"))
+    println "Created the new deb package in deb_scaffolding."
 
     def debFile = file("deb_scaffolding/hamster.deb")
     debFile.renameTo("hamster-${version}.deb")
+    println "Moved it to hamster-${version}.deb"
   }
 }

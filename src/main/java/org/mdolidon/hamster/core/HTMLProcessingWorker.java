@@ -1,12 +1,10 @@
 package org.mdolidon.hamster.core;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +28,7 @@ public class HTMLProcessingWorker implements Runnable {
 	// I could have listed acceptable protocols, but I do the opposite instead.
 	// This lets us be easily tolerant with the way http(s) urls are written.
 	private static String[] ignore_ProtocolPrefixes = { "mailto:", "telnet:", "nntp:", "gopher:", "news:", "file:",
-			"ftp:" };
+			"ftp:", "chrome:" };
 
 	private class ProcessingException extends Exception {
 		private static final long serialVersionUID = 1L;
@@ -85,7 +83,7 @@ public class HTMLProcessingWorker implements Runnable {
 			baseUrl = content.getSourceLink().getTarget();
 		}
 
-		logger.trace("Processing worker got document for {}", baseUrl);
+		logger.trace("HTML Processing worker got document for {}", baseUrl);
 
 		InputStream is = new ByteArrayInputStream(content.getBytes());
 		Document dom;
@@ -146,7 +144,7 @@ public class HTMLProcessingWorker implements Runnable {
 			link.unbindSourceElement();
 
 			if (isPartOfTargetSet) {
-				storageHref = getRelativeHref(sourceLink.getStorageFile(), link.getStorageFile()) + link.getUrlHash();
+				storageHref = Utils.getRelativeHref(sourceLink.getStorageFile(), link.getStorageFile()) + link.getUrlHash();
 			} else {
 				// if we the target is not part of the target set, make
 				// sure we leave an bsolute href in the stored page, to
@@ -171,34 +169,7 @@ public class HTMLProcessingWorker implements Runnable {
 		}
 	}
 
-	private String getRelativeHref(File from, File to) {
-		Path p1 = from.toPath();
-		Path p2 = to.toPath();
-		Path pp1 = p1.getParent();
 
-		if (pp1 == null) {
-			return pathToHref(p2);
-		} else {
-			try {
-				return pathToHref(pp1.relativize(p2));
-			} catch (IllegalArgumentException e) {
-				logger.warn("Could not find relative path from {} to {}", p1, p2);
-				return pathToHref(p2);
-			}
-		}
-
-	}
-
-	private String pathToHref(Path path) {
-		// Testing File.pathSeparatorChar was apparently not enough to prevent
-		// a Windows-running instance to put antislashes in the resulting html.
-		// Therefore I take this more brutal approach.
-		// It should not result in any other bugs, since antislashes are not a
-		// valid character in URLs.
-
-		return path.toString().replace('\\', '/');
-
-	}
 
 	private URL getNewBaseUrl_IfBaseElement(URL baseUrl, Document dom) throws ProcessingException {
 		Elements baseElems = dom.select("base");
