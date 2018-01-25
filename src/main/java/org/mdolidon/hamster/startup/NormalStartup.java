@@ -84,7 +84,6 @@ public class NormalStartup implements IHamsterStartup {
 	}
 	
 	protected void startCSSProcessingWorkers() {
-		int cores = Runtime.getRuntime().availableProcessors();
 		logger.trace("Starting CSS processing worker");
 		startAndRegisterWorker(new CSSProcessingWorker(mediator, configuration));
 	}

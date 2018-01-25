@@ -191,14 +191,11 @@ public class Link implements Serializable, Cloneable {
 
 	/**
 	 * Retrieve the source element that was bound to this link, to perform checks on
-	 * it. Throws a NullPointerException if no element is currently associated.
+	 * it. The value may be null if no element is currently associated.
 	 * 
 	 * @return
 	 */
 	public Element getSourceElement() {
-		if (sourceElement == null) {
-			throw new NullPointerException("Link.getSourceElement called while the source element was not bound");
-		}
 		return sourceElement;
 	}
 

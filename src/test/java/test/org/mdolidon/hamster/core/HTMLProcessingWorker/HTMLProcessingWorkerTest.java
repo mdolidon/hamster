@@ -2,6 +2,7 @@ package test.org.mdolidon.hamster.core.HTMLProcessingWorker;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.net.URL;
@@ -44,18 +45,18 @@ public class HTMLProcessingWorkerTest {
 	@Test
 	public void testedLinkContainsSourceJsoupElement() throws Exception {
 		MockConfig cfg = new MockConfig("http://place.com");
-		cfg.setDelegateForTargetProfile(this); // will call the getTargetProfile defined right below
+		cfg.setDelegateForTargetProfile(this); // will call the getTargetProfile
+												// defined right below
 		String pageText = "<html><body>Hello <a href=\"/world/YY\">world</a></body></html>";
 		@SuppressWarnings("unused")
 		ProcessingTestResult result = runOnString(pageText, cfg);
 	}
-	
+
 	// used by the test above
 	public TargetProfile getTargetProfile(Link link) {
 		assertNotNull(link.getSourceElement());
-		return new TargetProfile(true,true);
+		return new TargetProfile(true, true);
 	}
-	
 
 	@Test
 	public void returnedLinkDoesNotContainSourceJsoupElement() throws Exception {
@@ -64,13 +65,9 @@ public class HTMLProcessingWorkerTest {
 
 		assertEquals(1, result.links.size());
 		Link l = result.links.get(0);
-		try {
-			@SuppressWarnings("unused")
-			Element el = l.getSourceElement();
-			assertTrue("The link object should have thrown.", false);
-		} catch (NullPointerException e) {
-			assertTrue(true);
-		}
+		@SuppressWarnings("unused")
+		Element el = l.getSourceElement();
+		assertNull(el);
 	}
 
 	@Test
@@ -107,7 +104,8 @@ public class HTMLProcessingWorkerTest {
 
 		ProcessingTestResult result = runOnString(pageText);
 
-		assertEquals(1, result.links.size()); // the base tag href is not a new link
+		assertEquals(1, result.links.size()); // the base tag href is not a new
+												// link
 		Link l = result.links.get(0);
 		assertTrue(l.getTargetAsString().contains("http://place.com/my/garden/YY"));
 	}
@@ -175,8 +173,6 @@ public class HTMLProcessingWorkerTest {
 
 	// ----------------------------------
 
-
-
 	private ProcessingTestResult runOnString(String pageText) throws Exception {
 		IConfiguration cfg = new MockConfig("http://place.com");
 		return runOnString(pageText, cfg);
@@ -184,16 +180,23 @@ public class HTMLProcessingWorkerTest {
 
 	private ProcessingTestResult runOnString(String pageText, IConfiguration cfg) throws Exception {
 		Content page = makeContentFromString(pageText, cfg);
-		HTMLProcessingWorker worker = new HTMLProcessingWorker(null, cfg); // the processing worker only needs a mediator when
-																	// running autonomously, but we won't test the
-																	// overly simple outer loop of the worker
+		HTMLProcessingWorker worker = new HTMLProcessingWorker(null, cfg); // the
+																			// processing
+																			// worker
+																			// only
+																			// needs
+																			// a
+																			// mediator
+																			// when
+		// running autonomously, but we won't test the
+		// overly simple outer loop of the worker
 		List<Link> linksToDownload = worker.processCurrentContent(page);
 		ProcessingTestResult r = new ProcessingTestResult();
 		r.content = page;
 		r.links = linksToDownload;
 		return r;
 	}
-	
+
 	private Content makeContentFromString(String pageText, IConfiguration cfg) throws Exception {
 		Link location = new Link(new URL("http://place.com/home/index.html"), 1, cfg);
 		Content page = new Content(location);

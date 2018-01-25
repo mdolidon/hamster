@@ -40,7 +40,7 @@ public class CSSProcessingWorker implements Runnable {
 	// The biggest current weakness is : if the import is inside a comment, we
 	// follow the link anyway.
 	// It's most likely no big deal.
-	private Pattern importPattern = Pattern.compile("@import *(?:url\\( *)?(?:\"|')([^'\"]*)(?:\"|') *\\)?",
+	private Pattern importPattern = Pattern.compile("@import *(?:url\\( *)?(?:\"|')?([^'\"\\)]*)(?:\"|')? *\\)?",
 			Pattern.CASE_INSENSITIVE);
 
 	private static Logger logger = LogManager.getLogger();
