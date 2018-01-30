@@ -30,11 +30,12 @@ size_unit : kilobytes | megabytes ;
 kilobytes : KB ;
 megabytes : MB ;
 
-save_directive            : SAVE (save_as_tree | save_flat | save_regex_to_template) ;
-save_as_tree              : matcher? AS_TREE save_under_clause? ;
-save_flat                 : matcher? FLAT save_under_clause? ;
-save_under_clause         : UNDER string ;
-save_regex_to_template       : urls_matcher AS string ;
+save_directive          : SAVE (save_as_tree | save_flat | save_regex_to_template | save_as_basename) ;
+save_as_tree            : matcher? AS_TREE save_under_clause? ;
+save_flat               : matcher? FLAT save_under_clause? ;
+save_as_basename        : matcher? AS_BASE_NAME save_under_clause? ;
+save_regex_to_template  : urls_matcher AS string ;
+save_under_clause       : UNDER string ;
 
 download_directive : ( get_rule | get_unknown_rule | avoid_rule );
 get_rule   : GET   matcher ;

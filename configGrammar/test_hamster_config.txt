@@ -1,4 +1,5 @@
 
+save urls ".*\.7z" as basenames under "archive"
 start at "xxx"
 
 maximum 100 Kb each from outside domain

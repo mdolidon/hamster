@@ -178,15 +178,15 @@ public interface HamsterConfigParserListener extends ParseTreeListener {
 	 */
 	void exitSave_flat(HamsterConfigParser.Save_flatContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link HamsterConfigParser#save_under_clause}.
+	 * Enter a parse tree produced by {@link HamsterConfigParser#save_as_basename}.
 	 * @param ctx the parse tree
 	 */
-	void enterSave_under_clause(HamsterConfigParser.Save_under_clauseContext ctx);
+	void enterSave_as_basename(HamsterConfigParser.Save_as_basenameContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link HamsterConfigParser#save_under_clause}.
+	 * Exit a parse tree produced by {@link HamsterConfigParser#save_as_basename}.
 	 * @param ctx the parse tree
 	 */
-	void exitSave_under_clause(HamsterConfigParser.Save_under_clauseContext ctx);
+	void exitSave_as_basename(HamsterConfigParser.Save_as_basenameContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link HamsterConfigParser#save_regex_to_template}.
 	 * @param ctx the parse tree
@@ -197,6 +197,16 @@ public interface HamsterConfigParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitSave_regex_to_template(HamsterConfigParser.Save_regex_to_templateContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HamsterConfigParser#save_under_clause}.
+	 * @param ctx the parse tree
+	 */
+	void enterSave_under_clause(HamsterConfigParser.Save_under_clauseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HamsterConfigParser#save_under_clause}.
+	 * @param ctx the parse tree
+	 */
+	void exitSave_under_clause(HamsterConfigParser.Save_under_clauseContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link HamsterConfigParser#download_directive}.
 	 * @param ctx the parse tree

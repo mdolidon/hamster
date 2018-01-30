@@ -3,6 +3,7 @@ lexer grammar HamsterConfigLexer;
 // Keywords
 ALL : 'all' ;
 AS : 'as' ;
+AS_BASE_NAME : 'as' ' '+ 'base' ' '* 'name' 's'? ;
 AS_TREE : 'as' ' '+ 'tree' ;
 AVOID : 'avoid' ;
 CHECK_IN_AT : 'check' ' '+ 'in' ' '+ 'at' ;

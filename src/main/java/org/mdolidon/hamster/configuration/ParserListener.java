@@ -32,6 +32,7 @@ import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Not
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Parallel_directiveContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Resources_matcherContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Same_domain_matcherContext;
+import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Save_as_basenameContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Save_as_treeContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Save_directiveContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Save_flatContext;
@@ -184,7 +185,7 @@ public class ParserListener extends HamsterConfigParserBaseListener {
 	public void exitNo_max_size_directive(No_max_size_directiveContext ctx) {
 		configuration.addContentSizeRule(new IllimitedContentSizeRule(popMatcher()));
 	}
-	
+
 	//
 	// Save directives
 	//
@@ -210,6 +211,11 @@ public class ParserListener extends HamsterConfigParserBaseListener {
 	@Override
 	public void exitSave_flat(Save_flatContext ctx) {
 		configuration.addStorageResolver(new FlatStorageResolver(popMatcher(), configuration, save_under_folderStr));
+	}
+
+	@Override
+	public void exitSave_as_basename(Save_as_basenameContext ctx) {
+		configuration.addStorageResolver(new BasenameStorageResolver(popMatcher(), save_under_folderStr));
 	}
 
 	@Override

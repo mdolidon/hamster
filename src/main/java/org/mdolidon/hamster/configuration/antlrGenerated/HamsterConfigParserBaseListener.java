@@ -220,13 +220,13 @@ public class HamsterConfigParserBaseListener implements HamsterConfigParserListe
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSave_under_clause(HamsterConfigParser.Save_under_clauseContext ctx) { }
+	@Override public void enterSave_as_basename(HamsterConfigParser.Save_as_basenameContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSave_under_clause(HamsterConfigParser.Save_under_clauseContext ctx) { }
+	@Override public void exitSave_as_basename(HamsterConfigParser.Save_as_basenameContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -239,6 +239,18 @@ public class HamsterConfigParserBaseListener implements HamsterConfigParserListe
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitSave_regex_to_template(HamsterConfigParser.Save_regex_to_templateContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSave_under_clause(HamsterConfigParser.Save_under_clauseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSave_under_clause(HamsterConfigParser.Save_under_clauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

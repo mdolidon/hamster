@@ -105,6 +105,8 @@ As content is downloaded, it is saved locally in the working directory. Just lik
 
 `save [MATCHER] as tree [under "directory"]`, such as `save as tree` or `save domain as tree under "maven"` : contents are saved as files in a directory tree structure that mirrors the original URL paths.
 
+`save [MATCHER] as base names [under "directory"]`, such as `save urls ".*\.7z" as base names under "archive"` : the last part of the URL path is used to make the file name. The result is stored flat under "directory". This rule is convenient when you want to preserve names in a file archive (unlike `save flat`) and not inherit the full directory structure (unlike `save as tree`). Obviously file name collisions are likely if this rule is abused.
+
 `save urls "regex with groups" as "directory/$1/$2"`, such as `save urls ".*topic([0-9]+).message([0-9]+).*" as "bulletin_board/topic_$1/message_$2.html` : if a link's source URL matches the regular expression, it is destructured in groups, and those groups' values are used to build the destination path and file name, with `$n` taking the value of the nth group. Local path separators are always `/`, whatever system the hamster is running on.
 
 ## Basic matchers
