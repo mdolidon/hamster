@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParserBaseListener;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.All_matcherContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.And_matcherContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.And_not_matcherContext;
@@ -17,6 +16,7 @@ import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Che
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Cookies_directiveContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Css_matcherContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Download_directiveContext;
+import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.File_content_stringContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Get_ruleContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Get_unknown_ruleContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Images_matcherContext;
@@ -27,6 +27,7 @@ import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Max
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Max_size_per_file_directiveContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.MegabytesContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Min_jumps_matcherContext;
+import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Naked_stringContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.No_max_size_directiveContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Not_matcher_opContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Parallel_directiveContext;
@@ -40,15 +41,27 @@ import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Sav
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Save_under_clauseContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Simple_authentication_ruleContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Start_directiveContext;
-import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.StringContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.String_properties_mapContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.String_propertyContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Subpaths_matcherContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Unknown_matcher_opContext;
 import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParser.Urls_matcherContext;
+import org.mdolidon.hamster.configuration.antlrGenerated.HamsterConfigParserBaseListener;
 import org.mdolidon.hamster.core.ErrorsBoard;
 import org.mdolidon.hamster.core.IMatcher;
-import org.mdolidon.hamster.matchers.*;
+import org.mdolidon.hamster.core.Utils;
+import org.mdolidon.hamster.matchers.All;
+import org.mdolidon.hamster.matchers.And;
+import org.mdolidon.hamster.matchers.Css;
+import org.mdolidon.hamster.matchers.Images;
+import org.mdolidon.hamster.matchers.MaxJumps;
+import org.mdolidon.hamster.matchers.MinJumps;
+import org.mdolidon.hamster.matchers.Not;
+import org.mdolidon.hamster.matchers.Resources;
+import org.mdolidon.hamster.matchers.SameDomain;
+import org.mdolidon.hamster.matchers.Subpaths;
+import org.mdolidon.hamster.matchers.URLs;
+import org.mdolidon.hamster.matchers.Unknown;
 
 /**
  * An object of this class can listen to events that occur when walking an ANTLR
@@ -98,8 +111,21 @@ public class ParserListener extends HamsterConfigParserBaseListener {
 	//
 
 	@Override
-	public void exitString(StringContext ctx) {
-		pushString(ctx.getText());
+	public void exitNaked_string(Naked_stringContext ctx) {
+		String withQuotes = ctx.getText();
+		String withoutOuterQuotes = withQuotes.substring(1, withQuotes.length() - 1);
+		pushString(withoutOuterQuotes.replace("~\"", "\""));
+	}
+
+	@Override
+	public void exitFile_content_string(File_content_stringContext ctx) {
+		String fileName = popString();
+		String val = Utils.slurpFileOrNull(fileName);
+		if (val == null) {
+			val = "";
+		}
+		val = val.trim();
+		pushString(val);
 	}
 
 	@Override

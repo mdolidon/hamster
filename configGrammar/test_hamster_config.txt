@@ -1,6 +1,8 @@
 
-save urls ".*\.7z" as basenames under "archive"
-start at "xxx"
+save urls ".*\.7z" as basenames under "#archive"
+start at "x~"xx"
+
+cookies "_redmine_session" = file "cookie.txt" on "vmaosredmine"
 
 maximum 100 Kb each from outside domain
 no size limit from domain

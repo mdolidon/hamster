@@ -5,7 +5,10 @@ options { tokenVocab = HamsterConfigLexer; }
 // ---------------------------------------------------------------------------
 
 integer : INTEGER_LITERAL ;
-string : STRING_LITERAL ;
+
+string : ( naked_string | file_content_string ) ;
+naked_string : STRING_LITERAL ;
+file_content_string : FILE naked_string ;
 
 string_properties_map : string_property*;
 string_property : string EQUALS string ;

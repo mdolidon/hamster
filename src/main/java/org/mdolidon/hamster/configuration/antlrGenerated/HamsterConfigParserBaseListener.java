@@ -40,6 +40,30 @@ public class HamsterConfigParserBaseListener implements HamsterConfigParserListe
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterNaked_string(HamsterConfigParser.Naked_stringContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNaked_string(HamsterConfigParser.Naked_stringContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterFile_content_string(HamsterConfigParser.File_content_stringContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFile_content_string(HamsterConfigParser.File_content_stringContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterString_properties_map(HamsterConfigParser.String_properties_mapContext ctx) { }
 	/**
 	 * {@inheritDoc}

@@ -171,6 +171,11 @@ public class BaseConfiguration implements IConfiguration {
 	public void addCookiesDirective(CookiesDirective cookiesDirective) {
 		cookiesDirectives.add(cookiesDirective);
 	}
+	
+	// This is a testing hook
+	public CookiesDirective getFirstCookieDirective() {
+		return cookiesDirectives.get(0);
+	}
 
 	public void addContentSizeRule(IContentSizeRule rule) {
 		contentSizeRules.add(rule);

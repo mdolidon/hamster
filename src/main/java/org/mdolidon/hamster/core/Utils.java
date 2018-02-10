@@ -1,6 +1,7 @@
 package org.mdolidon.hamster.core;
 
 import java.io.File;
+import org.apache.commons.io.FileUtils;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -48,6 +49,19 @@ public class Utils {
 			return version;
 		} catch (IOException e) {
 			return "(could not read license info)";
+		}
+	}
+
+	/**
+	 * Read a file as a string or return null if any error occured.
+	 */
+	public static String slurpFileOrNull(String fileName) {
+		File file = new File(fileName);
+		try {
+			return FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+		} catch (Exception e) {
+			logger.warn("An error occured while trying to read {} : {}", fileName, e.toString());
+			return null;
 		}
 	}
 

@@ -28,6 +28,26 @@ public interface HamsterConfigParserListener extends ParseTreeListener {
 	 */
 	void exitString(HamsterConfigParser.StringContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link HamsterConfigParser#naked_string}.
+	 * @param ctx the parse tree
+	 */
+	void enterNaked_string(HamsterConfigParser.Naked_stringContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HamsterConfigParser#naked_string}.
+	 * @param ctx the parse tree
+	 */
+	void exitNaked_string(HamsterConfigParser.Naked_stringContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HamsterConfigParser#file_content_string}.
+	 * @param ctx the parse tree
+	 */
+	void enterFile_content_string(HamsterConfigParser.File_content_stringContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HamsterConfigParser#file_content_string}.
+	 * @param ctx the parse tree
+	 */
+	void exitFile_content_string(HamsterConfigParser.File_content_stringContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link HamsterConfigParser#string_properties_map}.
 	 * @param ctx the parse tree
 	 */

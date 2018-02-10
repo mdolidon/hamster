@@ -35,21 +35,23 @@ Get the English Git Pro book, with its necessary resources, but only those hoste
     get resources on domain
 
 
-How I extract my company's internal product FAQ/knowledge-directory stored in a Redmine forum, for offline usage by our experts when they go on customers' premises. One temporary lack of elegance that squeaks here is the necessity to include an authentication cookie : the hamster's check-in mechanisms are still rudimentary and Redmine's CSRF protection will prevent us from using them. This shall be improved in the future.
+How I extract my company's internal product FAQ/knowledge-directory stored in a Redmine forum, for offline usage by our experts when they go on customers' premises. The hamster's check-in mechanisms are quite rudimentary and Redmine's CSRF protection will prevent us from using them. For such a special use, an external script lets the user log into Redmine and then writes the obtained cookie in a file, from whence the Hamster can use it.
 
     start at "http://vmaosredmine/projects/nextgen/boards"
     get css "#forum_list *"
     get css "#topics_list *"
     get css "#sidebar *"
     get resources
-    cookies "_redmine_session" = "BAh7Dkki(...)753961" on "vmaosredmine"
+    cookies "_redmine_session" = file "cookie.txt" on "vmaosredmine"
 
 
 
 How I maintain my company's statically served Maven mirror from an Artifactory source. This explores the tree, updates all directory pages and downloads the new artefacts to the mirror :
 
     start at "https://company.com/artifactory2/repository"
-    user "mirror" password "1234" on domain
+    user "mirror" password "1234" on domain  
+        # The password could also have been read from a file,
+        # like the cookie in the previous example.
 
     avoid urls ".*SOME_VERSIONS.*"
     avoid urls ".*OTHER_VERSIONS.*"

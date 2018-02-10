@@ -11,6 +11,7 @@ COOKIES : 'cookie' 's'? ;
 CSS : 'css' ;
 DOMAIN : 'domain' ;
 EACH : 'each' ;
+FILE : 'file' ;
 FLAT : 'flat' ;
 FROM : 'from' ;
 GET : 'get' ;
@@ -44,18 +45,10 @@ EQUALS : '=';
 // Literals
 
 INTEGER_LITERAL : [0-9]+ ;
-OPENING_QUOTE : '"' -> pushMode(IN_STRING_LITERAL), skip;
-
+STRING_LITERAL : '"' (~["\r\n] | '~"')* '"' ;
 
 // What we're less concerned about
 
 COMMENT : '#' ~('\n')* -> skip ;
 WS      : (' '|'\r'|'\n'|'\t')+ -> skip ;
 WORD    : [a-zA-Z_]+ ; // grouping letters to build words lets us have nicer error messages
-
-
-// Inside string literals
-
-mode IN_STRING_LITERAL;
-CLOSING_QUOTE : '"' -> popMode, skip;
-STRING_LITERAL : ~('"')* ;

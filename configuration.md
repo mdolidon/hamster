@@ -4,7 +4,14 @@ You can get the same information by typing `hamster help configure`. Besides, `h
 
 ## Basic syntax rules
 
-White space only matters in so far that it separates keywords. Line breaks do not matter as long as they are not in the middle of a keyword or value. All keywords are lower-case.
+White space and line breaks do not really matter. Keywords are lower-case.
+
+Strings :
+
+    "a simple string"
+    "a string with a ~" double-quote inside"
+    "backquotes have no special meaning \:-)"
+    file "hello.txt"  # the string is read inside the file
 
 The order of the rules and directives may matter amongst rules of the same kind (for example, when there are several different storage rules, the first applicable rule wins). But apart of that, rules can appear in any order that fits you best.
 
@@ -21,7 +28,7 @@ means exactly the same as this :
     avoid images save as tree under "my_blog" get domain
 
 
-If a `#` is found on a line, everything that follows up to the line ending is considered to be a comment and ignored.
+If a `#` is found roaming free on a line, everything that follows up to the line ending is considered to be a comment and ignored.
 
 ## Step 0 : checking in
 

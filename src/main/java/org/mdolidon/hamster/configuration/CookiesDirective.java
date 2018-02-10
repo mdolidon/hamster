@@ -41,5 +41,10 @@ public class CookiesDirective {
 			store.addCookie(ck);
 		}
 	}
-
+	
+	
+	// This is a testing hook
+	public String getValue(String name) {
+		return namesAndValues.get(name);
+	}
 }

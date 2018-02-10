@@ -3,9 +3,7 @@ package test.org.mdolidon.hamster.configuration.storageResolvers;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 
-import java.io.File;
 import java.net.URL;
 
 import org.junit.Test;
