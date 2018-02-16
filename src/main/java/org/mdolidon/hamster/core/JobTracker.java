@@ -1,42 +1,39 @@
 package org.mdolidon.hamster.core;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Deque;
-import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Semaphore;
 
-/**
- * A very partial implementation of the BlockingQueue API, that is linked to a
- * semaphore. Elements are added or removed only if the semaphore can be
- * acquired. Otherwise, blocking operations wait for the semaphore to be
- * available again. The intent is for an external component to be able to
- * completely pause several of these queues at once by grabbing all of the
- * semaphore's permits, and make a reliable and consistent snapshot of all of
- * their contents.
- */
-public class PausableBlockingQueue<E> implements Iterable<E> {
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+public class JobTracker<E extends IMementoElement> {
+	
+	private static Logger logger = LogManager.getLogger();
 
 	private Semaphore pauseSemaphore;
-	private int maxCapacity;
-	private Deque<E> queue;
+	private int capacity;
 
-	public PausableBlockingQueue(Semaphore pauseSemaphore, int initialCapacity, int maxCapacity) {
+	private Deque<E> toDo;
+	private Set<E> beingDone = ConcurrentHashMap.newKeySet(20);
+
+	public JobTracker(Semaphore pauseSemaphore, int capacity) {
 		this.pauseSemaphore = pauseSemaphore;
-		this.maxCapacity = maxCapacity;
-		queue = new ArrayDeque<E>(initialCapacity);
-	}
-
-	public boolean isEmpty() {
-		return queue.isEmpty();
-	}
-
-	public int size() {
-		return queue.size();
+		this.capacity = capacity;
+		toDo = new ArrayDeque<E>(capacity);
 	}
 
 	public int remainingCapacity() {
-		return maxCapacity - size();
+		return capacity - toDo.size();
+	}
+
+	public int count() {
+		return toDo.size() + beingDone.size();
 	}
 
 	/**
@@ -51,28 +48,18 @@ public class PausableBlockingQueue<E> implements Iterable<E> {
 		boolean result;
 		while (true) {
 			pauseSemaphore.acquire();
-			synchronized (queue) {
-				if (queue.size() + c.size() < maxCapacity) {
-					result = queue.addAll(c);
+			synchronized (toDo) {
+				if (toDo.size() + c.size() < capacity) {
+					result = toDo.addAll(c);
 					pauseSemaphore.release();
-					queue.notify();
+					toDo.notify();
 					return result;
 				}
 				pauseSemaphore.release();
-				while (queue.size() + c.size() >= maxCapacity) {
-					queue.wait();
+				while (toDo.size() + c.size() >= capacity) {
+					toDo.wait();
 				}
 			}
-		}
-	}
-
-	/**
-	 * See Collection.iterator(). This method DOES NOT check the semaphore before
-	 * proceeding.
-	 */
-	public Iterator<E> iterator() {
-		synchronized (queue) {
-			return queue.iterator();
 		}
 	}
 
@@ -88,16 +75,16 @@ public class PausableBlockingQueue<E> implements Iterable<E> {
 	public void put(E e) throws InterruptedException {
 		while (true) {
 			pauseSemaphore.acquire();
-			synchronized (queue) {
-				if (queue.size() < maxCapacity) {
-					queue.addLast(e);
+			synchronized (toDo) {
+				if (toDo.size() < capacity) {
+					toDo.addLast(e);
 					pauseSemaphore.release();
-					queue.notify();
+					toDo.notify();
 					return;
 				}
 				pauseSemaphore.release();
-				while (queue.size() >= maxCapacity) {
-					queue.wait();
+				while (toDo.size() >= capacity) {
+					toDo.wait();
 				}
 			}
 		}
@@ -112,24 +99,46 @@ public class PausableBlockingQueue<E> implements Iterable<E> {
 	 * @return
 	 * @throws InterruptedException
 	 */
-	public E take() throws InterruptedException {
+	public E takeAndTrack() throws InterruptedException {
 		E retVal;
 		while (true) {
 			pauseSemaphore.acquire();
-			synchronized (queue) {
-				if (!queue.isEmpty()) {
-					retVal = queue.removeFirst();
+			synchronized (toDo) {
+				if (!toDo.isEmpty()) {
+					retVal = toDo.removeFirst();
+					beingDone.add(retVal);
 					pauseSemaphore.release();
-					queue.notify(); // wake up the next consumer !
+					toDo.notify(); // wake up the next consumer !
 					return retVal;
 				}
 				pauseSemaphore.release(); // that's the important bit : allow the queue to be serialized
 											// even though we're waiting at its tail end
-				while (queue.isEmpty()) {
-					queue.wait();
+				while (toDo.isEmpty()) {
+					toDo.wait();
 				}
 			}
 		}
+	}
+
+	public void forget(E job) {
+		beingDone.remove(job);
+	}
+
+	
+	@SuppressWarnings("unchecked")
+	public List<E> copyAllInNewList() {
+		List<E> list = new ArrayList<>(beingDone.size() + toDo.size());
+		try {
+			for (E element : beingDone) {
+				list.add((E) element.cryogenize());
+			}
+			for (E element : toDo) {
+				list.add((E) element.cryogenize());
+			}
+		} catch (Exception e) {
+			logger.error("Exception thrown while attempting to copy job tracker's state : {}", e);
+		}
+		return list;
 	}
 
 }

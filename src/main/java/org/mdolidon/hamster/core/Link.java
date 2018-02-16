@@ -1,7 +1,7 @@
 package org.mdolidon.hamster.core;
 
 import java.io.File;
-import java.io.Serializable;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.jsoup.nodes.Element;
@@ -11,7 +11,7 @@ import org.jsoup.nodes.Element;
  * add some relevant information about it, and let components communicate about
  * that target. Links are nearly fully passive records.
  */
-public class Link implements Serializable, Cloneable {
+public class Link implements IMementoElement {
 
 	private static final long serialVersionUID = 1L;
 
@@ -63,8 +63,20 @@ public class Link implements Serializable, Cloneable {
 	}
 
 	@Override
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
+	public Link cryogenize() {
+		try {
+			URL copyTarget = new URL(target.toString());
+			Link copy = new Link(copyTarget, jumpsFromStartingURL, configuration);
+			copy.setConfigurationToNull();
+			return copy;
+		} catch (MalformedURLException e) {
+			// no way ; we're going around URL's lack of .clone method
+			throw new RuntimeException("Couldn't clone the target URL when attempting to cryogenize a link");
+		}
+	}
+
+	private void setConfigurationToNull() {
+		this.configuration = null;
 	}
 
 	/**
@@ -74,6 +86,9 @@ public class Link implements Serializable, Cloneable {
 	 * @param configuration
 	 */
 	public void setConfiguration_afterDeserialization(IConfiguration configuration) {
+		if (configuration == null) {
+			throw new NullPointerException();
+		}
 		this.configuration = configuration;
 	}
 
@@ -118,7 +133,7 @@ public class Link implements Serializable, Cloneable {
 			return getTargetAsString();
 		}
 	}
-	
+
 	/**
 	 * This link's target URL's domain.
 	 */

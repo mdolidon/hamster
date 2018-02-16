@@ -1,6 +1,6 @@
 package org.mdolidon.hamster.core;
 
-import java.io.Serializable;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -14,7 +14,7 @@ import org.mdolidon.hamster.matchers.URLExtensions;
  *
  * 
  */
-public class Content implements Serializable, Cloneable {
+public class Content implements IMementoElement {
 
 	private static final long serialVersionUID = 1L;
 
@@ -42,8 +42,18 @@ public class Content implements Serializable, Cloneable {
 	}
 
 	@Override
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
+	public Content cryogenize() {
+		Content copy = new Content((Link) sourceLink.cryogenize());
+		copy.setBytes(bytes.clone());
+		try {
+			if (effectiveLocation != null) {
+				copy.setEffectiveLocation(new URL(effectiveLocation.toString()));
+			}
+		} catch (MalformedURLException e) {
+			// no way ; I just do this to go around URL's lack of .clone method
+		}
+		copy.setMimeType(mimeType);
+		return copy;
 	}
 
 	/**
