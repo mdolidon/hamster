@@ -1,5 +1,5 @@
 Package: hamster
-Version: 0.15
+Version: 0.16
 Maintainer: Mathias Dolidon <mathias.dolidon@gmail.com>
 Description: HTTP mirroring / offline-browsing tool
 Section: web

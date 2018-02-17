@@ -120,8 +120,10 @@ public class JobTracker<E extends IMementoElement> {
 		}
 	}
 
-	public void forget(E job) {
+	public void forget(E job) throws InterruptedException {
+		pauseSemaphore.acquire();
 		beingDone.remove(job);
+		pauseSemaphore.release();
 	}
 
 	

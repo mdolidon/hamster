@@ -145,7 +145,7 @@ public class DownloadWorker implements Runnable {
 				response.close();
 				mediator.setAuthContext(link, httpContext);
 			}
-		} catch (IOException | RetriableDownloadException e) {
+		} catch (IOException | OutOfMemoryError | RetriableDownloadException e) {
 			throw new RetriableDownloadException(e.toString());
 		} catch (Exception e) {
 			throw new NonRetriableDownloadException(e.toString());
